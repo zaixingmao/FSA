@@ -29,6 +29,14 @@ datadefs["ggHZZ-PU20bx25"] = {
     'calibrationTarget': 'Phys14DR',
     'x_sec': 43.62*picobarns*0.00133, # xsec * br. ratio. BR for L=e,mu, might need to use BR with tau? (=0.000294)
 }
+datadefs["VBFHtt-PU20bx25"] = {
+    'analyses': [''],
+    'datasetpath': '/VBF_HToTauTau_M-125_13TeV-powheg-pythia6/Phys14DR-PU20bx25_tsg_PHYS14_25_V1-v2/MINIAODSIM',
+    'pu': '20bx25',
+    'calibrationTarget': 'Phys14DR',
+    'x_sec': -999, # xsec * br. ratio. BR for L=e,mu, might need to use BR with tau? (=0.000294)
+}
+
 datadefs["ZZTo4L-PU20bx25"] = {
     'analyses': ['4L'],
     'datasetpath': '/ZZTo4L_Tune4C_13TeV-powheg-pythia8/Phys14DR-PU20bx25_PHYS14_25_V1-v1/MINIAODSIM',

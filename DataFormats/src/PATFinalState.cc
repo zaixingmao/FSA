@@ -6,6 +6,8 @@
 #include "FinalStateAnalysis/DataAlgos/interface/CollectionFilter.h"
 #include "FinalStateAnalysis/DataAlgos/interface/ApplySVfit.h"
 
+#include "TauAnalysis/SVfitStandalone/interface/SVfitStandaloneAlgorithm.h"
+
 #include "DataFormats/PatCandidates/interface/PATObject.h"
 #include "DataFormats/PatCandidates/interface/Electron.h"
 #include "DataFormats/PatCandidates/interface/Muon.h"
@@ -328,32 +330,67 @@ PATFinalState::smallestDeltaPhi() const {
 double
 PATFinalState::SVfit(int i, int j) const {
 
-  std::vector<reco::CandidatePtr> toFit;
-  toFit.push_back(daughterPtr(i));
-  toFit.push_back(daughterPtr(j));
+  edm::Ptr<pat::MET> pfMet;
+  pfMet = evt()->met("pfmet");
+  if (pfMet.isNull()) std::cout<<"pfmet not found"<<std::endl;
 
-  edm::Ptr<pat::MET> mvaMet;
-  if(event_->isMiniAOD())
-    {
-      // Turn this back on when miniAOD gains MVA MET
-      std::cout << "MVA MET doesn't exist in miniAOD yet. How did we even get here!?!?!?" << std::endl;
-    }
-  else
-    {
-      mvaMet = evt()->met("mvamet");
-    }
+  std::vector<svFitStandalone::MeasuredTauLepton> measuredTauLeptons;
+  measuredTauLeptons.push_back(svFitStandalone::MeasuredTauLepton(svFitStandalone::kTauToHadDecay, daughterPtr(i)->pt(), daughterPtr(i)->eta(),  daughterPtr(i)->phi(), daughterPtr(i)->mass()));
+  measuredTauLeptons.push_back(svFitStandalone::MeasuredTauLepton(svFitStandalone::kTauToHadDecay, daughterPtr(j)->pt(), daughterPtr(j)->eta(),  daughterPtr(j)->phi(), daughterPtr(j)->mass())); 
 
-  if (mvaMet.isNull()) {
-    throw cms::Exception("MissingMVAMet")
-      << "SV fit requires the MVAMET be available via "
-      << " met('mvamet') method in PATFinalStateEvent.  It's null."
-      << std::endl;
-  }
+  // define algorithm (set the debug level to 3 for testing)
+  unsigned verbosity = 0;
+  TMatrixD covMET = evt()->metCovariance();
 
+//   TMatrixD covMET(2, 2);
+//   covMET[0][0] =  787.352;
+//   covMET[1][0] = -178.63;
+//   covMET[0][1] = -178.63;
+//   covMET[1][1] =  179.545;
+  // define MET
+  double measuredMETx =  pfMet->pt()*TMath::Cos(pfMet->phi()); //11.7491;
+  double measuredMETy =  pfMet->pt()*TMath::Sin(pfMet->phi()); //-51.9172; 
 
-  return ApplySVfit::getSVfitMass(toFit, *mvaMet,
-      mvaMet->getSignificanceMatrix(), 0,
-      evt()->evtId());
+  SVfitStandaloneAlgorithm algo(measuredTauLeptons, measuredMETx, measuredMETy, covMET, verbosity);
+  algo.addLogM(false);
+  // integration by VEGAS
+  //algo.integrateVEGAS();
+  // integration by markov chain MC
+  algo.integrateMarkovChain();
+
+  double mass = algo.getMass(); // return value is in units of GeV
+  // if ( algo.isValidSolution() ) {
+//     std::cout << "found mass = " << mass << std::endl;
+//   } else {
+//     std::cout << "sorry -- status of NLL is not valid [" << algo.isValidSolution() << "]" << std::endl;
+//   }
+  return mass;
+
+//   std::vector<reco::CandidatePtr> toFit;
+//   toFit.push_back(daughterPtr(i));
+//   toFit.push_back(daughterPtr(j));
+//   edm::Ptr<pat::MET> mvaMet;
+//   if(event_->isMiniAOD())
+//     {
+//       // Turn this back on when miniAOD gains MVA MET
+//       std::cout << "MVA MET doesn't exist in miniAOD yet. How did we even get here!?!?!?" << std::endl;
+//     }
+//   else
+//     {
+//       mvaMet = evt()->met("mvamet");
+//     }
+// 
+//   if (mvaMet.isNull()) {
+//     throw cms::Exception("MissingMVAMet")
+//       << "SV fit requires the MVAMET be available via "
+//       << " met('mvamet') method in PATFinalStateEvent.  It's null."
+//       << std::endl;
+//   }
+// 
+// 
+//   return ApplySVfit::getSVfitMass(toFit, *mvaMet,
+//       mvaMet->getSignificanceMatrix(), 0,
+//       evt()->evtId());
 }
 
 double

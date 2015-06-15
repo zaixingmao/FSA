@@ -69,6 +69,10 @@ met = PSet(
     #mvametEt='evt.met("mvamet").et',
     #mvametPhi='evt.met("mvamet").phi',
     #mvametSignificance='evt.met("mvamet").significance',
+#     metCov01 = 'evt.metCovariance()',
+#     metCov10 = 'evt.metCovariance()',
+#     metCov11 = 'evt.metCovariance()',
+
 )
 
 gen = PSet(
@@ -80,6 +84,7 @@ gen = PSet(
     isWmunu='evt.findDecay(24,13)',
     NUP='evt.lesHouches.NUP',
     EmbPtWeight='evt.generatorFilter.filterEfficiency',
+
 )
 
 tauSpinner = PSet(
