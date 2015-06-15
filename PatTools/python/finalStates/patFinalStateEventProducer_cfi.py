@@ -13,7 +13,8 @@ patFinalStateEventProducer = cms.EDProducer(
     jetSrc = cms.InputTag("fixme"),
     pfSrc = cms.InputTag("particleFlow"),
     metSrc = cms.InputTag("fixme"),
-    metCovSrc = cms.InputTag("pfMEtSignCovMatrix"),
+    metCovSrc = cms.string("pfMEtSignCovMatrix"),
+
     trgSrc = cms.InputTag("patTriggerEvent"),
     puInfoSrc = cms.InputTag("addPileupInfo"),
     genParticleSrc = cms.InputTag("genParticles"),

@@ -106,17 +106,19 @@ pfCandsNotInSelectedJets = pfNoJet.clone(
 metSignficanceSequence += pfCandsNotInSelectedJets
 
 # produce PFMET significance cov. matrix
-from RecoMET.METProducers.METSigParams_cfi import METSignificance_params
+from RecoMET.METProducers.METSignificanceParams_cfi import METSignificanceParams
 pfMEtSignCovMatrix = cms.EDProducer(
-    "PFMETSignificanceProducer",
-    METSignificance_params,
-    noSeqChain = cms.bool(True), # Don't "chain" these sequence and update [src]
-    src = cms.VInputTag(
-        'metSigDecentMuons',
-        'metSigDecentElectrons',
-        'metSigDecentTaus',
-        'metSigGetPFJets',
-        'pfCandsNotInSelectedJets'
-    )
+    "METSignificanceProducer",
+    srcLeptons = cms.VInputTag(
+#        'slimmedElectrons',
+#        'slimmedMuons',
+#        'slimmedPhotons'
+       'slimmedTaus'
+       ),
+    srcPfJets            = cms.InputTag('slimmedJets'),
+    srcMet               = cms.InputTag('slimmedMETs'),
+    srcPFCandidates      = cms.InputTag('packedPFCandidates'),
+
+    parameters = METSignificanceParams
 )
 metSignficanceSequence += pfMEtSignCovMatrix

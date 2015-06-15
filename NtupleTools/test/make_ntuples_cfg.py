@@ -189,6 +189,10 @@ if options.rerunFSA:
     else:
         mvamet_collection = 'systematicsMETMVA'
 
+    process.load("FinalStateAnalysis.PatTools.patMETProduction_cff")
+    process.metSigPath = cms.Path(process.pfMEtSignCovMatrix)
+    process.schedule.append(process.metSigPath)
+
     # Make a version with the MVA MET reconstruction method
     # Works only if we rerun the FSA!
     if options.rerunMVAMET:

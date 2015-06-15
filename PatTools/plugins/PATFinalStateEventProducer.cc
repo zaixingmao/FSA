@@ -65,7 +65,7 @@ class PATFinalStateEventProducer : public edm::EDProducer {
 
     // Information about the MET
     edm::InputTag metSrc_;
-    edm::InputTag metCovSrc_;
+    std::string metCovSrc_;
 
     // Trigger input
     edm::InputTag trgSrc_;
@@ -127,7 +127,9 @@ PATFinalStateEventProducer::PATFinalStateEventProducer(
   if (!miniAOD_) gsfTrackSrc_ = pset.getParameter<edm::InputTag>("gsfTrackSrc");
 
   metSrc_ = pset.getParameter<edm::InputTag>("metSrc");
-  if (!miniAOD_) metCovSrc_ = pset.getParameter<edm::InputTag>("metCovSrc");
+  //if (!miniAOD_)
+  metCovSrc_ = pset.getParameter<std::string>("metCovSrc");
+ 
   trgSrc_ = pset.getParameter<edm::InputTag>("trgSrc");
   puInfoSrc_ = pset.getParameter<edm::InputTag>("puInfoSrc");
   truthSrc_ = pset.getParameter<edm::InputTag>("genParticleSrc");
@@ -258,6 +260,20 @@ void PATFinalStateEventProducer::produce(edm::Event& evt,
       metCovariance(1,1) = (*metCov)(1,1);
     }
   }
+  // Get MET covariance matrix
+  edm::Handle<double> metCov00, metCov01, metCov10, metCov11;
+  evt.getByLabel(metCovSrc_, "CovarianceMatrix00", metCov00);
+  evt.getByLabel(metCovSrc_, "CovarianceMatrix01", metCov01);
+  evt.getByLabel(metCovSrc_, "CovarianceMatrix10", metCov10);
+  evt.getByLabel(metCovSrc_, "CovarianceMatrix11", metCov11);
+  if (metCov00.isValid()) {
+    // Covert to TMatrixD
+    metCovariance(0,0) = (*metCov00);
+    metCovariance(0,1) = (*metCov01);
+    metCovariance(1,0) = (*metCov10);
+    metCovariance(1,1) = (*metCov11);
+  }
+
 
   std::map<std::string, edm::Ptr<pat::MET> > theMEts;
   // Get different types of METs - this will be a map like
