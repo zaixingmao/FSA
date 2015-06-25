@@ -78,7 +78,7 @@ options = TauVarParsing.TauVarParsing(
     eleCor="",
     rerunQGJetID=0,  # If one reruns the quark-gluon JetID
     runNewElectronMVAID=0,  # If one runs the new electron MVAID
-    rerunMVAMET=0,  # If one, (re)build the MVA MET
+    runMVAMET=1,  # If one, (re)build the MVA MET
     rerunJets=0,
     dblhMode=False, # For double-charged Higgs analysis
     runTauSpinner=0,
@@ -185,30 +185,13 @@ if options.rerunFSA:
     print 'Using globalTag: %s' % process.GlobalTag.globaltag
 
     if options.useMiniAOD:
-        mvamet_collection = 'slimmedMETs'
+        mvamet_collection = 'fake'
     else:
         mvamet_collection = 'systematicsMETMVA'
 
     process.load("FinalStateAnalysis.PatTools.patMETProduction_cff")
     process.metSigPath = cms.Path(process.pfMEtSignCovMatrix)
     process.schedule.append(process.metSigPath)
-
-    # Make a version with the MVA MET reconstruction method
-    # Works only if we rerun the FSA!
-    if options.rerunMVAMET:
-        process.load("FinalStateAnalysis.PatTools.met.mvaMetOnPatTuple_cff")
-        if options.useMiniAOD:
-            process.isotaus.src = "slimmedTaus"
-            mvamet_collection = "slimmedMETs"
-        else:
-            process.isotaus.src = "cleanPatTaus"
-            mvamet_collection = "patMEtMVA"
-        if not options.isMC:
-            process.patMEtMVA.addGenMET = False
-        process.mvaMetPath = cms.Path(process.pfMEtMVAsequence)
-        process.schedule.append(process.mvaMetPath)
-        print "rerunning MVA MET sequence, output collection will be {n}"\
-            .format(n=mvamet_collection)
 
     # Drop the input ones, just to make sure we aren't screwing anything up
     process.buildFSASeq = cms.Sequence()
@@ -238,6 +221,51 @@ if options.rerunFSA:
             'mvamet': mvamet_collection,
             'fsr': 'boostedFsrPhotons',
         }
+
+    # Make a version with the MVA MET reconstruction method
+    # Works only if we rerun the FSA!
+    # mvamet
+    if options.runMVAMET:
+        process.load("RecoJets.JetProducers.ak4PFJets_cfi")
+        process.ak4PFJets.src = cms.InputTag("packedPFCandidates")
+        process.ak4PFJets.doAreaFastjet = cms.bool(True)
+    
+        from JetMETCorrections.Configuration.DefaultJEC_cff import ak4PFJetsL1FastL2L3
+    
+        process.load("RecoMET.METPUSubtraction.mvaPFMET_cff")
+        process.pfMVAMEt.srcPFCandidates = cms.InputTag("packedPFCandidates")
+        process.pfMVAMEt.srcVertices = cms.InputTag("offlineSlimmedPrimaryVertices")
+        process.pfMVAMEt.inputFileNames.U     = cms.FileInPath('RecoMET/METPUSubtraction/data/gbrmet_7_2_X_MINIAOD_BX25PU20_Mar2015.root')
+        process.pfMVAMEt.inputFileNames.DPhi  = cms.FileInPath('RecoMET/METPUSubtraction/data/gbrphi_7_2_X_MINIAOD_BX25PU20_Mar2015.root')
+        process.pfMVAMEt.inputFileNames.CovU1 = cms.FileInPath('RecoMET/METPUSubtraction/data/gbru1cov_7_2_X_MINIAOD_BX25PU20_Mar2015.root')
+        process.pfMVAMEt.inputFileNames.CovU2 = cms.FileInPath('RecoMET/METPUSubtraction/data/gbru2cov_7_2_X_MINIAOD_BX25PU20_Mar2015.root')
+        if not options.use25ns:
+            process.pfMVAMEt.inputFileNames.U     = cms.FileInPath('RecoMET/METPUSubtraction/data/gbrmet_7_2_X_MINIAOD_BX50PU40_Jan2015.root')
+            process.pfMVAMEt.inputFileNames.DPhi  = cms.FileInPath('RecoMET/METPUSubtraction/data/gbrphi_7_2_X_MINIAOD_BX50PU40_Jan2015.root')
+            process.pfMVAMEt.inputFileNames.CovU1 = cms.FileInPath('RecoMET/METPUSubtraction/data/gbru1cov_7_2_X_MINIAOD_BX50PU40_Jan2015.root')
+            process.pfMVAMEt.inputFileNames.CovU2 = cms.FileInPath('RecoMET/METPUSubtraction/data/gbru2cov_7_2_X_MINIAOD_BX50PU40_Jan2015.root')
+    
+        process.puJetIdForPFMVAMEt.jec =  cms.string('AK4PF')
+        process.puJetIdForPFMVAMEt.vertexes = cms.InputTag("offlineSlimmedPrimaryVertices")
+        process.puJetIdForPFMVAMEt.rho = cms.InputTag("fixedGridRhoFastjetAll")
+    
+        from PhysicsTools.PatAlgos.producersLayer1.metProducer_cfi import patMETs
+    
+        process.miniAODMVAMEt = patMETs.clone(
+            metSource=cms.InputTag("pfMVAMEt"),
+            addMuonCorrections = cms.bool(False),
+            addGenMET = cms.bool(False)
+        )
+        fs_daughter_inputs['mvamet'] = 'miniAODMVAMEt'
+    
+        process.mvaMetSequence = cms.Path(
+            process.ak4PFJets *
+            process.pfMVAMEtSequence *
+            process.miniAODMVAMEt
+        )
+        process.schedule.append(process.mvaMetSequence)
+
+
     #re run the MC matching, if requested
     if options.rerunMCMatch:
         print 'doing rematching!'
