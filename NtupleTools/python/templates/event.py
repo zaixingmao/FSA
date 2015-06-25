@@ -66,8 +66,8 @@ met = PSet(
     recoilWithMet='getDaughtersRecoilWithMet().R()',
     #does not seem to work, investigating...
     #recoilWMetSig ='getRecoilWithMetSignificance()',
-    #mvametEt='evt.met("mvamet").et',
-    #mvametPhi='evt.met("mvamet").phi',
+    mvametEt='evt.met("mvamet").et',
+    mvametPhi='evt.met("mvamet").phi',
     #mvametSignificance='evt.met("mvamet").significance',
 #     metCov01 = 'evt.metCovariance()',
 #     metCov10 = 'evt.metCovariance()',
@@ -82,6 +82,14 @@ gen = PSet(
     isGtautau='evt.findDecay(22,15)',
     isWtaunu='evt.findDecay(24,15)',
     isWmunu='evt.findDecay(24,13)',
+    isHtautau='evt.findDecay(25,15)',
+    isZToEE='evt.findDecay(23,11)',
+    isHToEE='evt.findDecay(25,11)',
+    isZToMM='evt.findDecay(23,13)',
+    isHToMM='evt.findDecay(25,13)',
+    isTauToE='evt.findDecay(15,11)',
+    isTauToM='evt.findDecay(15,13)',
+
     NUP='evt.lesHouches.NUP',
     EmbPtWeight='evt.generatorFilter.filterEfficiency',
 
