@@ -13,6 +13,8 @@
   "Tbar_s" : "TBarToLeptons_s-channel-CSA14_Tune4C_13TeV-aMCatNLO-tauola",
   "Tbar_t" : "TBarToLeptons_t-channel_Tune4C_CSA14_13TeV-aMCatNLO-tauola",
   "Tbar_tW" : "Tbar_tW-channel-DR_Tune4C_13TeV-CSA14-powheg-tauola",
-  "VBFHtt" : "VBF_HToTauTau_M-125_13TeV-powheg-pythia6"
-
+  "VBFHtt" : "VBF_HToTauTau_M-125_13TeV-powheg-pythia6",
+  "G2HH2tautaubb300" : "GluGluToBulkGravitonToHHTo2B2Tau_M-300_narrow_13TeV-madgraph",
+  "G2HH2tautaubb260" : "GluGluToBulkGravitonToHHTo2B2Tau_M-260_narrow_13TeV-madgraph",
+  "G2HH2tautaubb350" : "GluGluToBulkGravitonToHHTo2B2Tau_M-350_narrow_13TeV-madgraph"
 }
