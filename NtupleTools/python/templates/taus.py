@@ -117,4 +117,10 @@ id = PSet(
     objectPuCorrPtSum     = '{object}.tauID("puCorrPtSum")',
 )
 
+# Trigger matching
+trigger = PSet(
+    objectDiTauJet = 'matchToHLTFilter({object_idx}, "hltL1sDoubleTauJet36erORDoubleTauJet68er", 0.5)',
+    objectDiIsoTau = 'matchToHLTFilter({object_idx}, "hltDoubleL2IsoTau35eta2p1", 0.5)',
+    objectDiPFTau40 = 'matchToHLTFilter({object_idx}, "hltDoublePFTau40TrackPt1MediumIsolationDz02Reg", 0.5)',
+)
 
