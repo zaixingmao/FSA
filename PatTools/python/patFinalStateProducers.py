@@ -88,6 +88,7 @@ def produce_final_states(process, collections, output_commands,
             process.patFinalStateEventProducer.mets = cms.PSet(
                 pfmet = cms.InputTag(pfmetsrc),
             )
+            process.patFinalStateEventProducer.mets.mvamet = cms.InputTag(mvametsrc)
         else:
             process.patFinalStateEventProducer.mets.pfmet = pfmetsrc
             process.patFinalStateEventProducer.mets.mvamet = mvametsrc
