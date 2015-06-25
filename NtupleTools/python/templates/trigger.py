@@ -54,6 +54,14 @@ tripleLepton = PSet(
     # other trilepton paths don't seem to exist in PHYS14...
     )
 
+doubleTau = PSet(
+    _trig_template.replace(
+        name='doubleTau',
+        paths=r'HLT_DoubleMediumIsoPFTau40_Trk1_eta2p1_Reg_v\\d+'
+        ),
+    )
+
+
 # isomu = _trig_template.replace(name='isoMu',
 #     paths=r'HLT_IsoMu17_v\\d+, HLT_IsoMu20_v\\d+, '
 #           r'HLT_IsoMu24_v\\d+, HLT_IsoMu24_eta2p1_v\\d+, '
