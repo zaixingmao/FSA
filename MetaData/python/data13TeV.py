@@ -16,12 +16,36 @@ datadefs["DYJets_M50-PU20bx25"] = {
     'x_sec': 6025.2*picobarns,
 }
 datadefs["TTJets-PU20bx25"] = {
-    'analyses': ['4L'],
+    'analyses': [],
     'datasetpath': '/TTJets_MSDecaysCKM_central_Tune4C_13TeV-madgraph-tauola/Phys14DR-PU20bx25_PHYS14_25_V1-v1/MINIAODSIM',
     'pu': '20bx25',
     'calibrationTarget': 'Phys14DR',
     'x_sec': 689.1*picobarns, # might be 809.1, I'm not sure. See https://twiki.cern.ch/twiki/bin/viewauth/CMS/StandardModelCrossSectionsat13TeV
 }
+
+datadefs["G2HH2tautaubb260"] = {
+    'analyses': [],
+    'datasetpath': '/GluGluToBulkGravitonToHHTo2B2Tau_M-260_narrow_13TeV-madgraph/RunIISpring15DR74-Asympt25ns_MCRUN2_74_V9-v1/MINIAODSIM',
+    'pu': '20bx25',
+    'calibrationTarget': 'RunIISpring15DR74',
+    'x_sec': -999,
+}
+datadefs["G2HH2tautaubb300"] = {
+    'analyses': [],
+    'datasetpath': '/GluGluToBulkGravitonToHHTo2B2Tau_M-300_narrow_13TeV-madgraph/RunIISpring15DR74-Asympt25ns_MCRUN2_74_V9-v1/MINIAODSIM',
+    'pu': '20bx25',
+    'calibrationTarget': 'RunIISpring15DR74',
+    'x_sec': -999,
+}
+
+datadefs["G2HH2tautaubb350"] = {
+    'analyses': [],
+    'datasetpath': '/GluGluToBulkGravitonToHHTo2B2Tau_M-350_narrow_13TeV-madgraph/RunIISpring15DR74-Asympt25ns_MCRUN2_74_V9-v1/MINIAODSIM',
+    'pu': '20bx25',
+    'calibrationTarget': 'RunIISpring15DR74',
+    'x_sec': -999,
+}
+
 datadefs["ggHZZ-PU20bx25"] = {
     'analyses': ['4L'],
     'datasetpath': '/GluGluToHToZZTo4L_M-125_13TeV-powheg-pythia6/Phys14DR-PU20bx25_tsg_PHYS14_25_V1-v1/MINIAODSIM',
