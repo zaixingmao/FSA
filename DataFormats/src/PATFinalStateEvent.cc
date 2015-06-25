@@ -113,7 +113,8 @@ PATFinalStateEvent::PATFinalStateEvent(
   packedPFRefProd_(packedPFRefProd),
   tracks_(tracks),
   gsfTracks_(gsfTracks),
-  mets_(miniAOD ? std::map<std::string, edm::Ptr<pat::MET> >() : mets)
+  mets_(mets)
+//   mets_(miniAOD ? std::map<std::string, edm::Ptr<pat::MET> >() : mets)
   //  (miniAOD ? mets_(std::map<std::string, edm::Ptr<pat::MET> >()) : mets_(mets))
 { }
 
@@ -163,19 +164,9 @@ const edm::Ptr<pat::MET>& PATFinalStateEvent::met() const {
 const edm::Ptr<pat::MET> PATFinalStateEvent::met(
     const std::string& type) const 
 {
-  if(miniAOD_)
-    {
-      // At least for now, miniAOD only has type1 pfMET
-      return met_;
-    }
-  else
-    {
-      std::map<std::string, edm::Ptr<pat::MET> >::const_iterator findit =
-	mets_.find(type);
-      if (findit != mets_.end() && findit->second.isNonnull())
-	return findit->second;
+    std::map<std::string, edm::Ptr<pat::MET> >::const_iterator findit = mets_.find(type);
+    if (findit != mets_.end() && findit->second.isNonnull()) return findit->second;
       return edm::Ptr<pat::MET>();
-    }
 }
 
 const TMatrixD& PATFinalStateEvent::metCovariance() const {
@@ -191,29 +182,20 @@ const reco::Candidate::LorentzVector PATFinalStateEvent::met4vector(
 								    const std::string& tag, 
 								    const int applyPhiCorr) const 
 {
-  if(miniAOD_)
-    { // miniAOD only has type1 pfMET for now, but corrections (jes, mes etc.) are supported
-      if(tag == "jes+")
-	return met_->shiftedP4(pat::MET::JetEnUp);
-      else if(tag == "ues+")
-	return met_->shiftedP4(pat::MET::UnclusteredEnUp);
-      else if(tag == "tes+")
-	return met_->shiftedP4(pat::MET::TauEnUp);
-      else if(tag == "mes+")
-	return met_->shiftedP4(pat::MET::MuonEnUp);
-      else // all miniAOD pfMET is Type 1
-	return met_->p4();      
-    }
   std::map<std::string, edm::Ptr<pat::MET> >::const_iterator findit =
     mets_.find(type);
   if (findit == mets_.end() || findit->second.isNull())
     return reco::Candidate::LorentzVector();
-
-  const reco::Candidate::LorentzVector& metp4 = (tag == "") ? met(type)->p4() : met(type)->userCand(tag)->p4();
-  if (applyPhiCorr == 1)
-    return fshelpers::metPhiCorrection(metp4, recoVertices_.size(), !isRealData_);
-
-  return metp4;
+  if(tag == "jes+")
+	return met_->shiftedP4(pat::MET::JetEnUp);
+  else if(tag == "ues+")
+	return met_->shiftedP4(pat::MET::UnclusteredEnUp);
+  else if(tag == "tes+")
+	return met_->shiftedP4(pat::MET::TauEnUp);
+  else if(tag == "mes+")
+	return met_->shiftedP4(pat::MET::MuonEnUp);
+  else // all miniAOD pfMET is Type 1
+	return met_->p4();    
 }
 
 const edm::EventID& PATFinalStateEvent::evtId() const {
@@ -246,7 +228,15 @@ int PATFinalStateEvent::matchedToFilter(const reco::Candidate& cand,
     matchingTriggerFilters(trig(), pattern);
   if (!filters.size())
     return -1;
-  return miniAOD_ ? matchedToAnObject(trigStandAlone(), cand, maxDeltaR) :
+  std::vector<pat::TriggerObjectStandAlone> trgObjects = trigStandAlone();
+  std::vector<pat::TriggerObjectStandAlone> matchedTrgObjects;
+
+    for (size_t i = 0; i < trgObjects.size(); ++i) {
+      if (trgObjects.at(i).hasFilterLabel(pattern)) matchedTrgObjects.push_back(trgObjects.at(i));
+    }
+  if (!matchedTrgObjects.size()) return -1;
+  
+  return miniAOD_ ? matchedToAnObject(matchedTrgObjects, cand, maxDeltaR) :
     matchedToAnObject(triggerEvent_.filterObjects(filters[0]->label()), cand, maxDeltaR);
 }
 
