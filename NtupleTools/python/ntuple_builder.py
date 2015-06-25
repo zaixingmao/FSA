@@ -33,10 +33,11 @@ _common_template = PSet(
     templates.cleaning.vetos,
 
     # PHYS14 lepton triggers
-    templates.trigger.singleLepton,
-    templates.trigger.doubleLepton,
-    templates.trigger.tripleLepton, # tiple e only, for some reason
-    # Need to fill out photon triggers
+    templates.trigger.doubleTau,
+#     templates.trigger.singleLepton,
+#     templates.trigger.doubleLepton,
+#     templates.trigger.tripleLepton, # tiple e only, for some reason
+#     # Need to fill out photon triggers
 #     templates.trigger.isomu,
 #     templates.trigger.isomu24eta2p1,
 #     templates.trigger.singlePho,
@@ -52,6 +53,7 @@ _tau_template = PSet(
     templates.cleaning.overlaps,
     templates.taus.info,
     templates.taus.id,
+    templates.taus.trigger,
     templates.topology.mtToMET,
 )
 
@@ -117,9 +119,9 @@ _pt_cuts = {
 _eta_cuts = {
     'm': '2.5',
     'e': '3.0',
-    't': '2.3',
+    't': '2.1',
     'g': '3.0',
-    'j': '2.5'
+    'j': '4.7'
 }
 
 # How to get from a leg name to "finalStateElecMuMuMu" etc
@@ -251,7 +253,7 @@ def make_ntuple(*legs, **kwargs):
     # If basic jet information is desired for a non-jet final state, put it in
     for i in range(1,kwargs.get("nExtraJets", 0)+1):
         label = "jet%i"%i
-        format_labels[label] = 'evt.jets.at(%i)' % i
+        format_labels[label] = 'evt.jets.at(%i)' %(i-1)
         format_labels[label + '_idx'] = '%i' % i
         
         ntuple_config = PSet(
