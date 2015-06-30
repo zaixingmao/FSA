@@ -235,7 +235,13 @@ int PATFinalStateEvent::matchedToFilter(const reco::Candidate& cand,
   std::vector<const pat::TriggerFilter*> filters = matchingTriggerFilters(trigStandAlone(), names(), pattern);
   if (!filters.size())
     return -1;
-  return matchedToAnObject(trigStandAlone(), cand, maxDeltaR);
+  std::vector<pat::TriggerObjectStandAlone> trgObjects = trigStandAlone();
+  std::vector<pat::TriggerObjectStandAlone> matchedTrgObjects;
+  for (size_t i = 0; i < trgObjects.size(); ++i) {
+    if (trgObjects.at(i).hasFilterLabel(pattern)) matchedTrgObjects.push_back(trgObjects.at(i));
+  }
+
+  return matchedToAnObject(matchedTrgObjects, cand, maxDeltaR);
 }
 
 int PATFinalStateEvent::matchedToPath(const reco::Candidate& cand,

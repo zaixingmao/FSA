@@ -35,9 +35,9 @@ _common_template = PSet(
     templates.topology.vbf,
 
     # PHYS14 lepton triggers
-    templates.trigger.singleLepton,
+#    templates.trigger.singleLepton,
     templates.trigger.doubleLepton,
-    templates.trigger.tripleLepton, # tiple e only, for some reason
+#    templates.trigger.tripleLepton, # tiple e only, for some reason
     # Need to fill out photon triggers
 #     templates.trigger.isomu,
 #     templates.trigger.isomu24eta2p1,

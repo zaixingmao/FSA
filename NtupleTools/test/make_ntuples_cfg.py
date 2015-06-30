@@ -73,7 +73,7 @@ options = TauVarParsing.TauVarParsing(
     rochCor="",
     eleCor="",
     rerunQGJetID=0,  # If one reruns the quark-gluon JetID
-    runMVAMET=0,  # If one, (re)build the MVA MET
+    runMVAMET=1,  # If one, (re)build the MVA MET
     rerunJets=0,
     dblhMode=False, # For double-charged Higgs analysis
     runTauSpinner=0,
@@ -153,6 +153,7 @@ envvar = 'mcgt' if options.isMC else 'datagt'
 GT = {'mcgt': 'MCRUN2_74_V9A::All', 'datagt': 'GR_70_V2_AN1::All'}
 if options.use25ns:
     GT['mcgt'] = 'MCRUN2_74_V9::All'
+    GT['mcgt'] = 'PHYS14_25_V1::All'
 
 
 if options.GlobalTag:
@@ -189,11 +190,11 @@ output_commands = []
 # embed electron ids
 electronMVANonTrigIDLabel = "BDTIDNonTrig"
 electronMVATrigIDLabel = "BDTIDTrig"
-from FinalStateAnalysis.NtupleTools.embedElectronIDs import embedElectronIDs
-fs_daughter_inputs['electrons'] = embedElectronIDs(process,options.use25ns,
-                                                   fs_daughter_inputs['electrons'], 
-                                                   electronMVANonTrigIDLabel,
-                                                   electronMVATrigIDLabel,)
+#from FinalStateAnalysis.NtupleTools.embedElectronIDs import embedElectronIDs
+#fs_daughter_inputs['electrons'] = embedElectronIDs(process,options.use25ns,
+#                                                   fs_daughter_inputs['electrons'], 
+#                                                   electronMVANonTrigIDLabel,
+#                                                   electronMVATrigIDLabel,)
 
 # Clean out muon "ghosts" caused by track ambiguities
 process.ghostCleanedMuons = cms.EDProducer("PATMuonCleanerBySegments",
@@ -420,6 +421,7 @@ if options.runMVAMET:
         process.pfMVAMEtSequence *
         process.miniAODMVAMEt
     )
+    process.schedule.append(process.mvaMetSequence)
 
 if options.hzz:    
     # Put FSR photons into leptons as user cands

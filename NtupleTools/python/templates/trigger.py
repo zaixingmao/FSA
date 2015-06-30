@@ -44,6 +44,10 @@ doubleLepton = PSet(
         name='muE',
         paths=r'HLT_Mu23_TrkIsoVVL_Ele12_Gsf_CaloId_TrackId_Iso_MediumWP_v\\d+'
         ),
+    _trig_template.replace(
+        name='doubleTau',
+        paths=r'HLT_DoubleMediumIsoPFTau40_Trk1_eta2p1_Reg_v\\d+'
+        ),
     )
 
 tripleLepton = PSet(
