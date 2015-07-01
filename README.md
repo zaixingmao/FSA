@@ -54,3 +54,12 @@ You must always set up the CMSSW environment + some extra variables from FinalSt
   cmsenv
   source $CMSSW_BASE/src/FinalStateAnalysis/environment.sh
 ```
+
+To test setup
+```bash
+  cd FinalStateAnalysis/NtupleTools/test
+  python test.py
+  #compare your results with benchmark
+  python diffROOTFiles.py --file1 myTestFile.root --file2 testFile.root
+  #check diff.root file
+```
