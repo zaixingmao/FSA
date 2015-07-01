@@ -16,8 +16,8 @@ Current CMSSW version: ``7_2_X``.
 Get a supported CMSSW release area:
 
 ```bash
-  scram pro -n MyWorkingAreaName CMSSW CMSSW_VERSION
-  cd MyWorkingAreaName/src
+  cmsrel CMSSW_7_2_1
+  cd CMSSW_7_2_1/src
   # Setup your CMSSW environment
   cmsenv
   # SSH agent is optional, but will save you from typing your password many times
@@ -30,7 +30,7 @@ Get a supported CMSSW release area:
 Checkout the FinalStateAnalysis repository:
 
 ```bash
-  git clone --recursive -b miniAOD_dev https://github.com/uwcms/FinalStateAnalysis.git
+  git clone -b test https://github.com/zaixingmao/FSA.git FinalStateAnalysis
   cd FinalStateAnalysis
 ```
 
