@@ -44,8 +44,8 @@ pv_info = PSet(
 )
 
 met = PSet(
-    mvaMetEt       = 'evt.met("mvamet").et',
-    mvaMetPhi      = 'evt.met("mvamet").phi',
+    mvametEt       = 'evt.met("mvamet").et',
+    mvametPhi      = 'evt.met("mvamet").phi',
     pfMetEt        = 'evt.met4vector("pfmet","",1).Et',
     pfMetPhi       = 'evt.met4vector("pfmet","",1).Phi',
     type1_pfMetEt  = 'evt.met4vector("pfmet","type1",1).Et', #1 --> phi correction not in miniAOD
