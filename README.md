@@ -16,8 +16,8 @@ Current CMSSW version: ``7_4_5``.
 Get a supported CMSSW release area:
 
 ```bash
-  scram pro -n MyWorkingAreaName CMSSW <CMSSW_VERSION>
-  cd MyWorkingAreaName/src
+  cmsrel CMSSW_7_4_5
+  cd CMSSW_7_4_5/src
   # Setup your CMSSW environment
   cmsenv
   # SSH agent is optional, but will save you from typing your password many times
@@ -30,7 +30,7 @@ Get a supported CMSSW release area:
 Checkout the FinalStateAnalysis repository:
 
 ```bash
-  git clone --recursive -b miniAOD_dev_74X git@github.com:uwcms/FinalStateAnalysis.git
+  git clone -b miniAOD_dev_74X https://github.com/zaixingmao/FSA.git FinalStateAnalysis
   cd FinalStateAnalysis
 ```
 
@@ -48,6 +48,13 @@ Checkout the needed CMSSW tags:
   pushd ..
   scram b -j 8
   popd
+```
+
+Checkout MVAMet (https://twiki.cern.ch/twiki/bin/view/CMS/MVAMet#CMSSW_7_2_X_requires_slc6_MiniAO)
+
+```bash
+git cms-addpkg RecoMET/METPUSubtraction/
+
 ```
 
 You must always set up the CMSSW environment + some extra variables from FinalStateAnalysis:
