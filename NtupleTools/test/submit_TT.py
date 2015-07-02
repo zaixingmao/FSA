@@ -10,7 +10,7 @@ skimCuts = {"ID": "object.tauID(\\\"decayModeFinding\\\") > 0.5 || object.tauID(
             }
 
 
-cmd = "./make_ntuples_cfg.py eventsToProcess=1:4903:490239  outputFile=myTestFile.root inputFiles=file:///hdfs/store/mc/Phys14DR/VBF_HToTauTau_M-125_13TeV-powheg-pythia6/MINIAODSIM/PU20bx25_tsg_PHYS14_25_V1-v2/00000/147B369C-9F77-E411-B99D-00266CF9B184.root channels=tt isMC=1 nExtraJets=6 svFit=0 "
+cmd = "./make_ntuples_cfg.py eventsToProcess=1:4903:490239  outputFile=myTestFile.root inputFiles=file:///hdfs/store/mc/Phys14DR/VBF_HToTauTau_M-125_13TeV-powheg-pythia6/MINIAODSIM/PU20bx25_tsg_PHYS14_25_V1-v2/00000/147B369C-9F77-E411-B99D-00266CF9B184.root channels=tt isMC=1 nExtraJets=8 svFit=0 "
 #cmd = "./make_ntuples_cfg.py maxEvents=1000  outputFile=myTestFile.root useMiniAOD=1 inputFiles=file:///hdfs/store/mc/Phys14DR/VBF_HToTauTau_M-125_13TeV-powheg-pythia6/MINIAODSIM/PU20bx25_tsg_PHYS14_25_V1-v2/00000/66E71D9C-9F77-E411-BFE9-00266CF9B184.root channels=tt isMC=1 nExtraJets=6 svFit=0 "
 
 cuts = "skimCuts=\""
