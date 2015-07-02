@@ -190,8 +190,8 @@ def make_ntuple(*legs, **kwargs):
     format_labels = {
     }
 
-    pt_cuts = kwargs.get('ptCuts',{'e':'0','m':'0','t':'0','g':'0','j':'0'})
-    eta_cuts = kwargs.get('etaCuts',{'e':'10','m':'10','t':'10','g':'10','j':'10'})
+    pt_cuts = kwargs.get('ptCuts',{'e':'0','m':'0','t':'30','g':'0','j':'0'})
+    eta_cuts = kwargs.get('etaCuts',{'e':'10','m':'10','t':'2.1','g':'10','j':'10'})
 
     # Count how many objects of each type we put in
     counts = {
