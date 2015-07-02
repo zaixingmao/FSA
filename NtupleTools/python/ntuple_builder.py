@@ -55,6 +55,7 @@ _tau_template = PSet(
     templates.taus.info,
     templates.taus.id,
     templates.topology.mtToMET,
+    templates.taus.trigger,
 )
 
 _muon_template = PSet(
