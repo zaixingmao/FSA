@@ -43,10 +43,23 @@ Checkout the needed CMSSW tags:
   PATPROD=1 LUMI=1 LIMITS=0 ./recipe.sh
   # Setup FSA environment
   source environment.sh
-  # Compile
-  cd ../../
-  scram b -j 8
 ```
+Checkout SVFit
+```bash
+  git clone http://github.com/veelken/SVfit_standalone.git TauAnalysis/SVfitStandalone
+  cd TauAnalysis/SVfitStandalone
+  git checkout svFit_2015Apr03
+  cd ../../
+```
+
+Checkout MVAMET (https://twiki.cern.ch/twiki/bin/view/CMS/MVAMet#CMSSW_7_2_X_requires_slc6_MiniAO):
+```bash
+  git cms-addpkg PhysicsTools/PatAlgos
+  git cms-addpkg FWCore/Version
+  git-cms-merge-topic -u cms-met:72X-13TeV-Training-30Jan15
+  cd ../../
+```
+Compile
 
 You must always set up the CMSSW environment + some extra variables from FinalStateAnalysis:
 
