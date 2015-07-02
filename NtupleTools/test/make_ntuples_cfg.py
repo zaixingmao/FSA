@@ -153,7 +153,6 @@ envvar = 'mcgt' if options.isMC else 'datagt'
 GT = {'mcgt': 'MCRUN2_74_V9A::All', 'datagt': 'GR_70_V2_AN1::All'}
 if options.use25ns:
     GT['mcgt'] = 'MCRUN2_74_V9::All'
-    GT['mcgt'] = 'PHYS14_25_V1::All'
 
 
 if options.GlobalTag:
