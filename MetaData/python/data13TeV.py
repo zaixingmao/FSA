@@ -44,6 +44,13 @@ datadefs["WZTo3LNu-PU20bx25"] = {
     'x_sec': -999,
 }
 
+datadefs["VBFHtt-PU20bx25"] = {
+    'analyses': [''],
+    'datasetpath': '/VBF_HToTauTau_M-125_13TeV-powheg-pythia6/Phys14DR-PU20bx25_tsg_PHYS14_25_V1-v2/MINIAODSIM',
+    'pu': '20bx25',
+    'calibrationTarget': 'Phys14DR',
+    'x_sec': -999, # xsec * br. ratio. BR for L=e,mu, might need to use BR with tau? (=0.000294)
+}
 
 if __name__=="__main__":
     query_cli(datadefs)
