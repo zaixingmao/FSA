@@ -26,6 +26,7 @@
 class MiniAODMuonIDEmbedder : public edm::EDProducer {
   public:
     explicit MiniAODMuonIDEmbedder(const edm::ParameterSet& pset);
+    bool isMediumMuon(const pat::Muon & muon);
     virtual ~MiniAODMuonIDEmbedder(){}
     void produce(edm::Event& evt, const edm::EventSetup& es);
 
@@ -42,6 +43,19 @@ MiniAODMuonIDEmbedder::MiniAODMuonIDEmbedder(const edm::ParameterSet& pset) {
 
   produces<pat::MuonCollection>();
 }
+
+bool MiniAODMuonIDEmbedder::isMediumMuon(const pat::Muon & recoMu) 
+   {
+      bool goodGlob = recoMu.isGlobalMuon() && 
+                      recoMu.globalTrack()->normalizedChi2() < 3 && 
+                      recoMu.combinedQuality().chi2LocalPosition < 12 && 
+                      recoMu.combinedQuality().trkKink < 20; 
+      bool isMedium = muon::isLooseMuon(recoMu) && 
+                      recoMu.innerTrack()->validFraction() > 0.8 && 
+                      muon::segmentCompatibility(recoMu) > (goodGlob ? 0.303 : 0.451); 
+      return isMedium; 
+   }
+
 
 void MiniAODMuonIDEmbedder::produce(edm::Event& evt, const edm::EventSetup& es) {
   edm::Handle<std::vector<pat::Muon>> muonsCollection;
@@ -63,6 +77,7 @@ void MiniAODMuonIDEmbedder::produce(edm::Event& evt, const edm::EventSetup& es) 
     pat::Muon muon(muons->at(i));
 
     muon.addUserInt("tightID",muon.isTightMuon(pv_));
+    muon.addUserInt("mediumID",isMediumMuon(muon));
 
     output->push_back(muon);
   }
