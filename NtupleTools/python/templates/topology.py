@@ -120,8 +120,11 @@ vbf = PSet(
 
 
 extraJet = PSet(
-    objectPt = '? evt.jets.size()>{object_idx} ? {object}.pt() : -999',
-    objectEta = '? evt.jets.size()>{object_idx} ? {object}.eta() : -999',
-    objectPhi = '? evt.jets.size()>{object_idx} ? {object}.phi() : -999',
-    objectPUMVA = '? evt.jets.size()>{object_idx} ? {object}.userFloat("pileupJetId:fullDiscriminant") : -999',
+    objectMass = '? evt.jets.size()>={object_idx} ? {object}.mass() : -999',
+    objectPt = '? evt.jets.size()>={object_idx} ? {object}.pt() : -999',
+    objectEta = '? evt.jets.size()>={object_idx} ? {object}.eta() : -999',
+    objectPhi = '? evt.jets.size()>={object_idx} ? {object}.phi() : -999',
+    objectPUMVA = '? evt.jets.size()>={object_idx} ? {object}.userFloat("pileupJetId:fullDiscriminant") : -999',
+    objectCSVBtag = '? evt.jets.size()>={object_idx} ? {object}.bDiscriminator("combinedInclusiveSecondaryVertexV2BJetTags") : -999',
+    objectPFJetIDLoose = '? evt.jets.size()>={object_idx} ? {object}.userFloat("idLoose") : -999',
 )
