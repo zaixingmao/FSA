@@ -54,8 +54,11 @@ Checkout MVAMet (https://twiki.cern.ch/twiki/bin/view/CMS/MVAMet#CMSSW_7_2_X_req
 
 ```bash
 git cms-addpkg RecoMET/METPUSubtraction/
-
+cd RecoMET/METPUSubtraction/
+git clone https://github.com/rfriese/RecoMET-METPUSubtraction data -b 72X-13TeV-Phys14_25_V4-26Mar15
+cp ../../FinalStateAnalysis/recipe/PFMETAlgorithmMVA.cc src/PFMETAlgorithmMVA.cc
 ```
+
 
 You must always set up the CMSSW environment + some extra variables from FinalStateAnalysis:
 
