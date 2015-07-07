@@ -52,5 +52,13 @@ datadefs["VBFHtt-PU20bx25"] = {
     'x_sec': -999, # xsec * br. ratio. BR for L=e,mu, might need to use BR with tau? (=0.000294)
 }
 
+datadefs["SUSYM160-RunIISpring15DR74-Asympt25ns"] = {
+    'analyses': [''],
+    'datasetpath': '/SUSYGluGluToBBHToTauTau_M-160_TuneCUETP8M1_13TeV-pythia8/RunIISpring15DR74-Asympt25ns_MCRUN2_74_V9-v2/MINIAODSIM',
+    'pu': 'Asympt25ns',
+    'calibrationTarget': 'RunIISpring15DR74',
+    'x_sec': -999, # xsec * br. ratio. BR for L=e,mu, might need to use BR with tau? (=0.000294)                                                                                     
+}
+
 if __name__=="__main__":
     query_cli(datadefs)

@@ -20,5 +20,6 @@
   "WW" : "WW_TuneCUETP8M1_13TeV-pythia8",
   "WZTo1L1Nu2Q" : "WZTo1L1Nu2Q_13TeV_amcatnloFXFX_madspin_pythia8",
   "WZ" : "WZ_TuneCUETP8M1_13TeV-pythia8",
-  "ZZ" : "ZZ_TuneCUETP8M1_13TeV-pythia8"
+  "ZZ" : "ZZ_TuneCUETP8M1_13TeV-pythia8",
+  "SUSYM160": "SUSYGluGluToBBHToTauTau_M-160_TuneCUETP8M1_13TeV-pythia8"
 }
