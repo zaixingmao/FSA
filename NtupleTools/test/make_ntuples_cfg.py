@@ -271,16 +271,6 @@ process.runMiniAODLeptonRelIsoEmbedding = cms.Path(
 )
 process.schedule.append(process.runMiniAODLeptonRelIsoEmbedding)
 
-#ElectronMVAID embedding
-process.miniElectronsEmbedMVAID = cms.EDProducer(
-    "MiniAODElectronMVAIDEmbedder",
-    src = cms.InputTag(fs_daughter_inputs['electrons']),
-    eleMediumIdMap = cms.InputTag("egmGsfElectronIDs:mvaEleID-PHYS14-PU20bx25-nonTrig-V1-wp80"),
-    eleTightIdMap = cms.InputTag("egmGsfElectronIDs:mvaEleID-PHYS14-PU20bx25-nonTrig-V1-wp90"),
-)
-fs_daughter_inputs['electrons'] = 'miniElectronsEmbedMVAID'
-process.schedule.append(process.miniElectronsEmbedMVAID)
-
 # Embed effective areas in muons and electrons
 process.load("FinalStateAnalysis.PatTools.electrons.patElectronEAEmbedding_cfi")
 process.patElectronEAEmbedder.src = cms.InputTag(fs_daughter_inputs['electrons'])

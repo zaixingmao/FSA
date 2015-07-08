@@ -6,7 +6,8 @@ def embedElectronIDs(process, use25ns, eSrc, nonTrigBDTLabel='BDTIDNonTrig', tri
     from PhysicsTools.SelectorUtils.tools.vid_id_tools import setupAllVIDIdsInModule, setupVIDElectronSelection, switchOnVIDElectronIdProducer, DataFormat
     switchOnVIDElectronIdProducer(process, DataFormat.MiniAOD)
     if use25ns:
-        cb_id_modules = ['RecoEgamma.ElectronIdentification.Identification.cutBasedElectronID_PHYS14_PU20bx25_V2_cff']
+        cb_id_modules = ['RecoEgamma.ElectronIdentification.Identification.cutBasedElectronID_PHYS14_PU20bx25_V2_cff',
+                         'RecoEgamma.ElectronIdentification.Identification.mvaElectronID_PHYS14_PU20bx25_nonTrig_V1_cff']
     else:
         print "50 ns cut based electron IDs don't exist yet for PHYS14. Using CSA14 cuts."
         cb_id_modules = ['RecoEgamma.ElectronIdentification.Identification.cutBasedElectronID_CSA14_50ns_V1_cff']
@@ -55,20 +56,18 @@ def embedElectronIDs(process, use25ns, eSrc, nonTrigBDTLabel='BDTIDNonTrig', tri
         for wt in trigMVAWeights+nonTrigMVAWeights:
             wt.replace('25ns','50ns')
     
-    #process.miniAODElectronMVAID = cms.EDProducer(
-    #    "MiniAODElectronMVAIDEmbedder",
-    #    src=cms.InputTag(eSrc),
-    #    trigWeights = cms.vstring(*trigMVAWeights),
-    #    trigLabel = cms.string(trigBDTLabel), # triggering MVA ID userfloat key
-    #    nonTrigWeights = cms.vstring(*nonTrigMVAWeights),
-    #    nonTrigLabel = cms.string(nonTrigBDTLabel) # nontriggering MVA ID userfloat key
-    #    )
-    #eSrc = 'miniAODElectronMVAID'
+    process.miniAODElectronMVAID = cms.EDProducer(
+        "MiniAODElectronMVAIDEmbedder",
+        src=cms.InputTag(eSrc),
+        eleMediumIdMap = cms.InputTag("egmGsfElectronIDs:mvaEleID-PHYS14-PU20bx25-nonTrig-V1-wp80"),
+        eleTightIdMap = cms.InputTag("egmGsfElectronIDs:mvaEleID-PHYS14-PU20bx25-nonTrig-V1-wp90"),
+        )
+    eSrc = 'miniAODElectronMVAID'
     
     process.miniAODElectrons = cms.Path(
         process.egmGsfElectronIDSequence+
         process.miniAODElectronCutBasedID
-        #process.miniAODElectronMVAID
+        process.miniAODElectronMVAID
         )
     process.schedule.append(process.miniAODElectrons)
 

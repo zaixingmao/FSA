@@ -82,12 +82,11 @@ void MiniAODElectronMVAIDEmbedder::produce(edm::Event& iEvent, const edm::EventS
   iEvent.getByToken(eleMediumIdMapToken_,medium_id_decisions);
   iEvent.getByToken(eleTightIdMapToken_,tight_id_decisions);
 
-  for(edm::View<reco::GsfElectron>::const_iterator e = electrons->begin();
-      e != electrons->end(); e++) // loop over electrons
-    {
-      out->push_back(*e); // copy electron to save correctly in event
-      bool isPassMedium = (*medium_id_decisions)[*e];
-      bool isPassTight  = (*tight_id_decisions)[*e];
+  for (size_t i = 0; i < electrons->size(); ++i){
+      const auto ee = electrons->ptrAt(i);
+      out->push_back(e); // copy electron to save correctly in event
+      bool isPassMedium = (*medium_id_decisions)[e];
+      bool isPassTight  = (*tight_id_decisions)[e];
 
       
       out->back().addUserFloat("MVAID_Medium", (int) isPassMedium);
