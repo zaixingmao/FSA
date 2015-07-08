@@ -249,7 +249,7 @@ fs_daughter_inputs['taus'] = 'miniTausEmbedIp'
 process.runMiniAODLeptonIpEmbedding = cms.Path(
     process.miniMuonsEmbedIp+
     process.miniElectronsEmbedIp+
-    process.miniTausEmbedIp+
+    process.miniTausEmbedIp
 )
 process.schedule.append(process.runMiniAODLeptonIpEmbedding)
 
@@ -267,7 +267,7 @@ process.miniElectronsEmbedRelIso = cms.EDProducer(
 fs_daughter_inputs['electrons'] = 'miniElectronsEmbedRelIso'
 process.runMiniAODLeptonRelIsoEmbedding = cms.Path(
     process.miniMuonsEmbedRelIso+
-    process.miniElectronsEmbedRelIso+
+    process.miniElectronsEmbedRelIso
 )
 process.schedule.append(process.runMiniAODLeptonRelIsoEmbedding)
 

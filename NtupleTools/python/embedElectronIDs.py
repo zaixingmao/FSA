@@ -66,7 +66,7 @@ def embedElectronIDs(process, use25ns, eSrc, nonTrigBDTLabel='BDTIDNonTrig', tri
     
     process.miniAODElectrons = cms.Path(
         process.egmGsfElectronIDSequence+
-        process.miniAODElectronCutBasedID
+        process.miniAODElectronCutBasedID+
         process.miniAODElectronMVAID
         )
     process.schedule.append(process.miniAODElectrons)
