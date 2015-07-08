@@ -33,9 +33,9 @@ localJobInfo = {'inputFile': "file:///hdfs/store/mc/RunIISpring15DR74/SUSYGluGlu
 SVFit = 1 if options.doSVFit else 0
 
 if ":" in localJobInfo['eventsToProcess']:
-    cmd = "./make_ntuples_cfg.py eventsToProcess=%s outputFile=myTestFile.root inputFiles=%s channels=tt isMC=1 nExtraJets=8 svFit=%i" %(localJobInfo['eventsToProcess'], localJobInfo['inputFile'], SVFit)
+    cmd = "./make_ntuples_cfg.py eventsToProcess=%s outputFile=myTestFile.root inputFiles=%s channels=tt isMC=1 nExtraJets=8 svFit=%i " %(localJobInfo['eventsToProcess'], localJobInfo['inputFile'], SVFit)
 else:
-    cmd = "./make_ntuples_cfg.py maxEvents=%i outputFile=myTestFile.root inputFiles=%s channels=tt isMC=1 nExtraJets=8 svFit=%i" %(localJobInfo['maxEvents'], localJobInfo['inputFile'], SVFit)
+    cmd = "./make_ntuples_cfg.py maxEvents=%i outputFile=myTestFile.root inputFiles=%s channels=tt isMC=1 nExtraJets=8 svFit=%i " %(localJobInfo['maxEvents'], localJobInfo['inputFile'], SVFit)
 
 
 cuts = "skimCuts=\""
@@ -51,8 +51,6 @@ if not options.runLocal:
     cmd = "submit_job.py %s make_ntuples_cfg.py channels=\"tt\" isMC=1 nExtraJets=8 svFit=%i" %(options.name, SVFit)
 #     cmd += " --campaign-tag=\"RunIISpring15DR74-Asympt25ns*\" --das-replace-tuple=$fsa/MetaData/tuples/MiniAOD-13TeV_RunIISpring15DR74.json --samples \"%s*\" -o %s" %(options.sample, tempFile)
     cmd += " --campaign-tag=\"Phys14DR-PU20bx25*\" --das-replace-tuple=$fsa/MetaData/tuples/MiniAOD-13TeV_PHYS14DR.json --samples \"%s*\" -o %s" %(options.sample, tempFile)
-
-
 os.system(cmd)
 
 if not options.runLocal:
