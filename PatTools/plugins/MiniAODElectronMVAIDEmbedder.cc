@@ -83,7 +83,7 @@ void MiniAODElectronMVAIDEmbedder::produce(edm::Event& iEvent, const edm::EventS
   iEvent.getByToken(eleTightIdMapToken_,tight_id_decisions);
 
   for (size_t i = 0; i < electrons->size(); ++i){
-      const auto ee = electrons->ptrAt(i);
+      const auto e = electrons->ptrAt(i);
       out->push_back(e); // copy electron to save correctly in event
       bool isPassMedium = (*medium_id_decisions)[e];
       bool isPassTight  = (*tight_id_decisions)[e];
