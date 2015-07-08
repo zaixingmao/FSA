@@ -7,9 +7,9 @@ def opts():
     parser = optparse.OptionParser()
     parser.add_option("--local", dest="runLocal", default=False, action="store_true", help="run local jobs")
     parser.add_option("--doSVFit", dest="doSVFit", default=False, action="store_true", help="do SVFit")
-    parser.add_option("--singleJob", dest="singleJob", default=True, action="store_true", help="run 1 job")
-    parser.add_option("-o", dest="name", default='SYNC_745', help="")
-    parser.add_option("--sample", dest="sample", default='SUSY', help="")
+    parser.add_option("--singleJob", dest="singleJob", default=False, action="store_true", help="run 1 job")
+    parser.add_option("-o", dest="name", default='SYNC_745', help="name of output dir")
+    parser.add_option("--sample", dest="sample", default='SUSY', help="sample name VBF, SUSY")
 
     options, args = parser.parse_args()
 
@@ -49,7 +49,10 @@ if not options.runLocal:
     tempFile = "do_test.sh"
     outFile = "do.sh"
     cmd = "submit_job.py %s make_ntuples_cfg.py channels=\"tt\" isMC=1 nExtraJets=8 svFit=%i" %(options.name, SVFit)
-    cmd += " --campaign-tag=\"RunIISpring15DR74-Asympt25ns*\" --das-replace-tuple=$fsa/MetaData/tuples/MiniAOD-13TeV_RunIISpring15DR74.json --samples \"%s*\" -o %s" %(options.sample, tempFile)
+#     cmd += " --campaign-tag=\"RunIISpring15DR74-Asympt25ns*\" --das-replace-tuple=$fsa/MetaData/tuples/MiniAOD-13TeV_RunIISpring15DR74.json --samples \"%s*\" -o %s" %(options.sample, tempFile)
+    cmd += " --campaign-tag=\"Phys14DR-PU20bx25*\" --das-replace-tuple=$fsa/MetaData/tuples/MiniAOD-13TeV_PHYS14DR.json --samples \"%s*\" -o %s" %(options.sample, tempFile)
+
+
 os.system(cmd)
 
 if not options.runLocal:
@@ -60,7 +63,9 @@ if not options.runLocal:
         currentLine = lines[i]
         if currentLine.find("svFit") != -1 and currentLine.find("farmoutAnalysisJobs") != -1:
             newLine = currentLine[0:currentLine.find("farmoutAnalysisJobs")]
-            newLine += "farmoutAnalysisJobs --job-count=1 "
+            newLine += "farmoutAnalysisJobs "
+            if options.singleJob:
+                newLine += "--job-count=1 "
             newLine += currentLine[currentLine.find("farmoutAnalysisJobs") + 19:currentLine.find("svFit")]
             newLine += "svFit=%i %s" %(SVFit, cuts)
             newLine += " 'inputFiles=$inputFileNames' 'outputFile=$outputFileName'"
