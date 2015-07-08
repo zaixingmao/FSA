@@ -1,7 +1,6 @@
 <use   name="SimDataFormats/PileupSummaryInfo"/>
 <use   name="FWCore/ParameterSet"/>
 <use   name="FWCore/PythonParameterSet"/>
-<use   name="DataFormats/Luminosity"/>
 <use   name="DataFormats/ParticleFlowCandidate"/>
 <use   name="PhysicsTools/HepMCCandAlgos"/>
 <use   name="DataFormats/Candidate"/>
