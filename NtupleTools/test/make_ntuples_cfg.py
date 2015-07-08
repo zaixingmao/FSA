@@ -239,11 +239,47 @@ process.miniElectronsEmbedIp = cms.EDProducer(
 )
 fs_daughter_inputs['electrons'] = 'miniElectronsEmbedIp'
 
+process.miniTausEmbedIp = cms.EDProducer(
+    "MiniAODTauIpEmbedder",
+    src = cms.InputTag(fs_daughter_inputs['taus']),
+    vtxSrc = cms.InputTag("offlineSlimmedPrimaryVertices"),
+)
+fs_daughter_inputs['taus'] = 'miniTausEmbedIp'
+
 process.runMiniAODLeptonIpEmbedding = cms.Path(
     process.miniMuonsEmbedIp+
-    process.miniElectronsEmbedIp
+    process.miniElectronsEmbedIp+
+    process.miniTausEmbedIp+
 )
 process.schedule.append(process.runMiniAODLeptonIpEmbedding)
+
+#relIso embedding
+process.miniMuonsEmbedRelIso = cms.EDProducer(
+    "MiniAODMuonRelIsoEmbedder",
+    src = cms.InputTag(fs_daughter_inputs['muons']),
+)
+fs_daughter_inputs['muons'] = 'miniMuonsEmbedRelIso'
+
+process.miniElectronsEmbedRelIso = cms.EDProducer(
+    "MiniAODElectronRelIsoEmbedder",
+    src = cms.InputTag(fs_daughter_inputs['electrons']),
+)
+fs_daughter_inputs['electrons'] = 'miniElectronsEmbedRelIso'
+process.runMiniAODLeptonRelIsoEmbedding = cms.Path(
+    process.miniMuonsEmbedRelIso+
+    process.miniElectronsEmbedRelIso+
+)
+process.schedule.append(process.runMiniAODLeptonRelIsoEmbedding)
+
+#ElectronMVAID embedding
+process.miniElectronsEmbedMVAID = cms.EDProducer(
+    "MiniAODElectronMVAIDEmbedder",
+    src = cms.InputTag(fs_daughter_inputs['electrons']),
+    eleMediumIdMap = cms.InputTag("egmGsfElectronIDs:mvaEleID-PHYS14-PU20bx25-nonTrig-V1-wp80"),
+    eleTightIdMap = cms.InputTag("egmGsfElectronIDs:mvaEleID-PHYS14-PU20bx25-nonTrig-V1-wp90"),
+)
+fs_daughter_inputs['electrons'] = 'miniElectronsEmbedMVAID'
+process.schedule.append(process.miniElectronsEmbedMVAID)
 
 # Embed effective areas in muons and electrons
 process.load("FinalStateAnalysis.PatTools.electrons.patElectronEAEmbedding_cfi")
