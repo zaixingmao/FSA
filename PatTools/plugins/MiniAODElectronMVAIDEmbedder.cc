@@ -21,6 +21,8 @@
 #include "FWCore/Framework/interface/MakerMacros.h"
 #include "FWCore/ParameterSet/interface/ParameterSet.h"
 #include "DataFormats/PatCandidates/interface/Electron.h"
+#include "DataFormats/EgammaCandidates/interface/GsfElectron.h"
+
 #include "DataFormats/Common/interface/ValueMap.h"
 #include "DataFormats/Common/interface/View.h"
 #include "FWCore/ServiceRegistry/interface/Service.h"
@@ -43,7 +45,8 @@ private:
   virtual void endJob();
 
   // Data
-  edm::EDGetTokenT<edm::View<pat::Electron> > electronCollectionToken_;
+  edm::EDGetToken electronsMiniAODToken_;
+
   // ID decisions objects
   edm::EDGetTokenT<edm::ValueMap<bool> > eleMediumIdMapToken_;
   edm::EDGetTokenT<edm::ValueMap<bool> > eleTightIdMapToken_;
@@ -57,12 +60,10 @@ private:
 // Constructors and destructors
 
 MiniAODElectronMVAIDEmbedder::MiniAODElectronMVAIDEmbedder(const edm::ParameterSet& iConfig):
-  electronCollectionToken_(consumes<edm::View<pat::Electron> >(iConfig.exists("src") ?
-							       iConfig.getParameter<edm::InputTag>("src") :
-							       edm::InputTag("slimmedElectrons"))),
   eleMediumIdMapToken_(consumes<edm::ValueMap<bool> >(iConfig.getParameter<edm::InputTag>("eleMediumIdMap"))),
   eleTightIdMapToken_(consumes<edm::ValueMap<bool> >(iConfig.getParameter<edm::InputTag>("eleTightIdMap")))
 {
+  electronsMiniAODToken_    = mayConsume<edm::View<reco::GsfElectron> > (iConfig.getParameter<edm::InputTag>("src"));
   produces<std::vector<pat::Electron> >();
 }
 
@@ -73,15 +74,15 @@ void MiniAODElectronMVAIDEmbedder::produce(edm::Event& iEvent, const edm::EventS
 
   //  out->clear();
 
-  edm::Handle<edm::View<pat::Electron> > electrons;
-  iEvent.getByToken(electronCollectionToken_, electrons);
+  edm::Handle<edm::View<reco::GsfElectron> > electrons;
+  iEvent.getByToken(electronsMiniAODToken_, electrons);
 
   edm::Handle<edm::ValueMap<bool> > medium_id_decisions;
   edm::Handle<edm::ValueMap<bool> > tight_id_decisions; 
   iEvent.getByToken(eleMediumIdMapToken_,medium_id_decisions);
   iEvent.getByToken(eleTightIdMapToken_,tight_id_decisions);
 
-  for(edm::View<pat::Electron>::const_iterator e = electrons->begin();
+  for(edm::View<reco::GsfElectron>::const_iterator e = electrons->begin();
       e != electrons->end(); e++) // loop over electrons
     {
       out->push_back(*e); // copy electron to save correctly in event
