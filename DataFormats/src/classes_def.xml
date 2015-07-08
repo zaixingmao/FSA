@@ -15,7 +15,8 @@
   <class name="std::map<std::string, int>"/>
   <class name ="std::map<std::string,edm::Ptr<pat::MET> >" />
 
-  <class name="VBFVariables" ClassVersion="13">
+  <class name="VBFVariables" ClassVersion="14">
+   <version ClassVersion="14" checksum="1002516445"/>
    <version ClassVersion="13" checksum="2844821699"/>
    <version ClassVersion="12" checksum="1002516445"/>
    <version ClassVersion="11" checksum="2844821699"/>
