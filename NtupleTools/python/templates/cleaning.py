@@ -16,9 +16,8 @@ from FinalStateAnalysis.Utilities.cfgtools import PSet
 # Vetos on extra stuff in the event
 vetos = PSet(
     #MUON VETOS
-    extramuon_veto = 'vetoMuons(0.0, "pt > 10 & abs(eta) < 2.4 & userInt(\'mediumID\') > 0.5 & abs(userFloat(\'dz\')) < 0.2 & abs(userFloat(\'ipDXY\')) < 0.045  & (chargedHadronIso + max(photonIso + neutralHadronIso - 0.5*puChargedHadronIso, 0))/pt < 0.3").size()',
-    extramuon_veto_user = 'vetoMuons(0.0, "pt > 10 & abs(eta) < 2.4 & userInt(\'mediumID\') > 0.5 & abs(userFloat(\'dz\')) < 0.2 & abs(userFloat(\'ipDXY\')) < 0.045  & (userIso(0) + max(photonIso + neutralHadronIso - 0.5*puChargedHadronIso, 0))/pt < 0.3").size()',
-    extramuon_veto_015 = 'vetoMuons(0.0, "pt > 10 & abs(eta) < 2.4 & userInt(\'mediumID\') > 0.5 & abs(userFloat(\'dz\')) < 0.2 & abs(userFloat(\'ipDXY\')) < 0.045  & (chargedHadronIso + max(photonIso + neutralHadronIso - 0.5*puChargedHadronIso, 0))/pt < 0.15").size()',
+    extramuon_veto = 'vetoMuons(0.0, "pt > 10 & abs(eta) < 2.4 & isMediumMuon > 0.5 & abs(userFloat(\'dz\')) < 0.2 & abs(userFloat(\'ipDXY\')) < 0.045  & abs(userFloat(\'relIso\')) < 0.3").size()',
+    extramuon_veto_user = 'vetoMuons(0.0, "pt > 10 & abs(eta) < 2.4 & isMediumMuon > 0.5 & abs(userFloat(\'dz\')) < 0.2 & abs(userFloat(\'ipDXY\')) < 0.045  & (userIso(0) + max(photonIso + neutralHadronIso - 0.5*puChargedHadronIso, 0))/pt < 0.3").size()',
 
 #     muGlbIsoVetoPt10 = 'vetoMuons(0.4, "isGlobalMuon & isTrackerMuon & pt > 10 & abs(eta) < 2.4 & (userIso(0) + max(photonIso + neutralHadronIso - 0.5*puChargedHadronIso, 0))/pt < 0.4").size()',
 #     muVetoPt5IsoIdVtx = 'vetoMuons(0.4, "pt > 5 & abs(eta) < 2.4 & userInt(\'tightID\') > 0.5 & ((userIso(0) + max(photonIso()+neutralHadronIso()-0.5*puChargedHadronIso,0.0))/pt()) < 0.15 & userFloat(\'dz\') < 0.2").size()',
@@ -40,9 +39,7 @@ vetos = PSet(
     #ELECTRON VETOS
 #     extraelec_veto = 'vetoElectrons(0., "pt > 10 & abs(eta) < 2.5 & userFloat(\'CBIDMedium\') > 0.5 & abs(userFloat(\'dz\')) < 0.2 & abs(userFloat(\'ipDXY\')) < 0.045  & (chargedHadronIso + max(photonIso + neutralHadronIso - 0.5*puChargedHadronIso, 0))/pt < 0.3").size()',
     extraelec_veto_user = 'vetoElectrons(0., "pt > 10 & abs(eta) < 2.5 & userFloat(\'CBIDVeto\') > 0.5 & abs(userFloat(\'dz\')) < 0.2 & abs(userFloat(\'ipDXY\')) < 0.045 & (userIso(0) + max(userIso(1) + neutralHadronIso - 0.5*userIso(2), 0))/pt < 0.3").size()',
-    extraelec_veto = 'vetoElectrons(0., "pt > 10 & abs(eta) < 2.5 & userFloat(\'CBIDVeto\') > 0.5 & abs(userFloat(\'dz\')) < 0.2 & abs(userFloat(\'ipDXY\')) < 0.045 & (chargedHadronIso + max(photonIso + neutralHadronIso - 0.5*puChargedHadronIso, 0))/pt < 0.3").size()',
-    extraelec_veto_015 = 'vetoElectrons(0., "pt > 10 & abs(eta) < 2.5 & userFloat(\'CBIDVeto\') > 0.5 & abs(userFloat(\'dz\')) < 0.2 & abs(userFloat(\'ipDXY\')) < 0.045 & (chargedHadronIso + max(photonIso + neutralHadronIso - 0.5*puChargedHadronIso, 0))/pt < 0.3").size()',
-    extraelec_veto_01 = 'vetoElectrons(0., "pt > 10 & abs(eta) < 2.5 & userFloat(\'CBIDVeto\') > 0.5 & abs(userFloat(\'dz\')) < 0.2 & abs(userFloat(\'ipDXY\')) < 0.045 & (chargedHadronIso + max(photonIso + neutralHadronIso - 0.5*puChargedHadronIso, 0))/pt < 0.3").size()',
+    extraelec_veto = 'vetoElectrons(0., "pt > 10 & abs(eta) < 2.5 & userFloat(\'CBIDVeto\') > 0.5 & abs(userFloat(\'dz\')) < 0.2 & abs(userFloat(\'ipDXY\')) < 0.045 & abs(userFloat(\'relIso\')) < 0.3").size()',
 
 #     eVetoMVAIsoVtx = 'vetoElectrons(0.4, "pt > 10 & abs(eta) < 2.5 & userInt(\'mvaidwp\') > 0.5 & ((userIso(0) + max(userIso(1) + neutralHadronIso - 0.5*userIso(2), 0))/pt) < 0.3 & userFloat(\'dz\') < 0.2").size()',
 #     eVetoMVAIso = 'vetoElectrons(0.4, "pt > 10 & abs(eta) < 2.5 & userInt(\'mvaidwp\') > 0.5 & (userIso(0) + max(userIso(1) + neutralHadronIso - 0.5*userIso(2), 0))/pt < 0.3").size()',
