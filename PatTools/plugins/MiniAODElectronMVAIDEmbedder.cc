@@ -49,6 +49,7 @@ private:
   edm::EDGetTokenT<edm::ValueMap<bool> > eleTightIdMapToken_;
   std::vector<Int_t> passMediumId_;
   std::vector<Int_t> passTightId_;
+  std::auto_ptr<std::vector<pat::Electron> > out; // Collection we'll output at the end
 
 };
 
