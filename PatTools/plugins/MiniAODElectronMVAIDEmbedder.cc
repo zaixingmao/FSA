@@ -44,13 +44,12 @@ private:
 
   // Data
   edm::EDGetTokenT<edm::View<pat::Electron> > electronCollectionToken_;
-  std::vector<std::string> trigWeights_; // xml files for weights for triggering and non-triggering MVA
-  std::vector<std::string> nonTrigWeights_;
-  std::string trigLabel_; // labels for the userFloats holding results
-  std::string nonTrigLabel_;
-  std::auto_ptr<std::vector<pat::Electron> > out; // Collection we'll output at the end
-  EGammaMvaEleEstimatorCSA14 trigMVA;
-  EGammaMvaEleEstimatorCSA14 nonTrigMVA;
+  // ID decisions objects
+  edm::EDGetTokenT<edm::ValueMap<bool> > eleMediumIdMapToken_;
+  edm::EDGetTokenT<edm::ValueMap<bool> > eleTightIdMapToken_;
+  std::vector<Int_t> passMediumId_;
+  std::vector<Int_t> passTightId_;
+
 };
 
 
@@ -60,39 +59,9 @@ MiniAODElectronMVAIDEmbedder::MiniAODElectronMVAIDEmbedder(const edm::ParameterS
   electronCollectionToken_(consumes<edm::View<pat::Electron> >(iConfig.exists("src") ?
 							       iConfig.getParameter<edm::InputTag>("src") :
 							       edm::InputTag("slimmedElectrons"))),
-  trigWeights_(iConfig.exists("trigWeights") ?
-	       iConfig.getParameter<std::vector<std::string> >("trigWeights") :
-	       std::vector<std::string>()),
-  nonTrigWeights_(iConfig.exists("nonTrigWeights") ?
-		  iConfig.getParameter<std::vector<std::string> >("nonTrigWeights") :
-		  std::vector<std::string>()),
-  trigLabel_(iConfig.exists("trigLabel") ?
-	     iConfig.getParameter<std::string>("trigLabel") :
-	     std::string("BDTIDTrig")),
-  nonTrigLabel_(iConfig.exists("nonTrigLabel") ?
-		iConfig.getParameter<std::string>("nonTrigLabel") :
-		std::string("BDTIDNonTrig"))
+  eleMediumIdMapToken_(consumes<edm::ValueMap<bool> >(iConfig.getParameter<edm::InputTag>("eleMediumIdMap"))),
+  eleTightIdMapToken_(consumes<edm::ValueMap<bool> >(iConfig.getParameter<edm::InputTag>("eleTightIdMap")))
 {
-  std::vector<std::string> trigWeightPaths;
-  std::vector<std::string> nonTrigWeightPaths;
-  string the_path;
-  for (unsigned i = 0 ; i < trigWeights_.size() ; i++){
-    the_path = edm::FileInPath ( trigWeights_[i] ).fullPath();
-    trigWeightPaths.push_back(the_path);
-  }
-  for (unsigned i = 0 ; i < nonTrigWeights_.size() ; i++){
-    the_path = edm::FileInPath ( nonTrigWeights_[i] ).fullPath();
-    nonTrigWeightPaths.push_back(the_path);
-  }
-
-  trigMVA = EGammaMvaEleEstimatorCSA14();
-  nonTrigMVA = EGammaMvaEleEstimatorCSA14();
-
-  trigMVA.initialize("BDT", EGammaMvaEleEstimatorCSA14::kTrig,
-		     true, trigWeightPaths);
-  nonTrigMVA.initialize("BDT", EGammaMvaEleEstimatorCSA14::kNonTrigPhys14,
-			true, nonTrigWeightPaths);		  
-
   produces<std::vector<pat::Electron> >();
 }
 
@@ -103,19 +72,24 @@ void MiniAODElectronMVAIDEmbedder::produce(edm::Event& iEvent, const edm::EventS
 
   //  out->clear();
 
-  edm::Handle<edm::View<pat::Electron> > electronsIn;
-  iEvent.getByToken(electronCollectionToken_, electronsIn);
+  edm::Handle<edm::View<pat::Electron> > electrons;
+  iEvent.getByToken(electronCollectionToken_, electrons);
 
-  for(edm::View<pat::Electron>::const_iterator ei = electronsIn->begin();
-      ei != electronsIn->end(); ei++) // loop over electrons
+  edm::Handle<edm::ValueMap<bool> > medium_id_decisions;
+  edm::Handle<edm::ValueMap<bool> > tight_id_decisions; 
+  iEvent.getByToken(eleMediumIdMapToken_,medium_id_decisions);
+  iEvent.getByToken(eleTightIdMapToken_,tight_id_decisions);
+
+  for(edm::View<pat::Electron>::const_iterator e = electrons->begin();
+      e != electrons->end(); e++) // loop over electrons
     {
-      out->push_back(*ei); // copy electron to save correctly in event
+      out->push_back(*e); // copy electron to save correctly in event
+      bool isPassMedium = (*medium_id_decisions)[*e];
+      bool isPassTight  = (*tight_id_decisions)[*e];
 
-      float trigMVAVal = trigMVA.mvaValue(*ei, false);
-      float nonTrigMVAVal = nonTrigMVA.mvaValue(*ei, false);
       
-      out->back().addUserFloat(trigLabel_, trigMVAVal);
-      out->back().addUserFloat(nonTrigLabel_, nonTrigMVAVal);
+      out->back().addUserFloat("MVAID_Medium", (int) isPassMedium);
+      out->back().addUserFloat("MVAID_Tight", (int) isPassTight);
     }
 
   iEvent.put(out);
