@@ -9,7 +9,8 @@
  *
  */
 
-#include "FinalStateAnalysis/DataFormats/interface/PATFinalStateEventFwd.h"
+#include "FinalStateAnalysis/DataFormats/interface/FwdIncludes.h"
+#include "FinalStateAnalysis/DataFormats/interface/Macros.h"
 
 #include "DataFormats/Common/interface/Ptr.h"
 #include "DataFormats/Common/interface/PtrVector.h"
@@ -57,7 +58,7 @@ class PATFinalStateEvent {
     PATFinalStateEvent(
         double rho,
         const edm::Ptr<reco::Vertex>& pv,
-        const std::vector<edm::Ptr<reco::Vertex>>& recoVertices,
+        const std::vector<edm::Ptr<reco::Vertex> >& recoVertices,
         const edm::Ptr<pat::MET>& met,
         const TMatrixD& metCovariance,
         const pat::TriggerEvent triggerEvent,
@@ -234,5 +235,7 @@ class PATFinalStateEvent {
     std::map<std::string, edm::Ptr<pat::MET> > mets_;
 
 };
+
+FWD_TYPEDEFS(PATFinalStateEvent)
 
 #endif /* end of include guard: PATFINALSTATEEVENT_MB433KP6 */
