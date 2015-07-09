@@ -24,8 +24,6 @@ namespace edm{
   class InputTag;
 }
 
-class ElectronHcalHelper;
-
 namespace photontools {
   class CutSet {
   private:
