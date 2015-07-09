@@ -14,6 +14,9 @@
 #include "FinalStateAnalysis/DataAlgos/interface/VBFSelections.h"
 #include "TVector2.h"
 
+#include "FinalStateAnalysis/DataFormats/interface/FwdIncludes.h"
+#include "FinalStateAnalysis/DataFormats/interface/Macros.h"
+FWD_ABS_TYPEDEFS(PATFinalState)
 
 // Forward delcarations
 namespace pat {

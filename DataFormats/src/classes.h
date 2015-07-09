@@ -1,5 +1,4 @@
 #include "FinalStateAnalysis/DataFormats/interface/PATFinalState.h"
-#include "FinalStateAnalysis/DataFormats/interface/PATFinalStateFwd.h"
 
 #include "FinalStateAnalysis/DataFormats/interface/PATFinalStateProxy.h"
 

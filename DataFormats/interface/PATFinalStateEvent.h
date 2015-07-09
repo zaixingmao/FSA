@@ -8,6 +8,7 @@
  *   Author: Evan K. Friis, UW Madison
  *
  */
+
 #include "FinalStateAnalysis/DataFormats/interface/FwdIncludes.h"
 #include "FinalStateAnalysis/DataFormats/interface/Macros.h"
 
@@ -234,6 +235,8 @@ class PATFinalStateEvent {
     std::map<std::string, edm::Ptr<pat::MET> > mets_;
 
 };
+FWD_TYPEDEFS(PATFinalStateEvent)
+
 FWD_TYPEDEFS(PATFinalStateEvent)
 
 #endif /* end of include guard: PATFINALSTATEEVENT_MB433KP6 */
