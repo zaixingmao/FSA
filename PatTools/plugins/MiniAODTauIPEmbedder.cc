@@ -61,8 +61,8 @@ void MiniAODTauIpEmbedder::produce(edm::Event& evt, const edm::EventSetup& es) {
 
     if(!tau.leadChargedHadrCand().isNull()){
         pat::PackedCandidate const* packedLeadTauCand = dynamic_cast<pat::PackedCandidate const*>(tau.leadChargedHadrCand().get());
-        ip = packedLeadTauCand->dxy(thePV.position());
-        dz = packedLeadTauCand->dz(thePV.position());
+        ip = packedLeadTauCand->dxy();
+        dz = packedLeadTauCand->dz();
         vz = packedLeadTauCand->vz();
     }
 

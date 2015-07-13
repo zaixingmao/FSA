@@ -73,7 +73,8 @@ void PATJetIdEmbedder::produce(edm::Event& evt, const edm::EventSetup& es) {
       }
       if (jet.chargedEmEnergyFraction() >= 0.99) {
         loose = false;
-        medium = false;
+      }
+      if (jet.chargedEmEnergyFraction() >= 0.90) {
         tight = false;
       }
     }

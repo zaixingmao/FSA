@@ -61,7 +61,7 @@ process.options = cms.untracked.PSet(
 import FinalStateAnalysis.Utilities.TauVarParsing as TauVarParsing
 options = TauVarParsing.TauVarParsing(
     skipEvents=0,  # Start at an event offset (for debugging)
-    reportEvery=100,
+    reportEvery=500,
     channels='mm,mjj,mj',
     rerunMCMatch=False,
     eventView=0,  # Switch between final state view (0) and event view (1)
@@ -73,7 +73,7 @@ options = TauVarParsing.TauVarParsing(
     rochCor="",
     eleCor="",
     rerunQGJetID=0,  # If one reruns the quark-gluon JetID
-    runMVAMET=1,  # If one, (re)build the MVA MET
+    runMVAMET=0,  # If one, (re)build the MVA MET
     rerunJets=0,
     dblhMode=False, # For double-charged Higgs analysis
     runTauSpinner=0,
@@ -139,7 +139,7 @@ process.TFileService = cms.Service(
 )
 
 process.maxEvents = cms.untracked.PSet(
-    input=cms.untracked.int32(options.maxEvents))
+    input=cms.untracked.int32(-1))
 
 process.schedule = cms.Schedule()
 
@@ -189,11 +189,8 @@ output_commands = []
 # embed electron ids
 electronMVANonTrigIDLabel = "BDTIDNonTrig"
 electronMVATrigIDLabel = "BDTIDTrig"
-#from FinalStateAnalysis.NtupleTools.embedElectronIDs import embedElectronIDs
-#fs_daughter_inputs['electrons'] = embedElectronIDs(process,options.use25ns,
-#                                                   fs_daughter_inputs['electrons'], 
-#                                                   electronMVANonTrigIDLabel,
-#                                                   electronMVATrigIDLabel,)
+from FinalStateAnalysis.NtupleTools.embedElectronIDs import embedElectronIDs
+fs_daughter_inputs['electrons'] = embedElectronIDs(process,options.use25ns,fs_daughter_inputs['electrons'])
 
 # Clean out muon "ghosts" caused by track ambiguities
 process.ghostCleanedMuons = cms.EDProducer("PATMuonCleanerBySegments",

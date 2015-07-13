@@ -180,7 +180,7 @@ def produce_final_states(process, collections, output_commands,
     if noTracks:
         process.patFinalStateVertexFitter.enable = False
 
-    crossCleaning = kwargs.get('crossCleaning','smallestDeltaR() > 0.3')
+    crossCleaning = kwargs.get('crossCleaning','smallestDeltaR() > 0.5')
 
     process.buildSingleObjects = cms.Sequence()
     # build single object pairs
@@ -210,7 +210,7 @@ def produce_final_states(process, collections, output_commands,
         process.buildSingleObjects += final_module
         setattr(process, producer_name, final_module)
         output_commands.append("*_%s_*_*" % producer_name)
-    sequence += process.buildSingleObjects
+#     sequence += process.buildSingleObjects
 
     process.buildDiObjects = cms.Sequence()
     # Build di-object pairs
@@ -227,7 +227,7 @@ def produce_final_states(process, collections, output_commands,
 
         # Define some basic selections for building combinations
         cuts = [crossCleaning]  # basic x-cleaning
-
+        cut=cms.string(' & '.join(cuts))
         producer = cms.EDProducer(
             "PAT%s%sFinalStateProducer" % (diobject[0][0], diobject[1][0]),
             evtSrc=cms.InputTag("patFinalStateEventProducer"),
@@ -298,7 +298,7 @@ def produce_final_states(process, collections, output_commands,
         setattr(process, producer_name, final_module)
         process.buildTriObjects += final_module
         output_commands.append("*_%s_*_*" % producer_name)
-    sequence += process.buildTriObjects
+#     sequence += process.buildTriObjects
 
     # Build 4 lepton final states
     process.buildQuadObjects = cms.Sequence()
@@ -348,7 +348,7 @@ def produce_final_states(process, collections, output_commands,
         setattr(process, producer_name, final_module)
         process.buildQuadObjects += final_module
         output_commands.append("*_%s_*_*" % producer_name)
-    sequence += process.buildQuadObjects
+#     sequence += process.buildQuadObjects
 
 
 if __name__ == "__main__":
