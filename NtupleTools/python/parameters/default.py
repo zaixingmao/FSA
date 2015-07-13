@@ -10,7 +10,7 @@ parameters = {
     'ptCuts' : {
         'm': '5',
         'e': '7',
-        't': '18',
+        't': '30',
         'g': '10',
         'j': '20'
     },
@@ -19,7 +19,7 @@ parameters = {
         'e': '3.0',
         't': '2.3',
         'g': '3.0',
-        'j': '2.5'
+        'j': '4.7'
     },
 
     # preselections for an object to be used anywhere
@@ -30,25 +30,25 @@ parameters = {
     'finalSelection' : {
         'e': 'abs(superCluster().eta) < 3.0 & max(pt, userFloat("maxCorPt")) > 7',
         'm': 'max(pt, userFloat("maxCorPt")) > 4 & (isGlobalMuon | isTrackerMuon)',
-        't': 'abs(eta) < 2.5 & pt > 17 & tauID("decayModeFinding")',
+        't': 'abs(eta) < 2.5 & pt > 30',
         'g': 'abs(superCluster().eta()) < 3.0 & pt > 10',
         # remove jets that are close to leptons
         'j' : {
-            'selection' : 'pt>20 & abs(eta) < 2.5 & userFloat("idLoose")',
-            'e': {
-                'selection' : 'pt>10&&userInt("CBIDLoose")>0&&(chargedHadronIso()+max(0.0,neutralHadronIso()+photonIso()-userFloat("rhoCSA14")*userFloat("EffectiveArea_HZZ4l2015")))/pt()<0.2',
-                'deltaR' : 0.3,
-                },
-            'm': {
-                'selection' : 'pt>10&&isLooseMuon&&(chargedHadronIso()+max(photonIso()+neutralHadronIso()-0.5*puChargedHadronIso,0.0))/pt()<0.2',
-                'deltaR' : 0.3,
-                },
+            'selection' : 'pt>20 & abs(eta) < 4.7',
+#             'e': {
+#                 'selection' : 'pt>10&&userInt("CBIDLoose")>0&&(chargedHadronIso()+max(0.0,neutralHadronIso()+photonIso()-userFloat("rhoCSA14")*userFloat("EffectiveArea_HZZ4l2015")))/pt()<0.2',
+#                 'deltaR' : 0.3,
+#                 },
+#             'm': {
+#                 'selection' : 'pt>10&&isLooseMuon&&(chargedHadronIso()+max(photonIso()+neutralHadronIso()-0.5*puChargedHadronIso,0.0))/pt()<0.2',
+#                 'deltaR' : 0.3,
+#                 },
             },
 
     },
 
     # cross cleaning for objects in final state
-    'crossCleaning' : 'smallestDeltaR() > 0.3',
+    'crossCleaning' : 'smallestDeltaR() > 0.5',
     # additional variables for ntuple
     'eventVariables' : PSet(),
     # candidates of form: objectVarName = 'string expression for selection'
