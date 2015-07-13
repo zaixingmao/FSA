@@ -26,6 +26,7 @@ vertex_info = PSet(
     objectPVDZ = 'getPVDZ({object_idx})',
     objectPVDXY = 'getPVDXY({object_idx})',
     objectSIP2D = 'getIP2D({object_idx}) / getIP2DErr({object_idx})',
+    objectdZ = '{object}.userFloat(\"dz\")'
 #    objectPVAssociation = '{object}.fromPV', # 0->used in PV fit, 1->PV is closest VTX, 2->other VTX is closest, 3->used in other VTX fit
 )
 
