@@ -83,36 +83,37 @@ PATFinalStateEvent::PATFinalStateEvent(
     const reco::GsfTrackRefProd& gsfTracks,
     const std::map<std::string, edm::Ptr<pat::MET> >& mets
     ):
-  rho_(rho),
-  triggerEvent_(triggerEvent),
-  triggerObjects_(triggerObjects),
-  names_(names),
-  triggerPrescale_(triggerPrescale),
-  triggerResults_(triggerResults),
-  pv_(pv),
-  recoVertices_(recoVertices),
-  met_(met),
-  metCovariance_(metCovariance),
-  puInfo_(puInfo),
-  lhe_(hepeup),
-  genParticles_(genParticles),
-  evtID_(evtId),
-  genEventInfoProduct_(genEventInfo),
-  generatorFilter_(generatorFilter),
-  isRealData_(isRealData),
-  puScenario_(puScenario),
-  fsaDataFormatVersion_(FSA_DATA_FORMAT_VERSION),
-  electronRefProd_(electronRefProd),
-  muonRefProd_(muonRefProd),
-  tauRefProd_(tauRefProd),
-  jetRefProd_(jetRefProd),
-  phoRefProd_(phoRefProd),
-  pfRefProd_(pfRefProd),
-  packedPFRefProd_(packedPFRefProd),
-  tracks_(tracks),
-  gsfTracks_(gsfTracks),
-  mets_(mets)
-{ }
+  metCovariance_(metCovariance)
+ {
+  rho_ = rho;
+  triggerEvent_ = triggerEvent;
+  triggerObjects_ = triggerObjects;
+  names_ = names;
+  triggerPrescale_ = triggerPrescale;
+  triggerResults_ = triggerResults;
+  pv_ = pv;
+  recoVertices_ = recoVertices;
+  met_ = met;
+  puInfo_ = puInfo;
+  lhe_ = hepeup;
+  genParticles_ = genParticles;
+  evtID_ = evtId;
+  genEventInfoProduct_ = genEventInfo;
+  generatorFilter_ = generatorFilter;
+  isRealData_ = isRealData;
+  puScenario_ = puScenario;
+  fsaDataFormatVersion_ = FSA_DATA_FORMAT_VERSION;
+  electronRefProd_ = electronRefProd;
+  muonRefProd_ = muonRefProd;
+  tauRefProd_ = tauRefProd;
+  jetRefProd_ = jetRefProd;
+  phoRefProd_ = phoRefProd;
+  pfRefProd_ = pfRefProd;
+  packedPFRefProd_ = packedPFRefProd;
+  tracks_ = tracks;
+  gsfTracks_ = gsfTracks;
+  mets_ = mets;
+}
 
 const edm::Ptr<reco::Vertex>& PATFinalStateEvent::pv() const { return pv_; }
 
