@@ -56,11 +56,11 @@ PATFinalStateEvent::PATFinalStateEvent(
 PATFinalStateEvent::PATFinalStateEvent(
     double rho,
     const edm::Ptr<reco::Vertex>& pv,
-    const std::vector<edm::Ptr<reco::Vertex>>& recoVertices,
+    const std::vector<edm::Ptr<reco::Vertex> >& recoVertices,
     const edm::Ptr<pat::MET>& met,
     const TMatrixD& metCovariance,
     const pat::TriggerEvent triggerEvent,
-    const edm::RefProd<std::vector<pat::TriggerObjectStandAlone>>& triggerObjects,
+    const edm::RefProd<std::vector<pat::TriggerObjectStandAlone> >& triggerObjects,
     const edm::TriggerNames& names,
     const pat::PackedTriggerPrescales& triggerPrescale,
     const edm::TriggerResults& triggerResults,
