@@ -10,7 +10,8 @@ def opts():
     parser.add_option("--singleJob", dest="singleJob", default=False, action="store_true", help="run 1 job")
     parser.add_option("-o", dest="name", default='SYNC_745', help="name of output dir")
     parser.add_option("--sample", dest="sample", default='SUSY', help="sample name VBF, SUSY")
-    parser.add_option("--checkMemory", dest="checkMemory", default=False, action="store_true", help="check memory leak")
+    parser.add_option("--memory", dest="memory", default=False, action="store_true", help="profile memory usage (igprof mp)")
+    parser.add_option("--cpu", dest="cpu", default=False, action="store_true", help="profile CPU usage (igprof pp)")
 
     options, args = parser.parse_args()
 
@@ -26,8 +27,9 @@ skimCuts = {"ID": "object.tauID(\\\"decayModeFindingNewDMs\\\") > 0.5",
 #             "iso": "object.tauID(\\\"byCombinedIsolationDeltaBetaCorrRaw3Hits\\\")<10.0"
             }
 
-localJobInfo = {'inputFile': "file:///hdfs/store/mc/RunIISpring15DR74/SUSYGluGluToHToTauTau_M-160_TuneCUETP8M1_13TeV-pythia8/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v1/10000/2A3929AE-5303-E511-9EFE-0025905A48C0.root",
-                'eventsToProcess': '1:619:120614',
+localJobInfo = {'inputFile': "file:///hdfs/store/mc/RunIISpring15DR74/SUSYGluGluToBBHToTauTau_M-160_TuneCUETP8M1_13TeV-pythia8/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v2/50000/A0F69455-EF11-E511-A140-0CC47A4DEDE2.root",
+                #'inputFile': "file:///hdfs/store/mc/RunIISpring15DR74/SUSYGluGluToHToTauTau_M-160_TuneCUETP8M1_13TeV-pythia8/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v1/10000/64BC29B9-5303-E511-8991-0CC47A4D99B0.root",
+                'eventsToProcess': 'all',#'1:1713:333892',
                 'maxEvents': -1}
 
 
@@ -38,10 +40,12 @@ if ":" in localJobInfo['eventsToProcess']:
 else:
     cmd = "./make_ntuples_cfg.py maxEvents=%i outputFile=myTestFile.root inputFiles=%s channels=tt isMC=1 nExtraJets=8 svFit=%i " %(localJobInfo['maxEvents'], localJobInfo['inputFile'], SVFit)
 
-if options.checkMemory:
-    checkMemoCMD = 'igprof -d -mp -z -o igprof.mp.gz  cmsRun '#"valgrind --tool=memcheck `cmsvgsupp` --leak-check=yes --show-reachable=yes --num-callers=20 --track-fds=yes cmsRun "
-
-    cmd =  checkMemoCMD + cmd
+if options.memory:
+    checkCmd = 'igprof -d -mp -z -o igprof.mp.gz  cmsRun '#"valgrind --tool=memcheck `cmsvgsupp` --leak-check=yes --show-reachable=yes --num-callers=20 --track-fds=yes cmsRun "
+    cmd =  checkCmd + cmd
+elif options.cpu:
+    checkCmd = 'igprof -d -pp -z -o igprof.pp.gz  cmsRun '
+    cmd =  checkCmd + cmd
 
 cuts = "skimCuts=\""
 for ikey in skimCuts.keys():
@@ -57,11 +61,13 @@ if not options.runLocal:
     cmd += " --campaign-tag=\"RunIISpring15DR74-Asympt25ns*\" --das-replace-tuple=$fsa/MetaData/tuples/MiniAOD-13TeV_RunIISpring15DR74.json --samples \"%s*\" -o %s" %(options.sample, tempFile)
 #     cmd += " --campaign-tag=\"Phys14DR-PU20bx25*\" --das-replace-tuple=$fsa/MetaData/tuples/MiniAOD-13TeV_PHYS14DR.json --samples \"%s*\" -o %s" %(options.sample, tempFile)
 
-if options.checkMemory:
+if options.memory:
 #     cmd += ">& vglog.out &"
     cmd += " >& igtest.mp.log &"
-    print cmd
-os.system(cmd)
+elif options.cpu:
+    cmd += " >& igtest.pp.log &"
+print cmd
+#os.system(cmd)
 
 if not options.runLocal:
     lines = open(tempFile, "r").readlines()
