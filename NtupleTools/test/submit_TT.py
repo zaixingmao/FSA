@@ -67,9 +67,9 @@ if options.memory:
 elif options.cpu:
     cmd += " >& igtest.pp.log &"
 print cmd
-#os.system(cmd)
 
 if not options.runLocal:
+    os.system(cmd)
     lines = open(tempFile, "r").readlines()
     output = open(outFile, "w")
 
