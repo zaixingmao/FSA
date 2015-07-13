@@ -60,7 +60,7 @@ class PATLeptonTrackVectorExtractor<pat::Muon>
   {
     //std::cout << "<PATLeptonTrackVectorExtractor<pat::Muon>::operator()>" << std::endl;
     std::vector<const reco::Track*> retVal;
-    if ( muon.innerTrack().isNonnull() ) retVal.push_back(muon.innerTrack().get());
+    if ( muon.muonBestTrack().isNonnull() ) retVal.push_back(muon.muonBestTrack().get());
     return retVal;
   }
 };
