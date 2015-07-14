@@ -23,7 +23,7 @@ singleLepton = PSet(
         ),
     _trig_template.replace(
         name='singleE',
-        paths=r'HLT_Ele27_eta2p1_WP85_Gsf_v\\d+,HLT_Ele32_eta2p1_WP85_Gsf_v\\d+,HLT_Ele95_CaloIdVT_GsfTrkIdT_v\\d+'
+        paths=r'HLT_Ele32_eta2p1_WP75_Gsf_v\\d+'
         ),
     )
 
@@ -35,6 +35,10 @@ doubleLepton = PSet(
     _trig_template.replace(
         name='doubleE',
         paths=r'HLT_Ele23_Ele12_CaloId_TrackId_Iso_v\\d+'
+        ),
+    _trig_template.replace(
+        name='eTau',
+        paths=r'HLT_Ele22_eta2p1_WP75_Gsf_LooseIsoPFTau20_v\\d+'
         ),
     _trig_template.replace(
         name='eMu',
