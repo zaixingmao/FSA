@@ -10,7 +10,7 @@ parameters = {
     'ptCuts' : {
         'm': '5',
         'e': '7',
-        't': '30',
+        't': '20',
         'g': '10',
         'j': '20'
     },
@@ -30,7 +30,7 @@ parameters = {
     'finalSelection' : {
         'e': 'abs(superCluster().eta) < 3.0 & max(pt, userFloat("maxCorPt")) > 7',
         'm': 'max(pt, userFloat("maxCorPt")) > 4 & (isGlobalMuon | isTrackerMuon)',
-        't': 'abs(eta) < 2.5 & pt > 30',
+        't': 'abs(eta) < 2.5 & pt > 20',
         'g': 'abs(superCluster().eta()) < 3.0 & pt > 10',
         # remove jets that are close to leptons
         'j' : {
