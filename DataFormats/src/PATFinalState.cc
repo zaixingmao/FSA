@@ -546,6 +546,14 @@ std::vector<const reco::Candidate*> PATFinalState::vetoJets(
       ptrizeCollection(evt()->jets()),
       dR, filter);
 }
+int PATFinalState::vetoDiElectron(
+    double dR, const std::string& filter) const {
+    return getVetoDiObjects(
+      ptrizeCollection(evt()->electrons()),
+      dR, filter);
+}
+
+
 
 std::vector<const reco::Candidate*> PATFinalState::vetoPhotons(
     double dR, const std::string& filter) const {

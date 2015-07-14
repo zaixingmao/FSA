@@ -234,6 +234,9 @@ class PATFinalState : public pat::PATObject<reco::LeafCandidate> {
     std::vector<const reco::Candidate*> vetoPhotons(
         double dR=0.1, const std::string& filter="") const;
 
+    int vetoDiElectron(
+        double dR=0.1, const std::string& filter="") const;
+
     /// Get overlap objects at least dR within from the ith object, passing
     /// filter.
     std::vector<const reco::Candidate*> overlapMuons(

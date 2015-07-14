@@ -41,6 +41,12 @@ std::vector<const reco::Candidate*> getVetoObjects(
     const std::string& filter
 );
 
+int getVetoDiObjects(
+    const std::vector<const reco::Candidate*>& vetoCollection,
+    double minDeltaR,
+    const std::string& filter
+);
+
 // Get objects passing [filter] within [minDeltaR] of [candidate]
 // that pass [filter]
 std::vector<const reco::Candidate*> getOverlapObjects(

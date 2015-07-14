@@ -39,6 +39,7 @@ vetos = PSet(
     #ELECTRON VETOS
     extraelec_veto = 'vetoElectrons(0., "pt > 10 & abs(eta) < 2.5 & userFloat(\'MVANonTrigWP90\') > 0.5 & abs(userFloat(\'dz\')) < 0.2 & abs(userFloat(\'ipDXY\')) < 0.045   & abs(userFloat(\'relIso\')) < 0.3").size()',
     extraelec_veto_user = 'vetoElectrons(0., "pt > 10 & abs(eta) < 2.5 & userFloat(\'MVANonTrigWP90\') > 0.5 & abs(userFloat(\'dz\')) < 0.2 & abs(userFloat(\'ipDXY\')) < 0.045 & (userIso(0) + max(userIso(1) + neutralHadronIso - 0.5*userIso(2), 0))/pt < 0.3").size()',
+    dilepton_veto = 'vetoDiElectron(0.15, "pt > 15 & abs(eta) < 2.5 & userFloat(\'CBIDVeto\') > 0.5 & abs(userFloat(\'dz\')) < 0.2 & abs(userFloat(\'ipDXY\')) < 0.045   & abs(userFloat(\'relIso\')) < 0.3")',
 #     extraelec_veto = 'vetoElectrons(0., "pt > 10 & abs(eta) < 2.5 & userFloat(\'MVAID_Tight\') > 0.5 & abs(userFloat(\'dz\')) < 0.2 & abs(userFloat(\'ipDXY\')) < 0.045 & abs(userFloat(\'relIso\')) < 0.3").size()',
 
 #     eVetoMVAIsoVtx = 'vetoElectrons(0.4, "pt > 10 & abs(eta) < 2.5 & userInt(\'mvaidwp\') > 0.5 & ((userIso(0) + max(userIso(1) + neutralHadronIso - 0.5*userIso(2), 0))/pt) < 0.3 & userFloat(\'dz\') < 0.2").size()',
