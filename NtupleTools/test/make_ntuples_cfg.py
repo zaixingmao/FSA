@@ -61,7 +61,7 @@ process.options = cms.untracked.PSet(
 import FinalStateAnalysis.Utilities.TauVarParsing as TauVarParsing
 options = TauVarParsing.TauVarParsing(
     skipEvents=0,  # Start at an event offset (for debugging)
-    reportEvery=500,
+    reportEvery=100,
     channels='mm,mjj,mj',
     rerunMCMatch=False,
     eventView=0,  # Switch between final state view (0) and event view (1)
@@ -139,7 +139,7 @@ process.TFileService = cms.Service(
 )
 
 process.maxEvents = cms.untracked.PSet(
-    input=cms.untracked.int32(-1))
+    input=cms.untracked.int32(options.maxEvents))
 
 process.schedule = cms.Schedule()
 
