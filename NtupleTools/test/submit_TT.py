@@ -12,6 +12,7 @@ def opts():
     parser.add_option("--sample", dest="sample", default='SUSY', help="sample name VBF, SUSY")
     parser.add_option("--memory", dest="memory", default=False, action="store_true", help="profile memory usage (igprof mp)")
     parser.add_option("--cpu", dest="cpu", default=False, action="store_true", help="profile CPU usage (igprof pp)")
+    parser.add_option("--FS", dest="FS", default='tt', help="final state: tt, et")
 
     options, args = parser.parse_args()
 
@@ -19,26 +20,31 @@ def opts():
 
 options = opts()
 
-skimCuts = {"ID": "object.tauID(\\\"decayModeFindingNewDMs\\\") > 0.5",
-            "Pt": "object.pt() > 45",
-            "Eta": "abs(object.eta()) < 2.1",
-#             "anti-Ele": "object.tauID(\\\"againstElectronVLooseMVA5\\\")>0.5",
-#             "anti-Mu": "object.tauID(\\\"againstMuonLoose3\\\")>0.5",
-#             "iso": "object.tauID(\\\"byCombinedIsolationDeltaBetaCorrRaw3Hits\\\")<10.0"
-            }
+skimCuts = {}
+skimCuts['tt'] = {"ID": "object.tauID(\\\"decayModeFindingNewDMs\\\") > 0.5",
+                  "Pt": "object.pt() > 45",
+                  "Eta": "abs(object.eta()) < 2.1",
+                  }
+skimCuts['et'] = {"ID_e": "object.userFloat(\'MVANonTrigWP80\')> 0.5",
+                  "Pt_e": "object.pt() > 23",
+                  "Eta_e": "abs(object.eta()) < 2.1",
+                  "ID_t": "object.tauID(\\\"decayModeFindingNewDMs\\\") > 0.5",
+                  "Pt_t": "object.pt() > 20",
+                  "Eta_t": "abs(object.eta()) < 2.3",
+                  }
 
 localJobInfo = {'inputFile': "file:///hdfs/store/mc/RunIISpring15DR74/SUSYGluGluToBBHToTauTau_M-160_TuneCUETP8M1_13TeV-pythia8/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v2/50000/A0F69455-EF11-E511-A140-0CC47A4DEDE2.root",
                 #'inputFile': "file:///hdfs/store/mc/RunIISpring15DR74/SUSYGluGluToHToTauTau_M-160_TuneCUETP8M1_13TeV-pythia8/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v1/10000/64BC29B9-5303-E511-8991-0CC47A4D99B0.root",
                 'eventsToProcess': 'all',#'1:1713:333892',
-                'maxEvents': -1}
+                'maxEvents': 5000}
 
 
 SVFit = 1 if options.doSVFit else 0
 
 if ":" in localJobInfo['eventsToProcess']:
-    cmd = "./make_ntuples_cfg.py eventsToProcess=%s outputFile=myTestFile.root inputFiles=%s channels=tt isMC=1 nExtraJets=8 svFit=%i " %(localJobInfo['eventsToProcess'], localJobInfo['inputFile'], SVFit)
+    cmd = "./make_ntuples_cfg.py eventsToProcess=%s outputFile=myTestFile.root inputFiles=%s channels=%s isMC=1 nExtraJets=8 svFit=%i " %(localJobInfo['eventsToProcess'], localJobInfo['inputFile'], options.FS, SVFit)
 else:
-    cmd = "./make_ntuples_cfg.py maxEvents=%i outputFile=myTestFile.root inputFiles=%s channels=tt isMC=1 nExtraJets=8 svFit=%i " %(localJobInfo['maxEvents'], localJobInfo['inputFile'], SVFit)
+    cmd = "./make_ntuples_cfg.py maxEvents=%i outputFile=myTestFile.root inputFiles=%s channels=%s isMC=1 nExtraJets=8 svFit=%i " %(localJobInfo['maxEvents'], localJobInfo['inputFile'], options.FS, SVFit)
 
 if options.memory:
     checkCmd = 'igprof -d -mp -z -o igprof.mp.gz  cmsRun '#"valgrind --tool=memcheck `cmsvgsupp` --leak-check=yes --show-reachable=yes --num-callers=20 --track-fds=yes cmsRun "
@@ -48,28 +54,38 @@ elif options.cpu:
     cmd =  checkCmd + cmd
 
 cuts = "skimCuts=\""
-for ikey in skimCuts.keys():
-    cuts+= "%s," %(skimCuts[ikey].replace("object", "daughter(0)"))
-    cuts+= "%s," %(skimCuts[ikey].replace("object", "daughter(1)"))
+if options.FS == 'tt':
+    for ikey in skimCuts[options.FS].keys():
+        cuts+= "%s," %(skimCuts[options.FS][ikey].replace("object", "daughter(0)"))
+        cuts+= "%s," %(skimCuts[options.FS][ikey].replace("object", "daughter(1)"))
+else:
+    for ikey in skimCuts[options.FS].keys():
+        if '_e' in ikey:
+            cuts+= "%s," %(skimCuts[options.FS][ikey].replace("object", "daughter(0)"))
+        if '_t' in ikey:
+            cuts+= "%s," %(skimCuts[options.FS][ikey].replace("object", "daughter(1)"))
 cuts = cuts[0: len(cuts)-1] + "\""
 cmd += cuts
 
 if not options.runLocal:
     tempFile = "do_test.sh"
     outFile = "do.sh"
-    cmd = "submit_job.py %s make_ntuples_cfg.py channels=\"tt\" isMC=1 nExtraJets=8 svFit=%i" %(options.name, SVFit)
+    cmd = "submit_job.py %s_%s make_ntuples_cfg.py channels=\"%s\" isMC=1 nExtraJets=8 svFit=%i" %(options.name, options.FS, options.FS, SVFit)
     cmd += " --campaign-tag=\"RunIISpring15DR74-Asympt25ns*\" --das-replace-tuple=$fsa/MetaData/tuples/MiniAOD-13TeV_RunIISpring15DR74.json --samples \"%s*\" -o %s" %(options.sample, tempFile)
 #     cmd += " --campaign-tag=\"Phys14DR-PU20bx25*\" --das-replace-tuple=$fsa/MetaData/tuples/MiniAOD-13TeV_PHYS14DR.json --samples \"%s*\" -o %s" %(options.sample, tempFile)
 
 if options.memory:
 #     cmd += ">& vglog.out &"
     cmd += " >& igtest.mp.log &"
+    print cmd
 elif options.cpu:
     cmd += " >& igtest.pp.log &"
-print cmd
+    print cmd
+else:
+    os.system(cmd)
+
 
 if not options.runLocal:
-    os.system(cmd)
     lines = open(tempFile, "r").readlines()
     output = open(outFile, "w")
 
