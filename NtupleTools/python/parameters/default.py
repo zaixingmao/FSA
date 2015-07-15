@@ -48,7 +48,7 @@ parameters = {
     },
 
     # cross cleaning for objects in final state
-    'crossCleaning' : 'smallestDeltaR() > 0.5',
+    'crossCleaning' : 'smallestDeltaR() > 0.3',
     # additional variables for ntuple
     'eventVariables' : PSet(),
     # candidates of form: objectVarName = 'string expression for selection'
