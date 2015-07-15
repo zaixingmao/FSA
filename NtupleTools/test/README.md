@@ -27,6 +27,8 @@ Submit One Jobs
 
 ```bash
     python submit_FS.py --singleJob --FS tt -o test
+    bash < do.sh
+
 ```
 
 Submit Jobs
@@ -34,6 +36,7 @@ Submit Jobs
 
 ```bash
     python submit_FS.py --FS tt -o test
+    bash < do.sh
 ```
 
 Submit Multiple Final States
@@ -41,4 +44,5 @@ Submit Multiple Final States
 
 ```bash
     python submit_FS.py --FS tt,et,mt,em -o test
+    bash < do.sh
 ```
