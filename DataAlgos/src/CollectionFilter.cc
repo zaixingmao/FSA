@@ -52,16 +52,18 @@ std::vector<const reco::Candidate*> getVetoObjects(
 int getVetoDiObjects(
     const std::vector<const reco::Candidate*>& vetoCollection,
     double minDeltaR,
-    const std::string& filter) {
+    const std::string& filter){
     int nPairs = 0;
     const CandFunc& filterFunc = getFunction(filter);
-    for (size_t i = 0; i < vetoCollection.size()-1; ++i) {
-        const reco::Candidate* ptr_i = vetoCollection[i];
-        for (size_t j = i; j < vetoCollection.size(); ++j) {
-            const reco::Candidate* ptr_j = vetoCollection[j];
-            double deltaR = reco::deltaR(ptr_i->p4(), ptr_j->p4());
-            if (deltaR > minDeltaR) {
-                if ((filterFunc)(*ptr_i) && (filterFunc)(*ptr_j) && (ptr_i->charge() == -ptr_j->charge())) nPairs++;
+    if(vetoCollection.size() > 1){
+        for (size_t i = 0; i < vetoCollection.size()-1; ++i) {
+            const reco::Candidate* ptr_i = vetoCollection[i];
+            for (size_t j = i; j < vetoCollection.size(); ++j) {
+                const reco::Candidate* ptr_j = vetoCollection[j];
+                double deltaR = reco::deltaR(ptr_i->p4(), ptr_j->p4());
+                if (deltaR > minDeltaR) {
+                    if ((filterFunc)(*ptr_i) && (filterFunc)(*ptr_j) && (ptr_i->charge() == -ptr_j->charge())) nPairs++;
+                }
             }
         }
     }
