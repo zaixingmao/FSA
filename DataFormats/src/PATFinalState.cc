@@ -552,7 +552,12 @@ int PATFinalState::vetoDiElectron(
       ptrizeCollection(evt()->electrons()),
       dR, filter);
 }
-
+int PATFinalState::vetoDiMuon(
+    double dR, const std::string& filter) const {
+    return getVetoDiObjects(
+      ptrizeCollection(evt()->muons()),
+      dR, filter);
+}
 
 
 std::vector<const reco::Candidate*> PATFinalState::vetoPhotons(
