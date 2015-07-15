@@ -85,7 +85,28 @@ options = TauVarParsing.TauVarParsing(
 )
 
 options.register(
-    'skimCuts',
+    'skimCuts-tt',
+    '',
+    TauVarParsing.TauVarParsing.multiplicity.list,
+    TauVarParsing.TauVarParsing.varType.string,
+    'additional cuts to impose on the NTuple'
+)
+options.register(
+    'skimCuts-et',
+    '',
+    TauVarParsing.TauVarParsing.multiplicity.list,
+    TauVarParsing.TauVarParsing.varType.string,
+    'additional cuts to impose on the NTuple'
+)
+options.register(
+    'skimCuts-mt',
+    '',
+    TauVarParsing.TauVarParsing.multiplicity.list,
+    TauVarParsing.TauVarParsing.varType.string,
+    'additional cuts to impose on the NTuple'
+)
+options.register(
+    'skimCuts-em',
     '',
     TauVarParsing.TauVarParsing.multiplicity.list,
     TauVarParsing.TauVarParsing.varType.string,
@@ -566,14 +587,18 @@ def expanded_final_states(input):
             yield fs
 
 print "Building ntuple for final states: %s" % ", ".join(final_states)
+
 for final_state in expanded_final_states(final_states):
     extraJets = options.nExtraJets if 'j' not in final_state else 0
     final_state = order_final_state(final_state)
+
+    skimCuts = getattr(options, "skimCuts-%s" %final_state)
+    print skimCuts
     analyzer = make_ntuple(*final_state, 
                             svFit=options.svFit, dblhMode=options.dblhMode,
                             runTauSpinner=options.runTauSpinner, 
                             runMVAMET=options.runMVAMET,
-                            skimCuts=options.skimCuts, suffix=suffix,
+                            skimCuts=skimCuts, suffix=suffix,
                             hzz=options.hzz, nExtraJets=extraJets, **parameters)
     add_ntuple(final_state, analyzer, process,
                process.schedule, options.eventView)
