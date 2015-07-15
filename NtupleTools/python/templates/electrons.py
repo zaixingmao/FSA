@@ -52,9 +52,6 @@ id = PSet(
     objectTrkIsoDR03 = cms.string("{object}.dr03TkSumPt()"),
     objectEcalIsoDR03 = cms.string("{object}.dr03EcalRecHitSumEt()"),
     objectHcalIsoDR03 = cms.string("{object}.dr03HcalTowerSumEt()"),
-    #objectChargeIdTight = '{object}.isGsfCtfScPixChargeConsistent',
-    #objectChargeIdMed = '{object}.isGsfScPixChargeConsistent',
-    #objectChargeIdLoose = '{object}.isGsfCtfChargeConsistent',
     # raw energy error
     objectEnergyError = '{object}.corrections().combinedP4Error',
     # shower shape / ID variables
@@ -126,6 +123,8 @@ supercluster = PSet(
 )
 
 trigger = PSet(
+    objectMu23El12 = 'matchToHLTFilter({object_idx}, "hltMu23TrkIsoVVLEle12CaloIdLTrackIdLIsoVLElectronlegTrackIsoFilter", 0.5)',
+    objectMu8El23 = 'matchToHLTFilter({object_idx}, "hltMu8TrkIsoVVLEle23CaloIdLTrackIdLIsoVLElectronlegTrackIsoFilter", 0.5)',
     objectEle22 = 'matchToHLTFilter({object_idx}, "hltEle22WP75L1IsoEG20erTau20erGsfTrackIsoFilter", 0.5)',
     objectOverlapEle22 = 'matchToHLTFilter({object_idx}, "hltOverlapFilterIsoEle22WP75GsfLooseIsoPFTau20", 0.5)',
     objectSingleEle = 'matchToHLTFilter({object_idx}, "hltEle32WP75GsfTrackIsoFilter", 0.5)',
