@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import os
 import optparse
+import localJob_cfg
 
 def expandFinalStates(FS):
     return [x.strip() for x in FS.split(',')]
@@ -49,13 +50,9 @@ skimCuts['mt'] = {"ID_m": "object.isMediumMuon() > 0.5",
                   "Eta_t": "abs(object.eta()) < 2.3",
                   }
 
-localJobInfo = {'inputFile': "file:///hdfs/store/mc/RunIISpring15DR74/SUSYGluGluToBBHToTauTau_M-160_TuneCUETP8M1_13TeV-pythia8/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v2/50000/A0F69455-EF11-E511-A140-0CC47A4DEDE2.root",
-                #'inputFile': "file:///hdfs/store/mc/RunIISpring15DR74/SUSYGluGluToHToTauTau_M-160_TuneCUETP8M1_13TeV-pythia8/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v1/10000/64BC29B9-5303-E511-8991-0CC47A4D99B0.root",
-                'eventsToProcess': 'all',#'1:1713:333892',
-                'maxEvents': 5000}
-
-
 SVFit = 1 if options.doSVFit else 0
+
+localJobInfo = localJob_cfg.localJobInfo
 
 if ":" in localJobInfo['eventsToProcess']:
     cmd = "./make_ntuples_cfg.py eventsToProcess=%s outputFile=myTestFile.root inputFiles=%s channels=%s isMC=1 nExtraJets=8 svFit=%i " %(localJobInfo['eventsToProcess'], localJobInfo['inputFile'], options.FS, SVFit)
