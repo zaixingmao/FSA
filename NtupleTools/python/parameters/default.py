@@ -28,8 +28,8 @@ parameters = {
 
     # selections to include object in final state (should be looser than analysis selections)
     'finalSelection' : {
-        'e': 'abs(superCluster().eta) < 3.0 & max(pt, userFloat("maxCorPt")) > 7',
-        'm': 'max(pt, userFloat("maxCorPt")) > 4 & (isGlobalMuon | isTrackerMuon)',
+        'e': 'abs(eta) < 3 & pt > 7',
+        'm': 'abs(eta) < 2.5 & pt > 5',
         't': 'abs(eta) < 2.5 & pt > 20',
         'g': 'abs(superCluster().eta()) < 3.0 & pt > 10',
         # remove jets that are close to leptons
