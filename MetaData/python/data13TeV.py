@@ -8,6 +8,22 @@ data_name_map = {}
 
 datadefs = {}
 
+datadefs["DYJets_M50-Asympt25ns"] = {
+    'analyses': [],
+    'datasetpath': '/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/RunIISpring15DR74-Asympt25ns_MCRUN2_74_V9-v3/MINIAODSIM',
+    'pu': 'Asympt25ns',
+    'calibrationTarget': 'RunIISpring15DR74',
+    'x_sec': 6025.0*picobarns,
+}
+
+datadefs["ZprimeToTauTau_M_500-Asympt25ns"] = {
+    'analyses': [],
+    'datasetpath': '/ZprimeToTauTau_M_500_TuneCUETP8M1_tauola_13TeV_pythia8/RunIISpring15DR74-Asympt25ns_MCRUN2_74_V9-v1/MINIAODSIM',
+    'pu': 'Asympt25ns',
+    'calibrationTarget': 'RunIISpring15DR74',
+    'x_sec': -999,
+}
+
 datadefs["DYJets_M50-PU20bx25"] = {
     'analyses': ['4L'],
     'datasetpath': '/DYJetsToLL_M-50_13TeV-madgraph-pythia8/Phys14DR-PU20bx25_PHYS14_25_V1-v1/MINIAODSIM',
