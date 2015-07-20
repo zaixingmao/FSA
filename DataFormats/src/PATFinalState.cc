@@ -17,7 +17,6 @@
 #include "CommonTools/Utils/interface/StringObjectFunction.h"
 
 #include "DataFormats/TrackReco/interface/HitPattern.h"
-
 #include "DataFormats/Math/interface/deltaPhi.h"
 #include "DataFormats/Math/interface/deltaR.h"
 #include <boost/algorithm/string.hpp>
@@ -319,12 +318,24 @@ PATFinalState::smallestDeltaPhi() const {
   return smallestDeltaPhi;
 }
 
-double
+TLorentzVector
 PATFinalState::SVfit(int i, int j) const {
 
+  std::vector<int> decayModes;
   std::vector<reco::CandidatePtr> toFit;
   toFit.push_back(daughterPtr(i));
   toFit.push_back(daughterPtr(j));
+
+  if(abs(daughter(i)->pdgId()) == 15){
+    decayModes.push_back(daughterAsTau(i)->decayMode());
+  }
+  else decayModes.push_back(-1);
+
+  if(abs(daughter(j)->pdgId()) == 15){
+    decayModes.push_back(daughterAsTau(j)->decayMode());
+  }
+  else decayModes.push_back(-1);
+
 
   edm::Ptr<pat::MET> mvaMet = evt()->met("mvamet");
 
@@ -336,7 +347,7 @@ PATFinalState::SVfit(int i, int j) const {
   }
 
 
-  return ApplySVfit::getSVfitMass(toFit, *mvaMet,
+  return ApplySVfit::getSVfitMass(toFit, decayModes, *mvaMet,
       mvaMet->getSignificanceMatrix(), 0,
       evt()->evtId());
 }

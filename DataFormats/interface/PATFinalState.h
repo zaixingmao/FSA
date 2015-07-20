@@ -13,6 +13,7 @@
 #include "FinalStateAnalysis/DataAlgos/interface/VBFVariables.h"
 #include "FinalStateAnalysis/DataAlgos/interface/VBFSelections.h"
 #include "TVector2.h"
+#include "TLorentzVector.h"
 
 #include "FinalStateAnalysis/DataFormats/interface/FwdIncludes.h"
 #include "FinalStateAnalysis/DataFormats/interface/Macros.h"
@@ -151,7 +152,7 @@ class PATFinalState : public pat::PATObject<reco::LeafCandidate> {
     double deltaPhiToMEt(int i) const;
 
    // return the SVfit computed  mass
-    double SVfit(int i, int j) const;
+    TLorentzVector SVfit(int i, int j) const;
 
     /// Get the transverse mass between two objects
     double mt(int i, const std::string& tagI,

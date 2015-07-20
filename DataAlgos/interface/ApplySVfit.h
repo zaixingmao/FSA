@@ -13,14 +13,18 @@
 #include <vector>
 #include "TMatrixDfwd.h"
 #include "Math/SMatrixDfwd.h"
+#include "DataFormats/PatCandidates/interface/Tau.h"
+#include "TLorentzVector.h"
 
 // forward declarations
 namespace pat { class MET; }
 namespace edm { class EventID; }
 
+
 namespace ApplySVfit {
-  double getSVfitMass(
+  TLorentzVector getSVfitMass(
       std::vector<reco::CandidatePtr>& cands,
+      std::vector<int>& decayModes,
       const pat::MET& met,
       const ROOT::Math::SMatrix2D& covariance, 
       unsigned int verbosity,
