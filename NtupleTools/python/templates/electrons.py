@@ -44,6 +44,9 @@ id = PSet(
     objectPFNeutralIso = cms.string('{object}.userIsolation("PfNeutralHadronIso")'),
     objectPFPhotonIso  = cms.string('{object}.userIsolation("PfGammaIso")'),
     
+    objectPassNumberOfHits = cms.string('{object}.userInt("passNumberOfHits")'),
+    objectPassConversionVeto = cms.string('{object}.userInt("passConversionVeto")'),
+
     objectEffectiveArea2012Data = cms.string('{object}.userFloat("ea_comb_Data2012_iso04_kt6PFJ")'),
     objectEffectiveAreaPHYS14 = cms.string('{object}.userFloat("EffectiveArea_HZZ4l2015")'),
 

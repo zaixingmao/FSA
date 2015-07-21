@@ -136,6 +136,14 @@ void MiniAODElectronIDEmbedder::produce(edm::Event& iEvent, const edm::EventSetu
 
       out->push_back(*ei); // copy electron to save correctly in event
 
+      //add some other stuff
+      int passNumberOfHits = 0;
+      int passConversionVeto = 0;
+      if(ei->gsfTrack()->hitPattern().numberOfHits(reco::HitPattern::MISSING_INNER_HITS) <=1) passNumberOfHits = 1;
+      if(ei->passConversionVeto()) passConversionVeto = 1;
+      out->back().addUserInt("passNumberOfHits", passNumberOfHits);
+      out->back().addUserInt("passConversionVeto", passConversionVeto);
+
       for(unsigned int i = 0; // Loop over ID working points
 	  i < ids.size(); ++i)
 	{
