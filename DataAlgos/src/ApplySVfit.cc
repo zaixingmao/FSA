@@ -63,16 +63,18 @@ namespace ApplySVfit {
 
       if (pdgId == 11){
         measuredTauLeptons.push_back(
-            MeasuredTauLepton(svFitStandalone::kTauToElecDecay,cands[dau]->pt(),cands[dau]->eta(),cands[dau]->phi(),cands[dau]->mass()));
+            MeasuredTauLepton(svFitStandalone::kTauToElecDecay,cands[dau]->pt(),cands[dau]->eta(),cands[dau]->phi(), 0.51100e-3));
       }
       else if (pdgId == 13){
         measuredTauLeptons.push_back(
-            MeasuredTauLepton(svFitStandalone::kTauToMuDecay,cands[dau]->pt(),cands[dau]->eta(),cands[dau]->phi(),cands[dau]->mass()));
+            MeasuredTauLepton(svFitStandalone::kTauToMuDecay,cands[dau]->pt(),cands[dau]->eta(),cands[dau]->phi(),0.10566));
       }
       else if (pdgId == 15){
+        double tauMass = cands[dau]->mass();
+        if(decayModes[dau] == 0) tauMass = 0.13957;
         measuredTauLeptons.push_back(
-            MeasuredTauLepton(svFitStandalone::kTauToHadDecay,cands[dau]->pt(),cands[dau]->eta(),cands[dau]->phi(),cands[dau]->mass(), decayModes[dau]));
-            hasHadronicTaus = true;
+            MeasuredTauLepton(svFitStandalone::kTauToHadDecay,cands[dau]->pt(),cands[dau]->eta(),cands[dau]->phi(), tauMass, decayModes[dau]));
+        if(decayModes[dau] != 5 and decayModes[dau] != 6) hasHadronicTaus = true;
       }
       else{
         throw cms::Exception("BadPdgId") << "I don't understand PDG id: "
