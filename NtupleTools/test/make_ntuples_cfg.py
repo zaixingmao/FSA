@@ -31,7 +31,7 @@ passThru=0 - turn off any preselection/skim
 dump=0     - if one, dump process python to stdout
 verbose=0 - print out timing information
 noPhotons=0 - don't build things which depend on photons.
-rerunMVAMET=1 - rerun the MVAMET algorithm
+rerunMVAMET=0 - rerun the MVAMET algorithm
 svFit=1 - run the SVfit on appropriate pairs
 rerunQGJetID=0 - rerun the quark-gluon JetID
 rerunJets=0   - rerun with new jet energy corrections
@@ -73,7 +73,7 @@ options = TauVarParsing.TauVarParsing(
     rochCor="",
     eleCor="",
     rerunQGJetID=0,  # If one reruns the quark-gluon JetID
-    runMVAMET=0,  # If one, (re)build the MVA MET
+    runMVAMET=1,  # If one, (re)build the MVA MET
     rerunJets=0,
     dblhMode=False, # For double-charged Higgs analysis
     runTauSpinner=0,
@@ -219,10 +219,10 @@ process.ghostCleanedMuons = cms.EDProducer("PATMuonCleanerBySegments",
                                            preselection = cms.string("track.isNonnull"),
                                            passthrough = cms.string("isGlobalMuon && numberOfMatches >= 2"),
                                            fractionOfSharedSegments = cms.double(0.499))
-fs_daughter_inputs['muons'] = "ghostCleanedMuons"
-
-process.miniCleanedMuons = cms.Path(process.ghostCleanedMuons)
-process.schedule.append(process.miniCleanedMuons)
+# fs_daughter_inputs['muons'] = "ghostCleanedMuons"
+# 
+# process.miniCleanedMuons = cms.Path(process.ghostCleanedMuons)
+# process.schedule.append(process.miniCleanedMuons)
 
 process.miniPatMuons = cms.EDProducer(
     "MiniAODMuonIDEmbedder",

@@ -44,8 +44,8 @@ pv_info = PSet(
 )
 
 met = PSet(
-#     mvametEt       = 'evt.met("mvamet").et',
-#     mvametPhi      = 'evt.met("mvamet").phi',
+    mvametEt       = 'evt.met("mvamet").et',
+    mvametPhi      = 'evt.met("mvamet").phi',
     pfMetEt        = 'evt.met4vector("pfmet","",1).Et',
     pfMetPhi       = 'evt.met4vector("pfmet","",1).Phi',
     type1_pfMetEt  = 'evt.met4vector("pfmet","type1",1).Et', #1 --> phi correction not in miniAOD
@@ -62,10 +62,10 @@ met = PSet(
     pfMet_ues_Phi  = 'evt.met4vector("pfmet","ues+", 1).Phi',
     
     #met cov matrix
-#     metCovariance_00 = 'evt.met("mvamet").getSignificanceMatrix()[0][0]',
-#     metCovariance_01 = 'evt.met("mvamet").getSignificanceMatrix()[0][1]',
-#     metCovariance_10 = 'evt.met("mvamet").getSignificanceMatrix()[1][0]',
-#     metCovariance_11 = 'evt.met("mvamet").getSignificanceMatrix()[1][1]',
+    metCovariance_00 = 'evt.met("mvamet").getSignificanceMatrix()[0][0]',
+    metCovariance_01 = 'evt.met("mvamet").getSignificanceMatrix()[0][1]',
+    metCovariance_10 = 'evt.met("mvamet").getSignificanceMatrix()[1][0]',
+    metCovariance_11 = 'evt.met("mvamet").getSignificanceMatrix()[1][1]',
 
     recoilDaught='getDaughtersRecoil().R()',
     recoilWithMet='getDaughtersRecoilWithMet().R()',
