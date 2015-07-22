@@ -180,7 +180,7 @@ def produce_final_states(process, collections, output_commands,
     if noTracks:
         process.patFinalStateVertexFitter.enable = False
 
-    crossCleaning = kwargs.get('crossCleaning','smallestDeltaR() > 0.5')
+    crossCleaning = kwargs.get('crossCleaning','smallestDeltaR() > 0.3')
 
     process.buildSingleObjects = cms.Sequence()
     # build single object pairs
