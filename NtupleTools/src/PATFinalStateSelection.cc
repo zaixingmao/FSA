@@ -146,8 +146,10 @@ bool PATFinalStateSelection::operator()(const PATFinalStatePtrs& input,
   for (size_t i = 0; i < passingLocal.size() && i < take_; ++i) {
     passing_.push_back(passingLocal[i]);
     // only fill the ntuple if we're not doing event view
+    TLorentzVector svfit_results = passingLocal[i]->SVfit(0, 1);
+
     if (!eventView_ && finalPlots_.get()) 
-      finalPlots_->fill(*passingLocal[i], weight, i);
+      finalPlots_->fill(*passingLocal[i], weight, i, "SVfit", svfit_results);
   }
   // if event view fill fill variable-sized branches
   if ( eventView_ ) finalPlotsEventView_->fill(passingLocal, weight);

@@ -26,17 +26,21 @@
 #include <iostream>
 #include <sstream>
 #include "FWCore/Utilities/interface/TypeWithDict.h"
+#include "TLorentzVector.h"
 
 template<typename ObjType>
 class ExpressionNtupleColumn {
 public:
     /// Compute the column function and store result in branch variable
   void compute(const ObjType& obj);
+  virtual void setValue(TLorentzVector value) = 0;
+
 protected:
   /// Abstract function which takes the result from the compute and fills the
   /// branch
   virtual void setValue(double value) = 0;
   virtual void setValue(const std::vector<double>& value) = 0;
+
   ExpressionNtupleColumn(const std::string& name, const std::string& func);
 private:
   std::string name_, expression_;
@@ -69,6 +73,7 @@ protected:
   /// branch
   virtual void setValue(double value) = 0;
   virtual void setValue(const std::vector<double>& value) = 0;
+
   ExpressionNtupleColumn(const std::string& name, const std::string& func);
 private:
   std::string name_;
@@ -148,6 +153,8 @@ class ExpressionNtupleColumnT : public ExpressionNtupleColumn<ObjType> {
     }
   }
 
+  void setValue(TLorentzVector value);
+
   protected:
     /// Abstract function
     ExpressionNtupleColumnT(const std::string& name, const std::string& func,
@@ -155,8 +162,11 @@ class ExpressionNtupleColumnT : public ExpressionNtupleColumn<ObjType> {
 
     void setValue(double value);
     void setValue(const std::vector<double>&) {}
+
   private:
     boost::shared_ptr<ColType> branch_;
+    TLorentzVector* tlv_branch_;
+
 };
 
 // Explicit typed (float, double, etc) ntuple column
@@ -164,14 +174,24 @@ template<typename ObjType, typename ColType>
 ExpressionNtupleColumnT<ObjType, ColType>::ExpressionNtupleColumnT(
     const std::string& name, const std::string& func, TTree* tree):
   ExpressionNtupleColumn<ObjType>(name, func) {
-    branch_.reset(new ColType);
-    std::string branchCmd = name + getTypeCmd<ColType>();
-    tree->Branch(name.c_str(), branch_.get(), branchCmd.c_str());
+
+      if(name.find("SVfit") != std::string::npos){
+        tree->Branch(name.c_str(), "TLorentzVector", &tlv_branch_);
+      }
+      else{
+        branch_.reset(new ColType);
+        std::string branchCmd = name + getTypeCmd<ColType>();
+        tree->Branch(name.c_str(), branch_.get(), branchCmd.c_str());
+      }
 }
 
 template<typename ObjType, typename ColType>
 void ExpressionNtupleColumnT<ObjType, ColType>::setValue(double value) {
   *branch_ = convertVal<ColType>(value);
+}
+template<typename ObjType, typename ColType>
+void ExpressionNtupleColumnT<ObjType, ColType>::setValue(TLorentzVector value) {
+  tlv_branch_->SetPtEtaPhiM(value.Pt(), value.Eta(), value.Phi(), value.M());
 }
 
 template<typename T>
@@ -252,6 +272,7 @@ class ExpressionNtupleColumnT<std::vector<const T*>, ColType> :
  private:
   TLeaf* counter_;
   boost::shared_ptr<ColType> branch_;
+
   TTree* const myparent_;
   const std::string branchname_;
 };

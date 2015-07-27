@@ -32,6 +32,8 @@ class HistoFolder {
     // object index, which will be passed to any ntuples contained in this
     // folder.
     void fill(const T& object, double weight, int idx=-1);
+    void fill(const T& object, double weight, int idx, std::string tlv_name, TLorentzVector tlv);
+
   private:
     // Initialization methods
     void bookHistograms(const edm::ParameterSet& pset, TFileDirectory& fs);
@@ -124,6 +126,25 @@ void HistoFolder<T>::fill(const T& object, double weight, int idx) {
     // Fill this directories ntuple, if we are using it.
     if (ntuple_.get())
       ntuple_->fill(object, idx);
+    // Descend into subdirectories
+    for (size_t iFolder = 0; iFolder < subfolders_.size(); ++iFolder) {
+      subfolders_.at(iFolder)->fill(object, weight, idx);
+    }
+  }
+}
+
+// Recursive filling of histograms with additional TLorentzVector Information
+template<typename T>
+void HistoFolder<T>::fill(const T& object, double weight, int idx, std::string tlv_name, TLorentzVector tlv) {
+  // Check if we are selecting and if it passes
+  if (!selector_.get() || (*selector_)(object)) {
+    // Fill this directories histos
+    for (size_t iHisto = 0; iHisto < histos_.size(); ++iHisto) {
+      histos_.at(iHisto)->fill(object, weight);
+    }
+    // Fill this directories ntuple, if we are using it.
+    if (ntuple_.get())
+      ntuple_->fill(object, tlv_name, tlv, idx);
     // Descend into subdirectories
     for (size_t iFolder = 0; iFolder < subfolders_.size(); ++iFolder) {
       subfolders_.at(iFolder)->fill(object, weight, idx);
