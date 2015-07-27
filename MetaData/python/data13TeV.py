@@ -24,6 +24,22 @@ datadefs["ZprimeToTauTau_M_500-Asympt25ns"] = {
     'x_sec': -999,
 }
 
+datadefs["ZprimeToTauTau_M_2000-Asympt25ns"] = {
+    'analyses': [],
+    'datasetpath': '/ZprimeToTauTau_M_2000_TuneCUETP8M1_tauola_13TeV_pythia8/RunIISpring15DR74-Asympt25ns_MCRUN2_74_V9-v1/MINIAODSIM',
+    'pu': 'Asympt25ns',
+    'calibrationTarget': 'RunIISpring15DR74',
+    'x_sec': -999,
+}
+
+datadefs["ZprimeToTauTau_M_2500-Asympt25ns"] = {
+    'analyses': [],
+    'datasetpath': '/ZprimeToTauTau_M_2500_TuneCUETP8M1_tauola_13TeV_pythia8/RunIISpring15DR74-Asympt25ns_MCRUN2_74_V9-v1/MINIAODSIM',
+    'pu': 'Asympt25ns',
+    'calibrationTarget': 'RunIISpring15DR74',
+    'x_sec': -999,
+}
+
 datadefs["DYJets_M50-PU20bx25"] = {
     'analyses': ['4L'],
     'datasetpath': '/DYJetsToLL_M-50_13TeV-madgraph-pythia8/Phys14DR-PU20bx25_PHYS14_25_V1-v1/MINIAODSIM',
