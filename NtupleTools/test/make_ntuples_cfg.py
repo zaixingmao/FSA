@@ -61,7 +61,7 @@ process.options = cms.untracked.PSet(
 import FinalStateAnalysis.Utilities.TauVarParsing as TauVarParsing
 options = TauVarParsing.TauVarParsing(
     skipEvents=0,  # Start at an event offset (for debugging)
-    reportEvery=100,
+    reportEvery=500,
     channels='mm,mjj,mj',
     rerunMCMatch=False,
     eventView=0,  # Switch between final state view (0) and event view (1)
@@ -73,7 +73,7 @@ options = TauVarParsing.TauVarParsing(
     rochCor="",
     eleCor="",
     rerunQGJetID=0,  # If one reruns the quark-gluon JetID
-    runMVAMET=1,  # If one, (re)build the MVA MET
+    runMVAMET=0,  # If one, (re)build the MVA MET
     rerunJets=0,
     dblhMode=False, # For double-charged Higgs analysis
     runTauSpinner=0,
