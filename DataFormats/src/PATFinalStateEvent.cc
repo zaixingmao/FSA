@@ -205,6 +205,11 @@ const reco::Candidate::LorentzVector PATFinalStateEvent::met4vector(
   //  return fshelpers::metPhiCorrection(metp4, recoVertices_.size(), !isRealData_);
 }
 
+const reco::GenMET* PATFinalStateEvent::getGenMET() const 
+{
+  return met_->genMET();
+}
+
 const edm::EventID& PATFinalStateEvent::evtId() const {
   return evtID_;
 }
