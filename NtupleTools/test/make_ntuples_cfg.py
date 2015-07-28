@@ -224,6 +224,14 @@ process.ghostCleanedMuons = cms.EDProducer("PATMuonCleanerBySegments",
 # process.miniCleanedMuons = cms.Path(process.ghostCleanedMuons)
 # process.schedule.append(process.miniCleanedMuons)
 
+#calculate pfmet covmatrix
+process.load("FinalStateAnalysis.PatTools.met.METSignificance_cfi")
+process.load("RecoMET/METProducers.METSignificanceParams_cfi")
+process.MiniAODMETSignificanceEmbedder.srcMet = cms.InputTag(fs_daughter_inputs['pfmet'])
+process.miniPatMET = cms.Path(process.MiniAODMETSignificanceEmbedder)
+process.schedule.append(process.miniPatMET)
+fs_daughter_inputs['pfmet'] = "MiniAODMETSignificanceEmbedder"
+
 process.miniPatMuons = cms.EDProducer(
     "MiniAODMuonIDEmbedder",
     src=cms.InputTag(fs_daughter_inputs['muons']),
@@ -466,6 +474,7 @@ if options.runMVAMET:
     )
     process.schedule.append(process.mvaMetSequence)
 
+
 if options.hzz:    
     # Put FSR photons into leptons as user cands
     from FinalStateAnalysis.PatTools.miniAODEmbedFSR_cfi \
@@ -495,6 +504,7 @@ if options.hzz:
         process.muonFSREmbedder
         )
     process.schedule.append(process.embedFSRInfo)
+
 
 # Eventually, set buildFSAEvent to False, currently working around bug
 # in pat tuples.
