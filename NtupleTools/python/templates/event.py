@@ -61,11 +61,21 @@ met = PSet(
     pfMet_jes_Phi  = 'evt.met4vector("pfmet","jes+", 1).Phi',
     pfMet_ues_Phi  = 'evt.met4vector("pfmet","ues+", 1).Phi',
     
-    #met cov matrix
-    metCovariance_00 = 'evt.met("mvamet").getSignificanceMatrix()[0][0]',
-    metCovariance_01 = 'evt.met("mvamet").getSignificanceMatrix()[0][1]',
-    metCovariance_10 = 'evt.met("mvamet").getSignificanceMatrix()[1][0]',
-    metCovariance_11 = 'evt.met("mvamet").getSignificanceMatrix()[1][1]',
+    #mvamet cov matrix
+    mvametCovariance_00 = 'evt.met("mvamet").getSignificanceMatrix()[0][0]',
+    mvametCovariance_01 = 'evt.met("mvamet").getSignificanceMatrix()[0][1]',
+    mvametCovariance_10 = 'evt.met("mvamet").getSignificanceMatrix()[1][0]',
+    mvametCovariance_11 = 'evt.met("mvamet").getSignificanceMatrix()[1][1]',
+
+    #pfmet cov matrix
+    pfmetCovariance_00 = 'evt.met("pfmet").getSignificanceMatrix()[0][0]',
+    pfmetCovariance_01 = 'evt.met("pfmet").getSignificanceMatrix()[0][1]',
+    pfmetCovariance_10 = 'evt.met("pfmet").getSignificanceMatrix()[1][0]',
+    pfmetCovariance_11 = 'evt.met("pfmet").getSignificanceMatrix()[1][1]',
+
+
+    genMetEt = 'evt.getGenMET().et',
+    genMetPhi = 'evt.getGenMET().phi',
 
     recoilDaught='getDaughtersRecoil().R()',
     recoilWithMet='getDaughtersRecoilWithMet().R()',
