@@ -50,6 +50,11 @@ Checkout the needed CMSSW tags:
   popd
 ```
 
+Checkout METProducers to produce MEt CovMatrix
+```bash
+git cms-addpkg RecoMET/METProducers/
+```
+
 Checkout MVAMet (https://twiki.cern.ch/twiki/bin/view/CMS/MVAMet#CMSSW_7_2_X_requires_slc6_MiniAO)
 
 ```bash
