@@ -116,6 +116,9 @@ class PATFinalStateEvent {
     /// Get MET significance
     double metSignificance() const;
 
+    const reco::GenMET* getGenMET() const;
+
+
     // Get a given type of MET
     const edm::Ptr<pat::MET> met(const std::string& type) const;
     // Get 4-vector of the MET

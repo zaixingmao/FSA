@@ -123,7 +123,7 @@ void addFourMomenta( reco::Candidate & c ) {
 }
 
 /// Helper function to get the matched gen particle 
-const reco::GenParticleRef getGenParticle(const reco::Candidate*   daughter, const reco::GenParticleRefProd genCollectionRef, int pdgIdToMatch, bool checkCharge)
+const reco::GenParticleRef getGenParticle(const reco::Candidate*   daughter, const reco::GenParticleRefProd genCollectionRef, int pdgIdToMatch, bool checkCharge, double maxDPtRel, double maxDeltaR)
 {
   //if no genPaticle no matching
   if(!genCollectionRef){
@@ -133,8 +133,8 @@ const reco::GenParticleRef getGenParticle(const reco::Candidate*   daughter, con
 
   //builds pset used by various subclasses
   edm::ParameterSet pset;
-  pset.addParameter<double>("maxDPtRel", 0.5);
-  pset.addParameter<double>("maxDeltaR", 0.5);
+  pset.addParameter<double>("maxDPtRel", maxDPtRel);
+  pset.addParameter<double>("maxDeltaR", maxDeltaR);
   std::vector<int> pdgIdsToMatch;
   pdgIdsToMatch.push_back(pdgIdToMatch);
   pset.addParameter<std::vector<int> >("mcPdgId", pdgIdsToMatch);

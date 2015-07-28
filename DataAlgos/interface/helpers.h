@@ -41,7 +41,7 @@ const reco::Candidate::LorentzVector metPhiCorrection(const reco::Candidate::Lor
 void addFourMomenta(reco::Candidate & c);
 
 /// Helper function to get the matched gen particle 
-const reco::GenParticleRef getGenParticle(const reco::Candidate*   daughter,const reco::GenParticleRefProd genCollectionRef, int pdgIdToMatch, bool checkCharge);
+const reco::GenParticleRef getGenParticle(const reco::Candidate*   daughter,const reco::GenParticleRefProd genCollectionRef, int pdgIdToMatch, bool checkCharge, double maxDPtRel, double maxDeltaR);
 
 ///Helper function to find a gen particle given pdgid and status
 const bool findDecay(const reco::GenParticleRefProd genCollectionRef, int pdgIdMother, int pdgIdDaughter);
