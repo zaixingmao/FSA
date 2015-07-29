@@ -881,6 +881,11 @@ const reco::GenParticleRef PATFinalState::getDaughterGenParticle(size_t i, int p
   return fshelpers::getGenParticle( daughter(i), event_->genParticleRefProd(), pdgIdToMatch, charge, maxDPtRel, maxDeltaR);
 }
 
+const reco::Candidate::LorentzVector PATFinalState::getDaughterGenParticleVisMomentum(size_t i, int pdgIdToMatch, int checkCharge, double maxDPtRel = 0.5, double maxDeltaR = 0.5) const {
+  bool charge = (bool) checkCharge;
+  return fshelpers::getGenParticleVisMomentum( daughter(i), event_->genParticleRefProd(), pdgIdToMatch, charge, maxDPtRel, maxDeltaR);
+}
+
 const reco::GenParticleRef PATFinalState::getDaughterGenParticleMotherSmart(size_t i, int pdgIdToMatch, int checkCharge) const {
   const reco::GenParticleRef genp = getDaughterGenParticle(i, pdgIdToMatch, checkCharge);
   if( genp.isAvailable() && genp.isNonnull()  )
