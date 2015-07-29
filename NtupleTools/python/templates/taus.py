@@ -34,6 +34,12 @@ info = PSet(
     objectGenPhi         = '? (getDaughterGenParticle({object_idx}, 15, 1, 1.0, 0.5).isAvailable && getDaughterGenParticle({object_idx}, 15, 1, 1.0, 0.5).isNonnull) ? getDaughterGenParticle({object_idx}, 15, 1, 1.0, 0.5).phi()   : -999',
     objectGenPt          = '? (getDaughterGenParticle({object_idx}, 15, 1, 1.0, 0.5).isAvailable && getDaughterGenParticle({object_idx}, 15, 1, 1.0, 0.5).isNonnull) ? getDaughterGenParticle({object_idx}, 15, 1, 1.0, 0.5).pt()   : -999',
     objectGenMass        = '? (getDaughterGenParticle({object_idx}, 15, 1, 1.0, 0.5).isAvailable && getDaughterGenParticle({object_idx}, 15, 1, 1.0, 0.5).isNonnull) ? getDaughterGenParticle({object_idx}, 15, 1, 1.0, 0.5).mass()   : -999',
+
+    objectGenVisPt       = '? getDaughterGenParticleVisMomentum({object_idx}, 15, 1, 1.0, 0.5).pt() > 0 ? getDaughterGenParticleVisMomentum({object_idx}, 15, 1, 1.0, 0.5).pt()  : -999',
+    objectGenVisEta       = '? getDaughterGenParticleVisMomentum({object_idx}, 15, 1, 1.0, 0.5).pt() > 0 ? getDaughterGenParticleVisMomentum({object_idx}, 15, 1, 1.0, 0.5).eta()  : -999',
+    objectGenVisPhi       = '? getDaughterGenParticleVisMomentum({object_idx}, 15, 1, 1.0, 0.5).pt() > 0 ? getDaughterGenParticleVisMomentum({object_idx}, 15, 1, 1.0, 0.5).phi()  : -999',
+    objectGenVisMass       = '? getDaughterGenParticleVisMomentum({object_idx}, 15, 1, 1.0, 0.5).pt() > 0 ? getDaughterGenParticleVisMomentum({object_idx}, 15, 1, 1.0, 0.5).phi()  : -999',
+
 )
 
 # ID and isolation
