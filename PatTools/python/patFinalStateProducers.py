@@ -224,6 +224,37 @@ def produce_final_states(process, collections, output_commands,
             continue
         if (diobject[0][0], diobject[1][0]) == ('Jet', 'Jet'):
             continue
+        if (diobject[0][0], diobject[1][0]) == ('Pho', 'Pho'):
+            continue
+        if (diobject[0][0], diobject[1][0]) == ('Elec', 'Elec'):
+            continue
+        if (diobject[0][0], diobject[1][0]) == ('Elec', 'Pho'):
+            continue
+        if (diobject[0][0], diobject[1][0]) == ('Elec', 'Jet'):
+            continue
+        if (diobject[0][0], diobject[1][0]) == ('Mu', 'Mu'):
+            continue
+        if (diobject[0][0], diobject[1][0]) == ('Mu', 'Pho'):
+            continue
+        if (diobject[0][0], diobject[1][0]) == ('Mu', 'Jet'):
+            continue
+
+        #tautauMVAMEt from Jan
+        if True:
+            from RecoMET.METPUSubtraction.mvaPFMET_cff import pfMVAMEt
+            mvaMETProducer = cms.EDProducer(
+                'PFMETProducerMVATauTau', 
+                **pfMVAMEt.parameters_()
+            )#pfMVAMEt.clone()
+            mvaMETProducer.srcPFCandidates = cms.InputTag("packedPFCandidates")
+            mvaMETProducer.srcVertices = cms.InputTag("offlineSlimmedPrimaryVertices")
+            mvaMETProducer.srcLeptons = cms.VInputTag(diobject[0][1],diobject[1][1])
+            mvaMETProducer.permuteLeptons = cms.bool(True)
+            producer_name = "finalStateMVAMET%s%s" % (diobject[0][0], diobject[1][0])
+            print producer_name
+            setattr(process, producer_name, mvaMETProducer)
+            process.buildDiObjects += getattr(process, producer_name)
+            output_commands.append("*_%s_*_*" % producer_name)
 
         # Define some basic selections for building combinations
         cuts = [crossCleaning]  # basic x-cleaning
@@ -233,6 +264,7 @@ def produce_final_states(process, collections, output_commands,
             evtSrc=cms.InputTag("patFinalStateEventProducer"),
             leg1Src=diobject[0][1],
             leg2Src=diobject[1][1],
+            tautauMVAMETSrc = cms.InputTag(producer_name),
             # X-cleaning
             cut=cms.string(' & '.join(cuts))
         )
@@ -251,6 +283,8 @@ def produce_final_states(process, collections, output_commands,
         process.buildDiObjects += final_module
         setattr(process, producer_name, final_module)
         output_commands.append("*_%s_*_*" % producer_name)
+
+
     sequence += process.buildDiObjects
 
     # Build tri-lepton pairs

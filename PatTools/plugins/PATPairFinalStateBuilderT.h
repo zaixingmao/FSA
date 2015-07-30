@@ -21,6 +21,7 @@ class PATPairFinalStateBuilderT : public edm::EDProducer {
     edm::InputTag leg1Src_;
     edm::InputTag leg2Src_;
     edm::InputTag evtSrc_;
+    edm::InputTag tautauMVAMetSrc_;
     StringCutObjectSelector<PATFinalState> cut_;
 };
 
@@ -31,6 +32,8 @@ PATPairFinalStateBuilderT<FinalStatePair>::PATPairFinalStateBuilderT(
   leg1Src_ = pset.getParameter<edm::InputTag>("leg1Src");
   leg2Src_ = pset.getParameter<edm::InputTag>("leg2Src");
   evtSrc_ = pset.getParameter<edm::InputTag>("evtSrc");
+  tautauMVAMetSrc_ = pset.getParameter<edm::InputTag>("tautauMVAMETSrc");
+
   produces<FinalStatePairCollection>();
 }
 
@@ -51,6 +54,9 @@ PATPairFinalStateBuilderT<FinalStatePair>::produce(
   edm::Handle<edm::View<typename FinalStatePair::daughter2_type> > leg2s;
   evt.getByLabel(leg2Src_, leg2s);
 
+  edm::Handle<edm::View<pat::MET> > metCands;
+  evt.getByLabel(tautauMVAMetSrc_, metCands);
+
   for (size_t iLeg1 = 0; iLeg1 < leg1s->size(); ++iLeg1) {
     edm::Ptr<typename FinalStatePair::daughter1_type> leg1 = leg1s->ptrAt(iLeg1);
     assert(leg1.isNonnull());
@@ -62,6 +68,23 @@ PATPairFinalStateBuilderT<FinalStatePair>::produce(
       if (reco::CandidatePtr(leg1) == reco::CandidatePtr(leg2))
         continue;
 
+//       edm::Ptr<pat::MET> tautauMVAMET;
+//       std::cout<<"leg1_p4: "<<leg1->p4()<<std::endl;
+//       std::cout<<"leg2_p4: "<<leg2->p4()<<std::endl;
+// 
+//       for(size_t iMEt = 0; iMEt < metCands->size(); iMEt++){
+//         if(leg1->p4() == (metCands->at(iMEt)).userCand("lepton1").get()->p4() && leg2->p4() == (metCands->at(iMEt)).userCand("lepton2").get()->p4()){
+//             tautauMVAMET = metCands->ptrAt(iMEt);
+//             break;
+//         }
+//         else if(leg1->p4() == (metCands->at(iMEt)).userCand("lepton2").get()->p4() && leg2->p4() == (metCands->at(iMEt)).userCand("lepton1").get()->p4()){
+//             tautauMVAMET = metCands->ptrAt(iMEt);
+//             break;
+//         }
+//       }
+//       std::string outName = "tautauMVAMET";
+//       std::cout<<"MET: "<<tautauMVAMET->pt()<<std::endl;
+//       evtPtr->addMET(outName, tautauMVAMET);
       FinalStatePair outputCand(leg1, leg2, evtPtr);
       if (cut_(outputCand))
         output->push_back(outputCand);
