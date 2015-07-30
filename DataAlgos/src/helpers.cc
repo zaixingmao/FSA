@@ -17,6 +17,7 @@
 
 #include "TMatrixD.h"
 #include "TMath.h"
+#include "RecoTauTag/TauTagTools/interface/GeneratorTau.h"
 #include <vector>
 //#include <iostream>
 
@@ -188,72 +189,50 @@ const reco::GenParticleRef getGenParticle(const reco::Candidate*   daughter, con
 const reco::Candidate::LorentzVector getGenParticleVisMomentum(const reco::Candidate*   daughter, const reco::GenParticleRefProd genCollectionRef, int pdgIdToMatch, bool checkCharge, double maxDPtRel, double maxDeltaR)
 {
   reco::Candidate::LorentzVector p4Vis(0,0,0,0);
+  reco::GenParticleRef mother = getGenParticle(daughter, genCollectionRef, pdgIdToMatch, checkCharge, maxDPtRel, maxDeltaR);
 
+  if(mother.isAvailable() && mother.isNonnull()){
+    while(abs((mother->daughterRef(0).get())->pdgId()) == 15) mother = mother->daughterRef(0);
+    GeneratorTau tau(*mother);
+    tau.init();
+    p4Vis += tau.getVisibleFourVector();
+  }
+  return p4Vis;
+}
+
+const reco::Candidate::LorentzVector getGenParticleNuMomentum(const reco::Candidate*   daughter, const reco::GenParticleRefProd genCollectionRef, int pdgIdToMatch, bool checkCharge, double maxDPtRel, double maxDeltaR)
+{
+  reco::Candidate::LorentzVector p4Vis(0,0,0,0);
+  reco::GenParticleRef mother = getGenParticle(daughter, genCollectionRef, pdgIdToMatch, checkCharge, maxDPtRel, maxDeltaR);
+
+  if(mother.isAvailable() && mother.isNonnull()){
+    while(abs((mother->daughterRef(0).get())->pdgId()) == 15) mother = mother->daughterRef(0);
+    GeneratorTau tau(*mother);
+    tau.init();
+    std::vector< const reco::Candidate * > nus = tau.getGenNu();
+    for(unsigned int iNu =0; iNu < nus.size(); iNu++) p4Vis += nus[iNu]->p4();
+  }
+  return p4Vis;
+}
+
+const reco::Candidate::LorentzVector getGenNu(const reco::GenParticleRefProd genCollectionRef)
+{
+  reco::Candidate::LorentzVector p4Vis(0,0,0,0);
   //if no genPaticle no matching
   if(!genCollectionRef){
     return p4Vis;
   }
   reco::GenParticleCollection genParticles = *genCollectionRef;
-
-  std::vector<const reco::GenParticle*> stableDaughters;
-
-
-  //builds pset used by various subclasses
-  edm::ParameterSet pset;
-  pset.addParameter<double>("maxDPtRel", maxDPtRel);
-  pset.addParameter<double>("maxDeltaR", maxDeltaR);
-  std::vector<int> pdgIdsToMatch;
-  pdgIdsToMatch.push_back(pdgIdToMatch);
-  pset.addParameter<std::vector<int> >("mcPdgId", pdgIdsToMatch);
-  std::vector<int> status;
-  pdgIdsToMatch.push_back(1);
-  pset.addParameter<std::vector<int> >("mcStatus", status);
-  pset.addParameter<bool>("resolveByMatchQuality", false);
-  pset.addParameter<bool>("checkCharge", checkCharge);
-  pset.addParameter<bool>("resolveAmbiguities", true); //does not make any difference since we have no access to multiple candidates to match
-
-  reco::MCMatchSelector<reco::Candidate, reco::GenParticle> slector(pset);
-  reco::MatchByDRDPt<reco::Candidate, reco::GenParticle> matcher(pset);
-
-  //copied from CommonTools/ UtilAlgos/ interface/ PhysObjectMatcher.h
-  typedef std::pair<size_t, size_t> IndexPair;
-  typedef std::vector<IndexPair> MatchContainer;
-
-  // loop over (one in my case) candidates
-  int index = -1;
-  double minDr = 9999;
-  // loop over target collection
   for(size_t m = 0; m != genParticles.size(); ++m) {
     const reco::GenParticle& match = genParticles[m];
-    // check lock and preselection
-    if ( slector(*daughter, match) ) {
-      // matching requirement fulfilled -> store pair of indices
-      if ( matcher(*daughter,match) )  {
-	double curDr = reco::deltaR(*daughter,match);
-	if(curDr < minDr){
-	  minDr = curDr;
-	  index = m;
-	}
-      }
+
+    if (match.numberOfDaughters() == 0){
+        if( abs(match.pdgId())==12 || abs(match.pdgId())==14 || abs(match.pdgId())==16 ) p4Vis += match.p4();
     }
   }
-
-  // if match(es) found and no global ambiguity resolution requested
-  if(index != -1){
-    reco::GenParticleRef mother = reco::GenParticleRef(genCollectionRef,index);
-    while(abs((mother->daughterRef(0).get())->pdgId()) == 15) mother = mother->daughterRef(0);
-
-    unsigned numDaughters = mother->numberOfDaughters();
-        for ( unsigned iDaughter = 0; iDaughter < numDaughters; ++iDaughter ) {
-            const reco::GenParticle* daughter = mother->daughterRef(iDaughter).get();
-            if ((daughter->status() == 1) && !(TMath::Abs(daughter->pdgId()) == 12 || TMath::Abs(daughter->pdgId()) == 14 || TMath::Abs(daughter->pdgId()) == 16)){
-                p4Vis += daughter->p4();
-            }
-        }
-  }
-  //No Match found
   return p4Vis;
 }
+
 
 
 /// Helper function to get the first interesting mother particle 

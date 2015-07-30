@@ -11,6 +11,8 @@
 <use   name="DataFormats/PatCandidates"/>
 <use   name="FWCore/Utilities"/>
 <use   name="TauAnalysis/SVfitStandalone"/>
+<use   name="RecoTauTag/TauTagTools"/>
+
 <export>
   <lib   name="1"/>
   <use   name="TauAnalysis/CandidateTools"/>

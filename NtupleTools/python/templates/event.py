@@ -73,6 +73,13 @@ met = PSet(
     pfmetCovariance_10 = 'evt.met("pfmet").getSignificanceMatrix()[1][0]',
     pfmetCovariance_11 = 'evt.met("pfmet").getSignificanceMatrix()[1][1]',
 
+    tautauMVAMETEt        = 'evt.met4vector("tautauMVAMET","",1).Et',
+    tautauMVAMETPhi       = 'evt.met4vector("tautauMVAMET","",1).Phi',
+    tautauMVAMETCovariance_00 = 'evt.met("tautauMVAMET").getSignificanceMatrix()[0][0]',
+    tautauMVAMETCovariance_01 = 'evt.met("tautauMVAMET").getSignificanceMatrix()[0][1]',
+    tautauMVAMETCovariance_10 = 'evt.met("tautauMVAMET").getSignificanceMatrix()[1][0]',
+    tautauMVAMETCovariance_11 = 'evt.met("tautauMVAMET").getSignificanceMatrix()[1][1]',
+
 
     genMetEt = 'evt.getGenMET().et',
     genMetPhi = 'evt.getGenMET().phi',
@@ -91,6 +98,11 @@ gen = PSet(
     NUP='evt.lesHouches.NUP',
     EmbPtWeight='evt.generatorFilter.filterEfficiency',
     genEventWeight='evt.weight("genEventWeight")',
+    genNuPt       = '? getGenNu().pt() > 0 ? getGenNu().pt() : -999',
+    genNuEta       = '? getGenNu().pt() > 0 ? getGenNu().eta()  : -999',
+    genNuPhi       = '? getGenNu().pt() > 0 ? getGenNu().phi()  : -999',
+    genNuMass       = '? getGenNu().pt() > 0 ? getGenNu().mass()  : -999',
+
 )
 
 tauSpinner = PSet(

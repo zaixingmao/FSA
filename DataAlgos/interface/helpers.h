@@ -43,6 +43,8 @@ void addFourMomenta(reco::Candidate & c);
 /// Helper function to get the matched gen particle 
 const reco::GenParticleRef getGenParticle(const reco::Candidate*   daughter,const reco::GenParticleRefProd genCollectionRef, int pdgIdToMatch, bool checkCharge, double maxDPtRel, double maxDeltaR);
 const reco::Candidate::LorentzVector getGenParticleVisMomentum(const reco::Candidate*   daughter,const reco::GenParticleRefProd genCollectionRef, int pdgIdToMatch, bool checkCharge, double maxDPtRel, double maxDeltaR);
+const reco::Candidate::LorentzVector getGenParticleNuMomentum(const reco::Candidate*   daughter,const reco::GenParticleRefProd genCollectionRef, int pdgIdToMatch, bool checkCharge, double maxDPtRel, double maxDeltaR);
+const reco::Candidate::LorentzVector getGenNu(const reco::GenParticleRefProd genCollectionRef);
 
 ///Helper function to find a gen particle given pdgid and status
 const bool findDecay(const reco::GenParticleRefProd genCollectionRef, int pdgIdMother, int pdgIdDaughter);

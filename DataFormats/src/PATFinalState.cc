@@ -338,6 +338,7 @@ PATFinalState::SVfit(int i, int j) const {
 
 
   edm::Ptr<pat::MET> mvaMet = evt()->met("mvamet");
+  edm::Ptr<pat::MET> pfMet = evt()->met("pfmet");
 
   if (mvaMet.isNull()) {
     throw cms::Exception("MissingMVAMet")
@@ -347,8 +348,8 @@ PATFinalState::SVfit(int i, int j) const {
   }
 
 
-  return ApplySVfit::getSVfitMass(toFit, decayModes, *mvaMet,
-      mvaMet->getSignificanceMatrix(), 0,
+  return ApplySVfit::getSVfitMass(toFit, decayModes, *pfMet,
+      pfMet->getSignificanceMatrix(), 0,
       evt()->evtId());
 }
 
@@ -885,6 +886,15 @@ const reco::Candidate::LorentzVector PATFinalState::getDaughterGenParticleVisMom
   bool charge = (bool) checkCharge;
   return fshelpers::getGenParticleVisMomentum( daughter(i), event_->genParticleRefProd(), pdgIdToMatch, charge, maxDPtRel, maxDeltaR);
 }
+
+const reco::Candidate::LorentzVector PATFinalState::getGenParticleNuMomentum(size_t i, int pdgIdToMatch, int checkCharge, double maxDPtRel = 0.5, double maxDeltaR = 0.5) const {
+  bool charge = (bool) checkCharge;
+  return fshelpers::getGenParticleNuMomentum( daughter(i), event_->genParticleRefProd(), pdgIdToMatch, charge, maxDPtRel, maxDeltaR);
+}
+const reco::Candidate::LorentzVector PATFinalState::getGenNu() const {
+  return fshelpers::getGenNu(event_->genParticleRefProd());
+}
+
 
 const reco::GenParticleRef PATFinalState::getDaughterGenParticleMotherSmart(size_t i, int pdgIdToMatch, int checkCharge) const {
   const reco::GenParticleRef genp = getDaughterGenParticle(i, pdgIdToMatch, checkCharge);
