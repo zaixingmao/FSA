@@ -73,12 +73,12 @@ met = PSet(
     pfmetCovariance_10 = 'evt.met("pfmet").getSignificanceMatrix()[1][0]',
     pfmetCovariance_11 = 'evt.met("pfmet").getSignificanceMatrix()[1][1]',
 
-    tautauMVAMETEt        = 'evt.met4vector("tautauMVAMET","",1).Et',
-    tautauMVAMETPhi       = 'evt.met4vector("tautauMVAMET","",1).Phi',
-    tautauMVAMETCovariance_00 = 'evt.met("tautauMVAMET").getSignificanceMatrix()[0][0]',
-    tautauMVAMETCovariance_01 = 'evt.met("tautauMVAMET").getSignificanceMatrix()[0][1]',
-    tautauMVAMETCovariance_10 = 'evt.met("tautauMVAMET").getSignificanceMatrix()[1][0]',
-    tautauMVAMETCovariance_11 = 'evt.met("tautauMVAMET").getSignificanceMatrix()[1][1]',
+#     tautauMVAMETEt        = 'evt.met4vector("tautauMVAMET","",1).Et',
+#     tautauMVAMETPhi       = 'evt.met4vector("tautauMVAMET","",1).Phi',
+#     tautauMVAMETCovariance_00 = 'evt.met("tautauMVAMET").getSignificanceMatrix()[0][0]',
+#     tautauMVAMETCovariance_01 = 'evt.met("tautauMVAMET").getSignificanceMatrix()[0][1]',
+#     tautauMVAMETCovariance_10 = 'evt.met("tautauMVAMET").getSignificanceMatrix()[1][0]',
+#     tautauMVAMETCovariance_11 = 'evt.met("tautauMVAMET").getSignificanceMatrix()[1][1]',
 
 
     genMetEt = 'evt.getGenMET().et',
