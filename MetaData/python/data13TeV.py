@@ -92,5 +92,40 @@ datadefs["SUSYM160-RunIISpring15DR74-Asympt25ns"] = {
     'x_sec': -999, # xsec * br. ratio. BR for L=e,mu, might need to use BR with tau? (=0.000294)                                                                                     
 }
 
+#50 ns
+
+datadefs["DYJets_M50-Asympt50ns"] = {
+    'analyses': [],
+    'datasetpath': '/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9-v2/MINIAODSIM',
+    'pu': 'Asympt50ns',
+    'calibrationTarget': 'RunIISpring15DR74',
+    'x_sec': 6025.0*picobarns,
+}
+
+datadefs["TTJets-Asympt50ns"] = {
+    'analyses': [],
+    'datasetpath': '/TTJets_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/MINIAODSIM',
+    'pu': 'Asympt50ns',
+    'calibrationTarget': 'RunIISpring15DR74',
+    'x_sec': 831.76*picobarns,
+}
+
+datadefs["ZZ-Asympt50ns"] = {
+    'analyses': [],
+    'datasetpath': '/ZZ_TuneCUETP8M1_13TeV-pythia8/RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/MINIAODSIM',
+    'pu': 'Asympt50ns',
+    'calibrationTarget': 'RunIISpring15DR74',
+    'x_sec': 10.32*picobarns,
+}
+
+datadefs["WJetsToLNu-Asympt50ns"] = {
+    'analyses': [],
+    'datasetpath': '/WJetsToLNu_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/MINIAODSIM',
+    'pu': 'Asympt50ns',
+    'calibrationTarget': 'RunIISpring15DR74',
+    'x_sec': 20509.0*picobarns,
+}
+
+
 if __name__=="__main__":
     query_cli(datadefs)

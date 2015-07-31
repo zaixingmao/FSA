@@ -43,9 +43,28 @@ pv_info = PSet(
     pvRho = 'evt.pv.position.Rho',
 )
 
-met = PSet(
+mvamet = PSet(
     mvametEt       = 'evt.met("mvamet").et',
     mvametPhi      = 'evt.met("mvamet").phi',
+
+    #mvamet cov matrix
+    mvametCovariance_00 = 'evt.met("mvamet").getSignificanceMatrix()[0][0]',
+    mvametCovariance_01 = 'evt.met("mvamet").getSignificanceMatrix()[0][1]',
+    mvametCovariance_10 = 'evt.met("mvamet").getSignificanceMatrix()[1][0]',
+    mvametCovariance_11 = 'evt.met("mvamet").getSignificanceMatrix()[1][1]',
+)
+
+tautauMVAMET = PSet(
+    tautauMVAMETEt        = 'tautauMVAMET.et',
+    tautauMVAMETPhi       = 'tautauMVAMET.phi',
+    tautauMVAMETCovariance_00 = 'tautauMVAMET.getSignificanceMatrix()[0][0]',
+    tautauMVAMETCovariance_01 = 'tautauMVAMET.getSignificanceMatrix()[0][1]',
+    tautauMVAMETCovariance_10 = 'tautauMVAMET.getSignificanceMatrix()[1][0]',
+    tautauMVAMETCovariance_11 = 'tautauMVAMET.getSignificanceMatrix()[1][1]',
+)
+
+
+met = PSet(
     pfMetEt        = 'evt.met4vector("pfmet","",1).Et',
     pfMetPhi       = 'evt.met4vector("pfmet","",1).Phi',
     type1_pfMetEt  = 'evt.met4vector("pfmet","type1",1).Et', #1 --> phi correction not in miniAOD
@@ -61,25 +80,11 @@ met = PSet(
     pfMet_jes_Phi  = 'evt.met4vector("pfmet","jes+", 1).Phi',
     pfMet_ues_Phi  = 'evt.met4vector("pfmet","ues+", 1).Phi',
     
-    #mvamet cov matrix
-    mvametCovariance_00 = 'evt.met("mvamet").getSignificanceMatrix()[0][0]',
-    mvametCovariance_01 = 'evt.met("mvamet").getSignificanceMatrix()[0][1]',
-    mvametCovariance_10 = 'evt.met("mvamet").getSignificanceMatrix()[1][0]',
-    mvametCovariance_11 = 'evt.met("mvamet").getSignificanceMatrix()[1][1]',
-
     #pfmet cov matrix
     pfmetCovariance_00 = 'evt.met("pfmet").getSignificanceMatrix()[0][0]',
     pfmetCovariance_01 = 'evt.met("pfmet").getSignificanceMatrix()[0][1]',
     pfmetCovariance_10 = 'evt.met("pfmet").getSignificanceMatrix()[1][0]',
     pfmetCovariance_11 = 'evt.met("pfmet").getSignificanceMatrix()[1][1]',
-
-#     tautauMVAMETEt        = 'evt.met4vector("tautauMVAMET","",1).Et',
-#     tautauMVAMETPhi       = 'evt.met4vector("tautauMVAMET","",1).Phi',
-#     tautauMVAMETCovariance_00 = 'evt.met("tautauMVAMET").getSignificanceMatrix()[0][0]',
-#     tautauMVAMETCovariance_01 = 'evt.met("tautauMVAMET").getSignificanceMatrix()[0][1]',
-#     tautauMVAMETCovariance_10 = 'evt.met("tautauMVAMET").getSignificanceMatrix()[1][0]',
-#     tautauMVAMETCovariance_11 = 'evt.met("tautauMVAMET").getSignificanceMatrix()[1][1]',
-
 
     genMetEt = 'evt.getGenMET().et',
     genMetPhi = 'evt.getGenMET().phi',

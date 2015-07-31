@@ -74,11 +74,12 @@ options = TauVarParsing.TauVarParsing(
     eleCor="",
     rerunQGJetID=0,  # If one reruns the quark-gluon JetID
     runMVAMET=0,  # If one, (re)build the MVA MET
+    runTauTauMVAMET=0,  # If one, (re)build the MVA MET
     rerunJets=0,
     dblhMode=False, # For double-charged Higgs analysis
     runTauSpinner=0,
     GlobalTag="",
-    use25ns=1,
+    use25ns=0,
     runDQM=0,
     hzz=0,
     paramFile='',
@@ -125,7 +126,7 @@ options.outputFile = "ntuplize.root"
 options.parseArguments()
 
 # SV Fit requires MVA MET
-options.runMVAMET = (options.runMVAMET or options.svFit)
+options.runMVAMET = options.runMVAMET
 
 process.source = cms.Source(
     "PoolSource",
@@ -162,6 +163,14 @@ process.TFileService = cms.Service(
 process.maxEvents = cms.untracked.PSet(
     input=cms.untracked.int32(options.maxEvents))
 
+# process.load("SimGeneral.HepPDTESSource.pythiapdt_cfi")
+# process.printTree = cms.EDAnalyzer("ParticleListDrawer",
+#   maxEventsToPrint = cms.untracked.int32(100),
+#   printVertex = cms.untracked.bool(False),
+#   printOnlyHardInteraction = cms.untracked.bool(False), # Print only status=3 particles. This will not work for Pythia8, which does not have any such particles.
+#   src = cms.InputTag("prunedGenParticles")
+# )
+# process.printGen = cms.Path(process.printTree)
 process.schedule = cms.Schedule()
 
 #load magfield and geometry (for mass resolution)
@@ -201,6 +210,7 @@ fs_daughter_inputs = {
     'jets': 'slimmedJets',
     'pfmet': 'slimmedMETs',         # only one MET in miniAOD
     'mvamet': 'fixme',              # produced later
+    'tautaumvamet': 'fixme',              # produced later
     'fsr': 'slimmedPhotons',
 }
 
@@ -474,7 +484,6 @@ if options.runMVAMET:
     )
     process.schedule.append(process.mvaMetSequence)
 
-
 if options.hzz:    
     # Put FSR photons into leptons as user cands
     from FinalStateAnalysis.PatTools.miniAODEmbedFSR_cfi \
@@ -510,7 +519,7 @@ if options.hzz:
 # in pat tuples.
 produce_final_states(process, fs_daughter_inputs, output_commands, process.buildFSASeq,
                      'puTagDoesntMatter', buildFSAEvent=True,
-                     noTracks=True, runMVAMET=options.runMVAMET,
+                     noTracks=True, runMVAMET=options.runMVAMET, runTauTauMVAMET = options.runTauTauMVAMET,
                      hzz=options.hzz, rochCor=options.rochCor,
                      eleCor=options.eleCor, use25ns=options.use25ns, **parameters)
 process.buildFSAPath = cms.Path(process.buildFSASeq)
@@ -608,6 +617,7 @@ for final_state in expanded_final_states(final_states):
                             svFit=options.svFit, dblhMode=options.dblhMode,
                             runTauSpinner=options.runTauSpinner, 
                             runMVAMET=options.runMVAMET,
+                            runTauTauMVAMET=options.runTauTauMVAMET,
                             skimCuts=skimCuts, suffix=suffix,
                             hzz=options.hzz, nExtraJets=extraJets, **parameters)
     add_ntuple(final_state, analyzer, process,
@@ -632,6 +642,7 @@ process.MessageLogger.cerr.GsfElectronAlgo = cms.untracked.PSet(
 process.MessageLogger.cerr.UndefinedPreselectionInfo = cms.untracked.PSet(
     limit = cms.untracked.int32(0)
 )
+# process.Tracer = cms.Service("Tracer")
 
 if options.verbose:
     process.options.wantSummary = cms.untracked.bool(True)

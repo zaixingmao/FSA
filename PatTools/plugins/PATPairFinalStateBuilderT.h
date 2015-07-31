@@ -55,7 +55,7 @@ PATPairFinalStateBuilderT<FinalStatePair>::produce(
   evt.getByLabel(leg2Src_, leg2s);
 
   edm::Handle<edm::View<pat::MET> > metCands;
-  evt.getByLabel(tautauMVAMetSrc_, metCands);
+  if(tautauMVAMetSrc_.label() != "fixme") evt.getByLabel(tautauMVAMetSrc_, metCands);
 
   for (size_t iLeg1 = 0; iLeg1 < leg1s->size(); ++iLeg1) {
     edm::Ptr<typename FinalStatePair::daughter1_type> leg1 = leg1s->ptrAt(iLeg1);
@@ -67,27 +67,27 @@ PATPairFinalStateBuilderT<FinalStatePair>::produce(
       // Skip if the two objects are the same thing.
       if (reco::CandidatePtr(leg1) == reco::CandidatePtr(leg2))
         continue;
-
-//       edm::Ptr<pat::MET> tautauMVAMET;
-//       std::cout<<"leg1_p4: "<<leg1->p4()<<std::endl;
-//       std::cout<<"leg2_p4: "<<leg2->p4()<<std::endl;
-// 
-//       for(size_t iMEt = 0; iMEt < metCands->size(); iMEt++){
-//         if(leg1->p4() == (metCands->at(iMEt)).userCand("lepton1").get()->p4() && leg2->p4() == (metCands->at(iMEt)).userCand("lepton2").get()->p4()){
-//             tautauMVAMET = metCands->ptrAt(iMEt);
-//             break;
-//         }
-//         else if(leg1->p4() == (metCands->at(iMEt)).userCand("lepton2").get()->p4() && leg2->p4() == (metCands->at(iMEt)).userCand("lepton1").get()->p4()){
-//             tautauMVAMET = metCands->ptrAt(iMEt);
-//             break;
-//         }
-//       }
-//       std::string outName = "tautauMVAMET";
-//       std::cout<<"MET: "<<tautauMVAMET->pt()<<std::endl;
-//       evtPtr->addMET(outName, tautauMVAMET);
-      FinalStatePair outputCand(leg1, leg2, evtPtr);
-      if (cut_(outputCand))
-        output->push_back(outputCand);
+      if(tautauMVAMetSrc_.label() != "fixme"){
+          edm::Ptr<pat::MET> tautauMVAMET;
+          for(size_t iMEt = 0; iMEt < metCands->size(); iMEt++){
+            if(leg1->p4() == (metCands->at(iMEt)).userCand("lepton1").get()->p4() && leg2->p4() == (metCands->at(iMEt)).userCand("lepton2").get()->p4()){
+                tautauMVAMET = metCands->ptrAt(iMEt);
+                break;
+            }
+            else if(leg1->p4() == (metCands->at(iMEt)).userCand("lepton2").get()->p4() && leg2->p4() == (metCands->at(iMEt)).userCand("lepton1").get()->p4()){
+                tautauMVAMET = metCands->ptrAt(iMEt);
+                break;
+            }
+          }
+          FinalStatePair outputCand(leg1, leg2, evtPtr, tautauMVAMET);
+          if (cut_(outputCand))
+            output->push_back(outputCand);
+      }
+      else{
+        FinalStatePair outputCand(leg1, leg2, evtPtr);
+          if (cut_(outputCand))
+            output->push_back(outputCand);
+      }
     }
   }
   evt.put(output);

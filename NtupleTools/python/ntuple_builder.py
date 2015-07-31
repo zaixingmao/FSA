@@ -205,6 +205,7 @@ def make_ntuple(*legs, **kwargs):
     hzz = kwargs.get('hzz',False)
 
     runMVAMET = kwargs.get('runMVAMET', False)
+    runTauTauMVAMET = kwargs.get('runTauTauMVAMET', False)
 
     ntuple_config = _common_template.clone()
     if kwargs.get('runTauSpinner', False):
@@ -356,10 +357,20 @@ def make_ntuple(*legs, **kwargs):
         ]
 
     # get rid of MVA MET stuff if we're not computing it
-    if not runMVAMET:
+    if runMVAMET:
+            ntuple_config = PSet(
+                ntuple_config,
+                templates.event.mvamet
+            )
+    else:
         notInMiniAOD.append("mvaMet((Et)|(Phi))")
         notInMiniAOD.append("[emtgj][1-9]?MtToMVAMET")
 
+    if runTauTauMVAMET:
+            ntuple_config = PSet(
+                ntuple_config,
+                templates.event.tautauMVAMET
+            )
     allRemovals = re.compile("(" + ")|(".join(notInMiniAOD) + ")")
     
     ntuple_config = ntuple_config.remove(allRemovals)

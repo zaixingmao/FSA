@@ -49,7 +49,15 @@ class PATFinalState : public pat::PATObject<reco::LeafCandidate> {
         const edm::Ptr<PATFinalStateEvent>& evt
 		  );
 
+    PATFinalState(
+        int charge, const reco::Candidate::LorentzVector& p4,
+        const edm::Ptr<PATFinalStateEvent>& evt, const edm::Ptr<pat::MET>& tautauMVAMET
+		  );
+
     const edm::Ptr<pat::MET>& met() const;
+    const edm::Ptr<pat::MET>& tautauMVAMET() const;
+    const LorentzVector& tautauMVAMET_cand(size_t i) const;
+
     const edm::Ptr<reco::Vertex>& vertexObject() const;
     const edm::Ptr<PATFinalStateEvent>& evt() const { return event_; }
 
@@ -355,6 +363,8 @@ class PATFinalState : public pat::PATObject<reco::LeafCandidate> {
 
   private:
     edm::Ptr<PATFinalStateEvent> event_;
+    edm::Ptr<pat::MET> tautauMVAMET_;
+
 };
 
 #endif /* end of include guard: FinalStateAnalysis_DataFormats_PATFinalState_h */

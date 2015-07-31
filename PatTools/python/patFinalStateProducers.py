@@ -43,7 +43,7 @@ def _combinatorics(items, n):
 
 def produce_final_states(process, collections, output_commands,
                          sequence, puTag, buildFSAEvent=True,
-                         noTracks=False, runMVAMET=False, hzz=False,
+                         noTracks=False, runMVAMET=False, runTauTauMVAMET=False, hzz=False,
                          rochCor="", eleCor="", use25ns=False, **kwargs):
 
     src = collections
@@ -239,8 +239,9 @@ def produce_final_states(process, collections, output_commands,
         if (diobject[0][0], diobject[1][0]) == ('Mu', 'Jet'):
             continue
 
+        tautauMVAMETProduct = 'fixme'
         #tautauMVAMEt from Jan
-        if True:
+        if runTauTauMVAMET:
             from RecoMET.METPUSubtraction.mvaPFMET_cff import pfMVAMEt
             mvaMETProducer = cms.EDProducer(
                 'PFMETProducerMVATauTau', 
@@ -251,10 +252,10 @@ def produce_final_states(process, collections, output_commands,
             mvaMETProducer.srcLeptons = cms.VInputTag(diobject[0][1],diobject[1][1])
             mvaMETProducer.permuteLeptons = cms.bool(True)
             producer_name = "finalStateMVAMET%s%s" % (diobject[0][0], diobject[1][0])
-            print producer_name
             setattr(process, producer_name, mvaMETProducer)
             process.buildDiObjects += getattr(process, producer_name)
             output_commands.append("*_%s_*_*" % producer_name)
+            tautauMVAMETProduct = producer_name
 
         # Define some basic selections for building combinations
         cuts = [crossCleaning]  # basic x-cleaning
@@ -264,7 +265,7 @@ def produce_final_states(process, collections, output_commands,
             evtSrc=cms.InputTag("patFinalStateEventProducer"),
             leg1Src=diobject[0][1],
             leg2Src=diobject[1][1],
-            tautauMVAMETSrc = cms.InputTag(producer_name),
+            tautauMVAMETSrc = cms.InputTag(tautauMVAMETProduct),
             # X-cleaning
             cut=cms.string(' & '.join(cuts))
         )

@@ -140,7 +140,6 @@ const reco::GenParticleRef getGenParticle(const reco::Candidate*   daughter, con
   pdgIdsToMatch.push_back(pdgIdToMatch);
   pset.addParameter<std::vector<int> >("mcPdgId", pdgIdsToMatch);
   std::vector<int> status;
-  pdgIdsToMatch.push_back(1);
   pset.addParameter<std::vector<int> >("mcStatus", status);
   pset.addParameter<bool>("resolveByMatchQuality", false);
   pset.addParameter<bool>("checkCharge", checkCharge);
@@ -156,9 +155,25 @@ const reco::GenParticleRef getGenParticle(const reco::Candidate*   daughter, con
   // loop over (one in my case) candidates
   int index = -1;
   double minDr = 9999;
+
+//   std::cout<<"tau pt: "<<daughter->pt()<<"  eta: "<<daughter->eta()<<"  phi: "<<daughter->phi()<<std::endl;
+
   // loop over target collection
   for(size_t m = 0; m != genParticles.size(); ++m) {
     const reco::GenParticle& match = genParticles[m];
+
+    //check if it's final gen particle before decay
+    bool final = true;
+    if(abs(match.pdgId()) == pdgIdToMatch){
+        size_t nDaughters = match.numberOfDaughters();
+        for(size_t iDaughter = 0; iDaughter < nDaughters; iDaughter++){
+            if(abs(match.daughter(iDaughter)->pdgId()) == pdgIdToMatch) final = false;
+        }
+//         if(final) std::cout<<"gen pt: "<<match.pt()<<"  eta: "<<match.eta()<<"  phi: "<<match.phi()<<std::endl;
+    }
+    else final = false;
+    if(!final) continue;
+
     // check lock and preselection
     if ( slector(*daughter, match) ) {
       // matching requirement fulfilled -> store pair of indices
@@ -174,10 +189,15 @@ const reco::GenParticleRef getGenParticle(const reco::Candidate*   daughter, con
 
   // if match(es) found and no global ambiguity resolution requested
   if(index != -1){
+//     std::cout<<"found match"<<std::endl;
+//     std::cout<<"matched tau pt: "<<reco::GenParticleRef(genCollectionRef,index)->pt()<<"  eta: "<<reco::GenParticleRef(genCollectionRef,index)->eta()<<"  phi: "<<reco::GenParticleRef(genCollectionRef,index)->phi()<<std::endl;
+//     std::cout<<std::endl;
     return reco::GenParticleRef(genCollectionRef,index);
   }
   //No Match found
   else{
+//     std::cout<<"didn't find match"<<std::endl;
+//     std::cout<<std::endl;
     return reco::GenParticleRef();
   }
 

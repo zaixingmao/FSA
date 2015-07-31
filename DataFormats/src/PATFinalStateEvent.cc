@@ -162,11 +162,6 @@ const edm::Ptr<pat::MET>& PATFinalStateEvent::met() const {
   return met_;
 }
 
-void PATFinalStateEvent::addMET(const std::string& name, const edm::Ptr<pat::MET>& met){
-    mets_[name] = met;
-}
-
-
 const edm::Ptr<pat::MET> PATFinalStateEvent::met(
     const std::string& type) const 
 {

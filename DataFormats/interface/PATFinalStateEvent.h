@@ -202,8 +202,6 @@ class PATFinalStateEvent {
     char version() const { return fsaDataFormatVersion_; }
     float jetVariables(const reco::CandidatePtr jet, const std::string& myvar) const;
 
-    void addMET(const std::string& name, const edm::Ptr<pat::MET>& met);
-
 
   private:
     std::map<std::string, float> weights_;

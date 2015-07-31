@@ -64,6 +64,25 @@ PATFinalState::PATFinalState(
   event_ = event;
 }
 
+PATFinalState::PATFinalState(
+    int charge, const reco::Candidate::LorentzVector& p4,
+    const edm::Ptr<PATFinalStateEvent>& event,
+    const edm::Ptr<pat::MET>& tautauMVAMET) : PATLeafCandidate(reco::LeafCandidate(charge, p4))
+{
+  event_ = event;
+  tautauMVAMET_ = tautauMVAMET;
+}
+
+const edm::Ptr<pat::MET>& PATFinalState::tautauMVAMET() const {
+    return tautauMVAMET_;
+}
+
+const PATFinalState::LorentzVector& PATFinalState::tautauMVAMET_cand(size_t i) const{
+    std::string candName = "lepton";
+    candName += i;
+    return tautauMVAMET_->userCand(candName).get()->p4();
+}
+
 const edm::Ptr<pat::MET>& PATFinalState::met() const {
     return event_->met();
 }
@@ -337,15 +356,15 @@ PATFinalState::SVfit(int i, int j) const {
   else decayModes.push_back(-1);
 
 
-  edm::Ptr<pat::MET> mvaMet = evt()->met("mvamet");
+//   edm::Ptr<pat::MET> mvaMet = evt()->met("mvamet");
   edm::Ptr<pat::MET> pfMet = evt()->met("pfmet");
 
-  if (mvaMet.isNull()) {
-    throw cms::Exception("MissingMVAMet")
-      << "SV fit requires the MVAMET be available via "
-      << " met('mvamet') method in PATFinalStateEvent.  It's null."
-      << std::endl;
-  }
+//   if (mvaMet.isNull()) {
+//     throw cms::Exception("MissingMVAMet")
+//       << "SV fit requires the MVAMET be available via "
+//       << " met('mvamet') method in PATFinalStateEvent.  It's null."
+//       << std::endl;
+//   }
 
 
   return ApplySVfit::getSVfitMass(toFit, decayModes, *pfMet,

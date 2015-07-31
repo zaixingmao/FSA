@@ -10,7 +10,10 @@ def opts():
     parser = optparse.OptionParser()
     parser.add_option("--local", dest="runLocal", default=False, action="store_true", help="run local jobs")
     parser.add_option("--doSVFit", dest="doSVFit", default=False, action="store_true", help="do SVFit")
+    parser.add_option("--doMVAMET", dest="doMVAMET", default=False, action="store_true", help="do MVAMET")
+    parser.add_option("--doTauTauMVAMET", dest="doTauTauMVAMET", default=False, action="store_true", help="do Jan's MVAMET")
     parser.add_option("--singleJob", dest="singleJob", default=False, action="store_true", help="run 1 job")
+    parser.add_option("--nJobs", dest="nJobs", default=9999, help="run n job")
     parser.add_option("-o", dest="name", default='SYNC_745', help="name of output dir")
     parser.add_option("--sample", dest="sample", default='SUSY', help="sample name VBF, SUSY")
     parser.add_option("--memory", dest="memory", default=False, action="store_true", help="profile memory usage (igprof mp)")
@@ -25,7 +28,7 @@ options = opts()
 
 skimCuts = {}
 skimCuts['tt'] = {"ID": "object.tauID(\\\"decayModeFindingNewDMs\\\") > 0.5",
-                  "Pt": "object.pt() > 45",
+                 "Pt": "object.pt() > 45",
                   "Eta": "abs(object.eta()) < 2.1",
                   }
 skimCuts['et'] = {"ID_e": "object.userFloat(\'MVANonTrigWP80\')> 0.5",
@@ -51,13 +54,15 @@ skimCuts['mt'] = {"ID_m": "object.isMediumMuon() > 0.5",
                   }
 
 SVFit = 1 if options.doSVFit else 0
+MVAMET = 1 if options.doMVAMET else 0
+TauTauMVAMET = 1 if options.doTauTauMVAMET else 0
 
 localJobInfo = localJob_cfg.localJobInfo
 
 if ":" in localJobInfo['eventsToProcess']:
-    cmd = "./make_ntuples_cfg.py eventsToProcess=%s outputFile=myTestFile.root inputFiles=%s channels=%s isMC=1 nExtraJets=8 svFit=%i " %(localJobInfo['eventsToProcess'], localJobInfo['inputFile'], options.FS, SVFit)
+    cmd = "./make_ntuples_cfg.py eventsToProcess=%s outputFile=myTestFile.root inputFiles=%s channels=%s isMC=1 nExtraJets=8 runMVAMET=%i runTauTauMVAMET=%i svFit=%i " %(localJobInfo['eventsToProcess'], localJobInfo['inputFile'], options.FS, MVAMET, TauTauMVAMET, SVFit)
 else:
-    cmd = "./make_ntuples_cfg.py maxEvents=%i outputFile=myTestFile.root inputFiles=%s channels=%s isMC=1 nExtraJets=8 svFit=%i " %(localJobInfo['maxEvents'], localJobInfo['inputFile'], options.FS, SVFit)
+    cmd = "./make_ntuples_cfg.py maxEvents=%i outputFile=myTestFile.root inputFiles=%s channels=%s isMC=1 nExtraJets=8 runMVAMET=%i runTauTauMVAMET=%i svFit=%i " %(localJobInfo['maxEvents'], localJobInfo['inputFile'], options.FS, MVAMET, TauTauMVAMET, SVFit)
 
 if options.memory:
     checkCmd = 'igprof -d -mp -z -o igprof.mp.gz  cmsRun '#"valgrind --tool=memcheck `cmsvgsupp` --leak-check=yes --show-reachable=yes --num-callers=20 --track-fds=yes cmsRun "
@@ -87,8 +92,8 @@ cmd += cuts
 if not options.runLocal:
     tempFile = "do_test.sh"
     outFile = "do.sh"
-    cmd = "submit_job.py %s make_ntuples_cfg.py channels=\"%s\" isMC=1 nExtraJets=8 svFit=%i" %(options.name, options.FS, SVFit)
-    cmd += " --campaign-tag=\"RunIISpring15DR74-Asympt25ns*\" --das-replace-tuple=$fsa/MetaData/tuples/MiniAOD-13TeV_RunIISpring15DR74.json --samples \"%s*\" -o %s" %(options.sample, tempFile)
+    cmd = "submit_job.py %s make_ntuples_cfg.py channels=\"%s\" isMC=1 nExtraJets=8 runMVAMET=%i runTauTauMVAMET=%i svFit=%i" %(options.name, options.FS, MVAMET, TauTauMVAMET, SVFit)
+    cmd += " --campaign-tag=\"RunIISpring15DR74-Asympt50ns*\" --das-replace-tuple=$fsa/MetaData/tuples/MiniAOD-13TeV_RunIISpring15DR74.json --samples \"%s*\" -o %s" %(options.sample, tempFile)
 #     cmd += " --campaign-tag=\"Phys14DR-PU20bx25*\" --das-replace-tuple=$fsa/MetaData/tuples/MiniAOD-13TeV_PHYS14DR.json --samples \"%s*\" -o %s" %(options.sample, tempFile)
 
 if options.memory:
@@ -112,6 +117,8 @@ if not options.runLocal:
             newLine += "farmoutAnalysisJobs "
             if options.singleJob:
                 newLine += "--job-count=1 "
+            elif options.nJobs != 9999:
+                newLine += "--job-count=%s " %options.nJobs
             newLine += currentLine[currentLine.find("farmoutAnalysisJobs") + 19:currentLine.find("svFit")]
             newLine += "svFit=%i %s" %(SVFit, cuts)
             newLine += " 'inputFiles=$inputFileNames' 'outputFile=$outputFileName'"

@@ -12,6 +12,14 @@ class PATPairFinalStateT : public PATFinalState {
     PATPairFinalStateT():PATFinalState(){}
 
     PATPairFinalStateT(const edm::Ptr<T1>& p1, const edm::Ptr<T2>& p2,
+        const edm::Ptr<PATFinalStateEvent>& evt, const edm::Ptr<pat::MET>& tautauMVAMET)
+      :PATFinalState(p1->charge() + p2->charge(),
+          p1->p4() + p2->p4(), evt, tautauMVAMET) {
+        p1_ = p1;
+        p2_ = p2;
+      }
+
+    PATPairFinalStateT(const edm::Ptr<T1>& p1, const edm::Ptr<T2>& p2,
         const edm::Ptr<PATFinalStateEvent>& evt)
       :PATFinalState(p1->charge() + p2->charge(),
           p1->p4() + p2->p4(), evt) {

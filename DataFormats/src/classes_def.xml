@@ -23,7 +23,8 @@
    <version ClassVersion="10" checksum="2474259455"/>
   </class>
 
-  <class name="PATFinalState" ClassVersion="11">
+  <class name="PATFinalState" ClassVersion="12">
+   <version ClassVersion="12" checksum="2025188175"/>
    <version ClassVersion="11" checksum="2004223533"/>
    <version ClassVersion="10" checksum="2840789346"/>
   </class>
@@ -67,7 +68,8 @@
   <class name="edm::RefProd<PATFinalStateLSCollection>"/>
   <class name="edm::Ptr<PATFinalStateLS>"/>
 
-  <class name="PATMultiCandFinalState" ClassVersion="11">
+  <class name="PATMultiCandFinalState" ClassVersion="12">
+   <version ClassVersion="12" checksum="3148123145"/>
    <version ClassVersion="11" checksum="2040738471"/>
    <version ClassVersion="10" checksum="3774322392"/>
   </class>
