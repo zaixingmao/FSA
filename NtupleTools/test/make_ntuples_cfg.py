@@ -79,7 +79,7 @@ options = TauVarParsing.TauVarParsing(
     dblhMode=False, # For double-charged Higgs analysis
     runTauSpinner=0,
     GlobalTag="",
-    use25ns=0,
+    use25ns=1,
     runDQM=0,
     hzz=0,
     paramFile='',
@@ -221,7 +221,7 @@ output_commands = []
 electronMVANonTrigIDLabel = "BDTIDNonTrig"
 electronMVATrigIDLabel = "BDTIDTrig"
 from FinalStateAnalysis.NtupleTools.embedElectronIDs import embedElectronIDs
-fs_daughter_inputs['electrons'] = embedElectronIDs(process,options.use25ns,fs_daughter_inputs['electrons'])
+fs_daughter_inputs['electrons'] = embedElectronIDs(process, True,fs_daughter_inputs['electrons'])
 
 # Clean out muon "ghosts" caused by track ambiguities
 process.ghostCleanedMuons = cms.EDProducer("PATMuonCleanerBySegments",
@@ -619,6 +619,7 @@ for final_state in expanded_final_states(final_states):
                             runMVAMET=options.runMVAMET,
                             runTauTauMVAMET=options.runTauTauMVAMET,
                             skimCuts=skimCuts, suffix=suffix,
+                            isMC=options.isMC,
                             hzz=options.hzz, nExtraJets=extraJets, **parameters)
     add_ntuple(final_state, analyzer, process,
                process.schedule, options.eventView)
