@@ -14,9 +14,6 @@
   "TTTo2L2Nu" : "TTTo2L2Nu_13TeV-powheg",
   "TT" : "TT_TuneCUETP8M1_13TeV-powheg-pythia8",
   "WJetsToLNu" : "WJetsToLNu_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8",
-  "WWTo2L2Nu" : "WWTo2L2Nu_13TeV-powheg",
-  "WWTo4Q" : "WWTo4Q_13TeV-powheg",
-  "WWToLNuQQ" : "WWToLNuQQ_13TeV-powheg",
   "WW" : "WW_TuneCUETP8M1_13TeV-pythia8",
   "WZTo1L1Nu2Q" : "WZTo1L1Nu2Q_13TeV_amcatnloFXFX_madspin_pythia8",
   "WZ" : "WZ_TuneCUETP8M1_13TeV-pythia8",
@@ -24,5 +21,7 @@
   "SUSYM160": "SUSYGluGluToHToTauTau_M-160_TuneCUETP8M1_13TeV-pythia8",
   "ZprimeToTauTau_M_500": "ZprimeToTauTau_M_500_TuneCUETP8M1_tauola_13TeV_pythia8",
   "ZprimeToTauTau_M_2000": "ZprimeToTauTau_M_2000_TuneCUETP8M1_tauola_13TeV_pythia8",
-  "ZprimeToTauTau_M_2500": "ZprimeToTauTau_M_2500_TuneCUETP8M1_tauola_13TeV_pythia8"
+  "ZprimeToTauTau_M_2500": "ZprimeToTauTau_M_2500_TuneCUETP8M1_tauola_13TeV_pythia8",
+  "Tbar_tW": "ST_tW_antitop_5f_mtop1755_inclusiveDecays_13TeV-powheg-pythia8_TuneCUETP8M1",
+  "T_tW": "ST_tW_top_5f_inclusiveDecays_13TeV-powheg-pythia8_TuneCUETP8M1"
 }
