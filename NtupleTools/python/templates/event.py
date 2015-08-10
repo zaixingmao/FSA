@@ -86,9 +86,6 @@ met = PSet(
     pfmetCovariance_10 = 'evt.met("pfmet").getSignificanceMatrix()[1][0]',
     pfmetCovariance_11 = 'evt.met("pfmet").getSignificanceMatrix()[1][1]',
 
-    genMetEt = 'evt.getGenMET().et',
-    genMetPhi = 'evt.getGenMET().phi',
-
     recoilDaught='getDaughtersRecoil().R()',
     recoilWithMet='getDaughtersRecoilWithMet().R()',
 )
@@ -107,7 +104,8 @@ gen = PSet(
     genNuEta       = '? getGenNu().pt() > 0 ? getGenNu().eta()  : -999',
     genNuPhi       = '? getGenNu().pt() > 0 ? getGenNu().phi()  : -999',
     genNuMass       = '? getGenNu().pt() > 0 ? getGenNu().mass()  : -999',
-
+    genMetEt = 'evt.getGenMET().et',
+    genMetPhi = 'evt.getGenMET().phi',
 )
 
 tauSpinner = PSet(
