@@ -42,6 +42,7 @@ class PATFinalStateSelection : public Selector<PATFinalStatePtrs> {
     }
     boost::ptr_vector<FinalStateCut> cuts_;
     bool eventView_;
+    bool doSVFit_;
     PATFinalStatePtrs passing_; // The passing final states
     index_type topologyCutId_;
     std::vector<pat::strbitset::index_type> cutIndices_; // for fast lookup
