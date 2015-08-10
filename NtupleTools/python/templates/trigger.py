@@ -29,12 +29,20 @@ singleLepton = PSet(
         name='singleE',
         paths=r'HLT_Ele32_eta2p1_WP75_Gsf_v\\d+'
         ),
+    _trig_template.replace(
+        name='singleETight',
+        paths=r'HLT_Ele32_eta2p1_WPTight_Gsf_v\\d+'
+        ),
     )
 
 doubleLepton = PSet(
     _trig_template.replace(
         name='eTau',
         paths=r'HLT_Ele22_eta2p1_WP75_Gsf_LooseIsoPFTau20_v\\d+'
+        ),
+    _trig_template.replace(
+        name='eTau_WPLoose',
+        paths=r'HLT_Ele22_eta2p1_WPLoose_Gsf_LooseIsoPFTau20_v\\d+'
         ),
     _trig_template.replace(
         name='Mu23e12',
