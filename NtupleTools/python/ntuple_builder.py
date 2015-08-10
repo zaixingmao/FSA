@@ -27,8 +27,6 @@ _common_template = PSet(
     templates.event.pv_info,
     # templates.Info about the MET
     templates.event.met,
-    # templates.Info about the generator
-    templates.event.gen,
     # templates.Vetoes on extra objects
     templates.cleaning.vetos,
     # VBF variables, because most analyses using FSA want them
@@ -54,6 +52,7 @@ _tau_template = PSet(
     templates.cleaning.overlaps,
     templates.taus.info,
     templates.taus.id,
+    templates.taus.veto,
     templates.topology.mtToMET,
     templates.taus.trigger,
 )
@@ -66,6 +65,7 @@ _muon_template = PSet(
     templates.muons.energyCorrections,
     templates.muons.tracking,
     templates.muons.trigger,
+    templates.muons.veto,
     templates.topology.mtToMET,
 )
 
@@ -85,6 +85,7 @@ _electron_template = PSet(
     templates.electrons.tracking,
     templates.electrons.supercluster,
     templates.electrons.trigger,
+    templates.electrons.veto,
     templates.topology.mtToMET,
 )
 
@@ -234,6 +235,14 @@ def make_ntuple(*legs, **kwargs):
         ntuple_config,
         eventVariables
     )
+
+    # templates.Info about the generator
+    isMC = kwargs.get('isMC', True)
+    if isMC:
+        ntuple_config = PSet(
+            ntuple_config,
+            templates.event.gen
+        )
 
     candidateVariables = kwargs.get('candidateVariables',PSet())
     custVariables = {}
@@ -388,6 +397,7 @@ def make_ntuple(*legs, **kwargs):
             selections=cms.VPSet(),
             EventView=cms.bool(False),
             tlvName=cms.string('SVfit'),
+            doSVFit=cms.bool(bool(do_svfit)),
             final=cms.PSet(
                 sort=cms.string('daughter(0).pt'),  # Doesn't really matter
                 take=cms.uint32(50),
