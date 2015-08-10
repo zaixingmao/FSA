@@ -562,6 +562,25 @@ std::vector<const reco::Candidate*> PATFinalState::vetoElectrons(
       dR, filter);
 }
 
+std::vector<const reco::Candidate*> 
+PATFinalState::veto3rdLepton(size_t i, double dR, const std::string& filter, const std::string& type) const {
+  std::vector<const reco::Candidate*> singleDaughter;
+  singleDaughter.push_back(daughter(i));
+  if(type == "electron"){
+      return getVetoObjects(
+          singleDaughter,
+          ptrizeCollection(evt()->electrons()),
+          dR, filter);
+  }
+  else{
+    return getVetoObjects(
+    singleDaughter,
+    ptrizeCollection(evt()->muons()),
+    dR, filter);
+  }
+}
+
+
 std::vector<const reco::Candidate*> PATFinalState::vetoTaus(
     double dR, const std::string& filter) const {
   return getVetoObjects(
