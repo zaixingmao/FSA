@@ -77,7 +77,7 @@ skimCuts['em'] = {"ID_e": "object.userFloat(\'MVANonTrigWP80\')> 0.5",
                   "Pt_e": "object.pt() > 13",
                   "Eta_e": "abs(object.eta()) < 2.5",
                   "ID_m": "object.isMediumMuon() > 0.5",
-                  "Pt_m": "object.pt() > 9",
+                  "Pt_m": "object.pt() > 10",
                   "Eta_m": "abs(object.eta()) < 2.4",
                   }
 skimCuts['mt'] = {"ID_m": "object.isMediumMuon() > 0.5",
