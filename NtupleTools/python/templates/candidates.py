@@ -14,6 +14,7 @@ kinematics = PSet(
     objectAbsEta = 'abs({object}.eta)',
     objectPhi = '{object}.phi',
     objectCharge = '{object}.charge',
+    objectEnergy = '{object}.energy',
     objectMass = '{object}.mass',
     objectRank ='{object}.userFloat("rankByPt")'
 )

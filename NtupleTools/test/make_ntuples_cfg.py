@@ -79,7 +79,7 @@ options = TauVarParsing.TauVarParsing(
     dblhMode=False, # For double-charged Higgs analysis
     runTauSpinner=0,
     GlobalTag="",
-    use25ns=1,
+    use25ns=0,
     runDQM=0,
     hzz=0,
     paramFile='',
@@ -212,6 +212,8 @@ fs_daughter_inputs = {
     'mvamet': 'fixme',              # produced later
     'tautaumvamet': 'fixme',              # produced later
     'fsr': 'slimmedPhotons',
+    'vertices': 'offlineSlimmedPrimaryVertices',
+    'beamSpots': 'offlineBeamSpot'
 }
 
 # embed some things we need that arent in miniAOD yet (like some ids)
@@ -221,7 +223,7 @@ output_commands = []
 electronMVANonTrigIDLabel = "BDTIDNonTrig"
 electronMVATrigIDLabel = "BDTIDTrig"
 from FinalStateAnalysis.NtupleTools.embedElectronIDs import embedElectronIDs
-fs_daughter_inputs['electrons'] = embedElectronIDs(process, True,fs_daughter_inputs['electrons'])
+fs_daughter_inputs['electrons'] = embedElectronIDs(process, True,fs_daughter_inputs['electrons'], fs_daughter_inputs['vertices'], fs_daughter_inputs['beamSpots'])
 
 # Clean out muon "ghosts" caused by track ambiguities
 process.ghostCleanedMuons = cms.EDProducer("PATMuonCleanerBySegments",
@@ -245,7 +247,12 @@ fs_daughter_inputs['pfmet'] = "MiniAODMETSignificanceEmbedder"
 process.miniPatMuons = cms.EDProducer(
     "MiniAODMuonIDEmbedder",
     src=cms.InputTag(fs_daughter_inputs['muons']),
-    vertices=cms.InputTag("offlineSlimmedPrimaryVertices"),
+    vertices=cms.InputTag(fs_daughter_inputs['vertices']),
+    beamSrc=cms.InputTag(fs_daughter_inputs['beamSpots']),
+    Muon_vtx_ndof_min = cms.int32(4),
+    Muon_vtx_rho_max = cms.int32(2),
+    Muon_vtx_position_z_max = cms.double(24.),
+
 )
 fs_daughter_inputs['muons'] = "miniPatMuons"
 

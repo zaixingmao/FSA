@@ -1,6 +1,6 @@
 import FWCore.ParameterSet.Config as cms
 
-def embedElectronIDs(process, use25ns, eSrc):
+def embedElectronIDs(process, use25ns, eSrc, vtxSrc, beamSrc):
     from PhysicsTools.SelectorUtils.tools.vid_id_tools import setupAllVIDIdsInModule, setupVIDElectronSelection, switchOnVIDElectronIdProducer, DataFormat
     switchOnVIDElectronIdProducer(process, DataFormat.MiniAOD)
     process.egmGsfElectronIDs.physicsObjectSrc = cms.InputTag(eSrc)
@@ -24,6 +24,7 @@ def embedElectronIDs(process, use25ns, eSrc):
             cms.InputTag('egmGsfElectronIDs:cutBasedElectronID-PHYS14-PU20bx25-V2-standalone-tight'),
             cms.InputTag("egmGsfElectronIDs:mvaEleID-PHYS14-PU20bx25-nonTrig-V1-wp80"),
             cms.InputTag("egmGsfElectronIDs:mvaEleID-PHYS14-PU20bx25-nonTrig-V1-wp90"),
+#             cms.InputTag("egmGsfElectronIDs:heepElectronID-HEEPV51"),
             ]
     else:
         CBIDTags = [ # almost certainly wrong. Just don't use 50ns miniAOD any more
@@ -51,6 +52,8 @@ def embedElectronIDs(process, use25ns, eSrc):
     process.miniAODElectronID = cms.EDProducer(
         "MiniAODElectronIDEmbedder",
         src=cms.InputTag(eSrc),
+        vtxSrc=cms.InputTag(vtxSrc),
+        beamSrc=cms.InputTag(beamSrc),
         idLabels = cms.vstring(*CBIDLabels),
         ids = cms.VInputTag(*CBIDTags),
         valueLabels = cms.vstring(*mvaValueLabels),       # labels for MVA values

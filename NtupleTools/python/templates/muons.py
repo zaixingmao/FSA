@@ -16,39 +16,39 @@ from FinalStateAnalysis.Utilities.cfgtools import PSet
 
 # ID and isolation
 id = PSet(
-    objectPFIDTight = 'isTightMuon({object_idx})',
-    objectPFIDLoose = '{object}.isLooseMuon()',
+#     objectPFIDTight = 'isTightMuon({object_idx})',
+#     objectPFIDLoose = '{object}.isLooseMuon()',
     objectRelIso = '{object}.userFloat("relIso")',
 
     # For charged, we use ALL charged particles
     objectEffectiveArea2012 = '{object}.userFloat("ea_comb_iso04_kt6PFJCNth05")',
     objectEffectiveArea2011 = '{object}.userFloat("ea_comb_iso04_kt6PFJCth05")',
     objectRho = cms.string('{object}.userFloat("rhoCSA14")'),
-    objectPFChargedIso = cms.string('{object}.userIsolation("PfChargedHadronIso")'),
-    objectPFNeutralIso = cms.string('{object}.userIsolation("PfNeutralHadronIso")'),
-    objectPFPhotonIso  = cms.string('{object}.userIsolation("PfGammaIso")'),
-    objectPFPUChargedIso = cms.string('{object}.userIsolation("PfPUChargedHadronIso")'),
-    objectRelPFIsoDBDefault = cms.string(
-        "({object}.chargedHadronIso()"
-        "+max({object}.photonIso()"
-        "+{object}.neutralHadronIso()"
-        "-0.5*{object}.puChargedHadronIso,0.0))"
-        "/{object}.pt()"
-    ),
-    objectRelPFIsoRho = cms.string(
-        '({object}.chargedHadronIso()'
-        '+max(0.0,{object}.neutralHadronIso()'
-        '+{object}.photonIso()'
-        '-{object}.userFloat("rhoCSA14")*{object}.userFloat("ea_comb_iso04_kt6PFJCNth05")))'
-        '/{object}.pt()'
-    ),
-    objectRelPFIsoRhoFSR = cms.string(
-        '({object}.chargedHadronIso()'
-        '+max(0.0,{object}.neutralHadronIso()'
-        '+{object}.photonIso() - userFloat("leg{object_idx}fsrIsoCorr")'
-        '-{object}.userFloat("rhoCSA14")*{object}.userFloat("ea_comb_iso04_kt6PFJCNth05")))'
-        '/{object}.pt()'
-    ),
+#     objectPFChargedIso = cms.string('{object}.userIsolation("PfChargedHadronIso")'),
+#     objectPFNeutralIso = cms.string('{object}.userIsolation("PfNeutralHadronIso")'),
+#     objectPFPhotonIso  = cms.string('{object}.userIsolation("PfGammaIso")'),
+#     objectPFPUChargedIso = cms.string('{object}.userIsolation("PfPUChargedHadronIso")'),
+#     objectRelPFIsoDBDefault = cms.string(
+#         "({object}.chargedHadronIso()"
+#         "+max({object}.photonIso()"
+#         "+{object}.neutralHadronIso()"
+#         "-0.5*{object}.puChargedHadronIso,0.0))"
+#         "/{object}.pt()"
+#     ),
+#     objectRelPFIsoRho = cms.string(
+#         '({object}.chargedHadronIso()'
+#         '+max(0.0,{object}.neutralHadronIso()'
+#         '+{object}.photonIso()'
+#         '-{object}.userFloat("rhoCSA14")*{object}.userFloat("ea_comb_iso04_kt6PFJCNth05")))'
+#         '/{object}.pt()'
+#     ),
+#     objectRelPFIsoRhoFSR = cms.string(
+#         '({object}.chargedHadronIso()'
+#         '+max(0.0,{object}.neutralHadronIso()'
+#         '+{object}.photonIso() - userFloat("leg{object_idx}fsrIsoCorr")'
+#         '-{object}.userFloat("rhoCSA14")*{object}.userFloat("ea_comb_iso04_kt6PFJCNth05")))'
+#         '/{object}.pt()'
+#     ),
     objectIsMediumMuon = '{object}.isMediumMuon',
     objectIsPFMuon = '{object}.isPFMuon',
     objectIsGlobal = '{object}.isGlobalMuon',
@@ -84,15 +84,15 @@ energyCorrections = PSet(
 
 # Information about the associated track
 tracking = PSet(
-    objectPixHits = '? {object}.innerTrack.isNonnull ? '
+    object_validPixHits = '? {object}.innerTrack.isNonnull ? '
         '{object}.innerTrack.hitPattern.numberOfValidPixelHits :-1',
     objectNormTrkChi2 = "? {object}.combinedMuon.isNonnull ? "
         "{object}.combinedMuon.normalizedChi2 : 1e99",
     objectTkLayersWithMeasurement = '? {object}.innerTrack.isNonnull ? '
         '{object}.innerTrack().hitPattern().trackerLayersWithMeasurement : -1',
-    objectMuonHits = '? {object}.globalTrack.isNonnull ? '
+    object_validHits = '? {object}.globalTrack.isNonnull ? '
         '{object}.globalTrack().hitPattern().numberOfValidMuonHits() : -1',
-    objectMatchedStations = '{object}.numberOfMatchedStations',
+    object_matchedStations = '{object}.numberOfMatchedStations',
     #objectD0 = '{object}.dB("PV3D")',
 )
 
@@ -109,4 +109,31 @@ trigger = PSet(
 veto = PSet(
     objectElectronVeto = 'veto3rdLepton({object_idx}, 0.0, "pt > 10 & abs(eta) < 2.5 & userFloat(\'MVANonTrigWP90\') > 0.5 & abs(userFloat(\'dz\')) < 0.2 & abs(userFloat(\'ipDXY\')) < 0.045   & abs(userFloat(\'relIso\')) < 0.3", "electron").size()',
     objectMuonVeto = 'veto3rdLepton({object_idx}, 0.1, "pt > 10 & abs(eta) < 2.4 & isMediumMuon > 0.5 & abs(userFloat(\'dz\')) < 0.2 & abs(userFloat(\'ipDXY\')) < 0.045  & abs(userFloat(\'relIso\')) < 0.3", "muon").size()',
+)
+
+TNT_request = PSet(
+    object_tight = '{object}.userInt("_tight")',
+    object_loose = '{object}.userInt("_loose")',
+    object_soft = '{object}.userInt("_soft")',
+    object_isHighPt = '{object}.userInt("_isHighPt")',
+    object_isoCharged = '{object}.pfIsolationR04().sumChargedHadronPt',
+    object_isoSum = '{object}.trackIso() + {object}.ecalIso() + {object}.hcalIso()',
+    object_isoCharParPt = '{object}.pfIsolationR04().sumChargedParticlePt',
+    object_chi2 = '? {object}.globalTrack.isNonnull ? {object}.globalTrack().normalizedChi2() : -9999',
+    object_dxy = '{object}.userFloat("_dxy")',
+    object_dxy_bs = '{object}.userFloat("_dxy_bs")',
+    object_dxy_bs_dz = '{object}.userFloat("_dxy_bs_dz")',
+    object_dxyError = '? {object}.innerTrack.isNonnull ? {object}.innerTrack.d0Error :-9999',
+    object_dzError = '? {object}.innerTrack.isNonnull ? {object}.innerTrack.dzError :-9999',
+    object_dz = '{object}.userFloat("_dz")',
+    object_ndof = '? {object}.innerTrack.isNonnull ? {object}.innerTrack.ndof :-9999',
+    object_vtx = '? {object}.innerTrack.isNonnull ? {object}.innerTrack.vx :-9999',
+    object_vty = '? {object}.innerTrack.isNonnull ? {object}.innerTrack.vy :-9999',
+    object_vtz = '? {object}.innerTrack.isNonnull ? {object}.innerTrack.vz :-9999',
+    object_track_pt = '? {object}.innerTrack.isNonnull ? {object}.innerTrack.pt :-9999',
+    object_track_ptError = '? {object}.innerTrack.isNonnull ? {object}.innerTrack.ptError :-9999',
+
+    object_isoNeutralHadron = '{object}.pfIsolationR04().sumNeutralHadronEt',
+    object_isoPhoton = '{object}.pfIsolationR04().sumPhotonEt',
+    object_isoPU = '{object}.pfIsolationR04().sumPUPt',
 )

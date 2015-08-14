@@ -34,12 +34,21 @@ class MiniAODMuonIDEmbedder : public edm::EDProducer {
     edm::EDGetTokenT<pat::MuonCollection> muonsCollection_;
     edm::EDGetTokenT<reco::VertexCollection> vtxToken_;
     reco::Vertex pv_;
+    edm::InputTag beamSrc_;
+    bool isGoodVertex(const reco::Vertex& vtx);
+    int Muon_vtx_ndof_min_, Muon_vtx_rho_max_;
+    double Muon_vtx_position_z_max_;
 };
 
 // class member functions
 MiniAODMuonIDEmbedder::MiniAODMuonIDEmbedder(const edm::ParameterSet& pset) {
   muonsCollection_ = consumes<pat::MuonCollection>(pset.getParameter<edm::InputTag>("src"));
   vtxToken_            = consumes<reco::VertexCollection>(pset.getParameter<edm::InputTag>("vertices"));
+  beamSrc_ = pset.getParameter<edm::InputTag>("beamSrc");
+
+  Muon_vtx_ndof_min_      = pset.getParameter<int>("Muon_vtx_ndof_min");
+  Muon_vtx_rho_max_        = pset.getParameter<int>("Muon_vtx_rho_max");
+  Muon_vtx_position_z_max_ = pset.getParameter<double>("Muon_vtx_position_z_max");
 
   produces<pat::MuonCollection>();
 }
@@ -63,8 +72,23 @@ void MiniAODMuonIDEmbedder::produce(edm::Event& evt, const edm::EventSetup& es) 
 
   edm::Handle<reco::VertexCollection> vertices;
   evt.getByToken(vtxToken_, vertices);
-  if (vertices->empty()) return; // skip the event if no PV found
-  pv_ = vertices->front();
+
+  reco::VertexCollection::const_iterator firstGoodVertex = vertices->end();
+  for (reco::VertexCollection::const_iterator it = vertices->begin(); it != firstGoodVertex; it++)
+    {
+      if(isGoodVertex(*it)){
+        firstGoodVertex = it;
+        break;
+      }
+    }
+  // require a good vertex 
+  if (firstGoodVertex == vertices->end()) return;
+
+  reco::BeamSpot beamSpot;
+  edm::Handle<reco::BeamSpot> beamSpotHandle;
+  evt.getByLabel(beamSrc_, beamSpotHandle);
+  if ( beamSpotHandle.isValid() )  beamSpot = *beamSpotHandle;
+  math::XYZPoint point(beamSpot.x0(),beamSpot.y0(), beamSpot.z0());
 
   const std::vector<pat::Muon> * muons = muonsCollection.product();
 
@@ -76,13 +100,30 @@ void MiniAODMuonIDEmbedder::produce(edm::Event& evt, const edm::EventSetup& es) 
   for(unsigned i = 0 ; i < nbMuon; i++){
     pat::Muon muon(muons->at(i));
 
-    muon.addUserInt("tightID",muon.isTightMuon(pv_));
+    muon.addUserInt("_tight",muon.isTightMuon(*firstGoodVertex));
+    muon.addUserInt("_soft",muon.isSoftMuon(*firstGoodVertex));
+    muon.addUserInt("_isHightPt",muon.isHighPtMuon(*firstGoodVertex));
 //     muon.addUserInt("mediumID",mediumMuon(muon));
+    if(muon.innerTrack().isNonnull()){
+        muon.addUserFloat("_dxy", muon.innerTrack()->dxy(firstGoodVertex->position()));
+        muon.addUserFloat("_dxy_bs", (-1.)*muon.innerTrack()->dxy(point));
+        muon.addUserFloat("_dxy_bs_dz", muon.innerTrack()->dz(point));
+        muon.addUserFloat("_dz", muon.innerTrack()->dz(firstGoodVertex->position()));
 
+    }
     output->push_back(muon);
   }
 
   evt.put(output);
+}
+
+bool MiniAODMuonIDEmbedder::isGoodVertex(const reco::Vertex& vtx)
+{
+  if (vtx.isFake()) return false;
+  if (vtx.ndof() < Muon_vtx_ndof_min_) return false;
+  if (vtx.position().Rho() > Muon_vtx_rho_max_) return false;
+  if (fabs(vtx.position().Z()) > Muon_vtx_position_z_max_) return false;
+  return true;
 }
 
 // define plugin

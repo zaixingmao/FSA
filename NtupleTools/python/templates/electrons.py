@@ -23,29 +23,29 @@ id = PSet(
     objectCBIDTight = '{object}.userFloat("CBIDTight")',
     objectMVANonTrigWP80 = '{object}.userFloat("MVANonTrigWP80")',
     objectMVANonTrigWP90 = '{object}.userFloat("MVANonTrigWP90")',
+#     objectHEEPIDD = '{object}.userFloat("heepElectronID")',
     
     # Use cms.string so we get the parentheses formatting bonus
-    objectRelPFIsoDB = cms.string(
-        "({object}.userIso(0)"
-        "+max({object}.userIso(1)"
-        "+{object}.neutralHadronIso()"
-        "-0.5*{object}.userIso(2),0.0))"
-        "/{object}.pt()"
-    ),
-    objectRelPFIsoRho = cms.string(
-        '({object}.chargedHadronIso()'
-        '+max(0.0,{object}.neutralHadronIso()'
-        '+{object}.photonIso()'
-        '-{object}.userFloat("rhoCSA14")*{object}.userFloat("EffectiveArea_HZZ4l2015")))'
-        '/{object}.pt()'
-    ),
-
-    objectPFChargedIso = cms.string('{object}.userIsolation("PfChargedHadronIso")'),
-    objectPFNeutralIso = cms.string('{object}.userIsolation("PfNeutralHadronIso")'),
-    objectPFPhotonIso  = cms.string('{object}.userIsolation("PfGammaIso")'),
+#     objectRelPFIsoDB = cms.string(
+#         "({object}.userIso(0)"
+#         "+max({object}.userIso(1)"
+#         "+{object}.neutralHadronIso()"
+#         "-0.5*{object}.userIso(2),0.0))"
+#         "/{object}.pt()"
+#     ),
+#     objectRelPFIsoRho = cms.string(
+#         '({object}.chargedHadronIso()'
+#         '+max(0.0,{object}.neutralHadronIso()'
+#         '+{object}.photonIso()'
+#         '-{object}.userFloat("rhoCSA14")*{object}.userFloat("EffectiveArea_HZZ4l2015")))'
+#         '/{object}.pt()'
+#     ),
+# 
+#     objectPFChargedIso = cms.string('{object}.userIsolation("PfChargedHadronIso")'),
+#     objectPFNeutralIso = cms.string('{object}.userIsolation("PfNeutralHadronIso")'),
+#     objectPFPhotonIso  = cms.string('{object}.userIsolation("PfGammaIso")'),
     
     objectPassNumberOfHits = cms.string('{object}.userInt("passNumberOfHits")'),
-    objectPassConversionVeto = cms.string('{object}.userInt("passConversionVeto")'),
 
     objectEffectiveArea2012Data = cms.string('{object}.userFloat("ea_comb_Data2012_iso04_kt6PFJ")'),
     objectEffectiveAreaPHYS14 = cms.string('{object}.userFloat("EffectiveArea_HZZ4l2015")'),
@@ -92,6 +92,26 @@ id = PSet(
     
     # How close is the nearest muon passing some basic quality cuts?
     objectNearestMuonDR = "electronClosestMuonDR({object_idx})",
+)
+
+#variables for life-time
+TNT_request = PSet(
+    object_gsfTrack_normChi2 = cms.string('{object}.gsfTrack().normalizedChi2()'),
+    object_gsfTrack_ndof = cms.string('{object}.gsfTrack().ndof()'),
+    object_gsfTrack_vtx = cms.string('{object}.gsfTrack().vx()'),
+    object_gsfTrack_vty = cms.string('{object}.gsfTrack().vy()'),
+    object_gsfTrack_vtz = cms.string('{object}.gsfTrack().vz()'),
+    object_dxy = cms.string('{object}.userFloat("_dxy")'),
+    object_dxyError = cms.string('{object}.gsfTrack().d0Error()'),
+    object_dz = cms.string('{object}.userFloat("_dz")'),
+    object_dxy_bs = cms.string('{object}.userFloat("_dxy_bs")'),
+    object_expectedMissingInnerHits = cms.string('{object}.userInt("expectedMissingInnerHits")'),
+    object_passConversionVeto = cms.string('{object}.userInt("passConversionVeto")'),
+
+    object_isoChargedHadrons = cms.string('{object}.pfIsolationVariables().sumChargedHadronPt'),
+    object_isoNeutralHadrons = cms.string('{object}.pfIsolationVariables().sumNeutralHadronEt'),
+    object_isoPhotons = cms.string('{object}.pfIsolationVariables().sumPhotonEt'),
+    object_isoPU = cms.string('{object}.pfIsolationVariables().sumPUPt'),
 )
 
 energyCorrections = PSet(

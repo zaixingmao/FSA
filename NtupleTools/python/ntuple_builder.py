@@ -67,6 +67,7 @@ _muon_template = PSet(
     templates.muons.trigger,
     templates.muons.veto,
     templates.topology.mtToMET,
+    templates.muons.TNT_request
 )
 
 _bjet_template= PSet(
@@ -81,6 +82,7 @@ _electron_template = PSet(
     templates.candidates.kinematics,
     templates.candidates.vertex_info,
     templates.electrons.id,
+    templates.electrons.TNT_request,
     templates.electrons.energyCorrections,
     templates.electrons.tracking,
     templates.electrons.supercluster,

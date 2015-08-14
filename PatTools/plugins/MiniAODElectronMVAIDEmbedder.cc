@@ -51,6 +51,10 @@ private:
   std::vector<std::string> categoryLabels_;
   std::vector<edm::EDGetTokenT<edm::ValueMap<int> > > categoryTokens_;
   std::auto_ptr<std::vector<pat::Electron> > out; // Collection we'll output at the end
+
+  edm::InputTag vtxSrc_;
+  edm::InputTag beamSrc_;
+
 };
 
 
@@ -71,6 +75,10 @@ MiniAODElectronIDEmbedder::MiniAODElectronIDEmbedder(const edm::ParameterSet& iC
                std::vector<std::string>())
 {
   std::vector<edm::InputTag> idTags = iConfig.getParameter<std::vector<edm::InputTag> >("ids");
+
+  vtxSrc_ = iConfig.getParameter<edm::InputTag>("vtxSrc");
+  beamSrc_ = iConfig.getParameter<edm::InputTag>("beamSrc");
+
 
   for(unsigned int i = 0;
       (i < idTags.size() && i < idLabels_.size()); // ignore IDs with no known label
@@ -110,6 +118,16 @@ void MiniAODElectronIDEmbedder::produce(edm::Event& iEvent, const edm::EventSetu
 
   iEvent.getByToken(electronCollectionToken_, electronsIn);
 
+  edm::Handle<reco::VertexCollection> vertices;
+  iEvent.getByLabel(vtxSrc_, vertices);
+  const reco::Vertex& thePV = *vertices->begin();
+
+  reco::BeamSpot beamSpot;
+  edm::Handle<reco::BeamSpot> beamSpotHandle;
+  iEvent.getByLabel(beamSrc_, beamSpotHandle);
+  if ( beamSpotHandle.isValid() )  beamSpot = *beamSpotHandle;
+  math::XYZPoint point(beamSpot.x0(),beamSpot.y0(), beamSpot.z0());
+
   for(unsigned int i = 0;
       i < idMapTokens_.size();
       ++i)
@@ -143,6 +161,12 @@ void MiniAODElectronIDEmbedder::produce(edm::Event& iEvent, const edm::EventSetu
       if(ei->passConversionVeto()) passConversionVeto = 1;
       out->back().addUserInt("passNumberOfHits", passNumberOfHits);
       out->back().addUserInt("passConversionVeto", passConversionVeto);
+
+      out->back().addUserFloat("_dxy", (-1.0)*ei->gsfTrack()->dxy(thePV.position()));
+      out->back().addUserFloat("_dz", ei->gsfTrack()->dz(thePV.position()));
+      out->back().addUserFloat("_dxy_bs", ei->gsfTrack()->dxy(point));
+      out->back().addUserInt("expectedMissingInnerHits", ei->gsfTrack()->hitPattern().numberOfHits(reco::HitPattern::MISSING_INNER_HITS));
+
 
       for(unsigned int i = 0; // Loop over ID working points
 	  i < ids.size(); ++i)
@@ -185,5 +209,6 @@ MiniAODElectronIDEmbedder::fillDescriptions(edm::ConfigurationDescriptions& desc
   desc.setUnknown();
   descriptions.addDefault(desc);
 }
+
 //define this as a plug-in
 DEFINE_FWK_MODULE(MiniAODElectronIDEmbedder);
