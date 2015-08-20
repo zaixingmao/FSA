@@ -176,70 +176,70 @@ datadefs["SUSYM160-RunIISpring15DR74-Asympt25ns"] = {
 
 #50 ns
 
-datadefs["DYJets_M50-Asympt50ns"] = {
-    'analyses': [],
-    'datasetpath': '/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9-v2/MINIAODSIM',
-    'pu': 'Asympt50ns',
-    'calibrationTarget': 'RunIISpring15DR74',
-    'x_sec': 6025.0*picobarns,
-}
-
-datadefs["TTJets-Asympt50ns"] = {
-    'analyses': [],
-    'datasetpath': '/TTJets_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/MINIAODSIM',
-    'pu': 'Asympt50ns',
-    'calibrationTarget': 'RunIISpring15DR74',
-    'x_sec': 831.76*picobarns,
-}
-
-datadefs["ZZ-Asympt50ns"] = {
-    'analyses': [],
-    'datasetpath': '/ZZ_TuneCUETP8M1_13TeV-pythia8/RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/MINIAODSIM',
-    'pu': 'Asympt50ns',
-    'calibrationTarget': 'RunIISpring15DR74',
-    'x_sec': 10.32*picobarns,
-}
-
-datadefs["WJetsToLNu-Asympt50ns"] = {
-    'analyses': [],
-    'datasetpath': '/WJetsToLNu_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/MINIAODSIM',
-    'pu': 'Asympt50ns',
-    'calibrationTarget': 'RunIISpring15DR74',
-    'x_sec': 20509.0*picobarns,
-}
-
-
-datadefs["WW-Asympt50ns"] = {
-    'analyses': [],
-    'datasetpath': '/WW_TuneCUETP8M1_13TeV-pythia8/RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/MINIAODSIM',
-    'pu': 'Asympt50ns',
-    'calibrationTarget': 'RunIISpring15DR74',
-    'x_sec': 63.21*picobarns,
-}
-
-datadefs["WZJets-Asympt50ns"] = {
-    'analyses': [],
-    'datasetpath': '/WZ_TuneCUETP8M1_13TeV-pythia8/RunIISpring15DR74- Asympt50ns_MCRUN2_74_V9A-v2/MINIAODSIM',
-    'pu': 'Asympt50ns',
-    'calibrationTarget': 'RunIISpring15DR74',
-    'x_sec': 22.82*picobarns,
-}
-
-datadefs["T_tW-Asympt50ns"] = {
-    'analyses': [],
-    'datasetpath': '/ST_tW_top_5f_inclusiveDecays_13TeV-powheg-pythia8_TuneCUETP8M1/RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/MINIAODSIM',
-    'pu': 'Asympt50ns',
-    'calibrationTarget': 'RunIISpring15DR74',
-    'x_sec': 35.6*picobarns,
-}
-
-datadefs["Tbar_tW-Asympt50ns"] = {
-    'analyses': [],
-    'datasetpath': '/ST_tW_antitop_5f_mtop1755_inclusiveDecays_13TeV-powheg-pythia8_TuneCUETP8M1/RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v3/MINIAODSIM',
-    'pu': 'Asympt50ns',
-    'calibrationTarget': 'RunIISpring15DR74',
-    'x_sec': 35.6*picobarns,
-}
+# datadefs["DYJets_M50-Asympt50ns"] = {
+#     'analyses': [],
+#     'datasetpath': '/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9-v2/MINIAODSIM',
+#     'pu': 'Asympt50ns',
+#     'calibrationTarget': 'RunIISpring15DR74',
+#     'x_sec': 6025.0*picobarns,
+# }
+# 
+# datadefs["TTJets-Asympt50ns"] = {
+#     'analyses': [],
+#     'datasetpath': '/TTJets_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/MINIAODSIM',
+#     'pu': 'Asympt50ns',
+#     'calibrationTarget': 'RunIISpring15DR74',
+#     'x_sec': 831.76*picobarns,
+# }
+# 
+# datadefs["ZZ-Asympt50ns"] = {
+#     'analyses': [],
+#     'datasetpath': '/ZZ_TuneCUETP8M1_13TeV-pythia8/RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/MINIAODSIM',
+#     'pu': 'Asympt50ns',
+#     'calibrationTarget': 'RunIISpring15DR74',
+#     'x_sec': 10.32*picobarns,
+# }
+# 
+# datadefs["WJetsToLNu-Asympt50ns"] = {
+#     'analyses': [],
+#     'datasetpath': '/WJetsToLNu_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/MINIAODSIM',
+#     'pu': 'Asympt50ns',
+#     'calibrationTarget': 'RunIISpring15DR74',
+#     'x_sec': 20509.0*picobarns,
+# }
+# 
+# 
+# datadefs["WW-Asympt50ns"] = {
+#     'analyses': [],
+#     'datasetpath': '/WW_TuneCUETP8M1_13TeV-pythia8/RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/MINIAODSIM',
+#     'pu': 'Asympt50ns',
+#     'calibrationTarget': 'RunIISpring15DR74',
+#     'x_sec': 63.21*picobarns,
+# }
+# 
+# datadefs["WZJets-Asympt50ns"] = {
+#     'analyses': [],
+#     'datasetpath': '/WZ_TuneCUETP8M1_13TeV-pythia8/RunIISpring15DR74- Asympt50ns_MCRUN2_74_V9A-v2/MINIAODSIM',
+#     'pu': 'Asympt50ns',
+#     'calibrationTarget': 'RunIISpring15DR74',
+#     'x_sec': 22.82*picobarns,
+# }
+# 
+# datadefs["T_tW-Asympt50ns"] = {
+#     'analyses': [],
+#     'datasetpath': '/ST_tW_top_5f_inclusiveDecays_13TeV-powheg-pythia8_TuneCUETP8M1/RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/MINIAODSIM',
+#     'pu': 'Asympt50ns',
+#     'calibrationTarget': 'RunIISpring15DR74',
+#     'x_sec': 35.6*picobarns,
+# }
+# 
+# datadefs["Tbar_tW-Asympt50ns"] = {
+#     'analyses': [],
+#     'datasetpath': '/ST_tW_antitop_5f_mtop1755_inclusiveDecays_13TeV-powheg-pythia8_TuneCUETP8M1/RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v3/MINIAODSIM',
+#     'pu': 'Asympt50ns',
+#     'calibrationTarget': 'RunIISpring15DR74',
+#     'x_sec': 35.6*picobarns,
+# }
 
 if __name__=="__main__":
     query_cli(datadefs)
