@@ -81,8 +81,6 @@ void MiniAODMuonIDEmbedder::produce(edm::Event& evt, const edm::EventSetup& es) 
         break;
       }
     }
-  // require a good vertex 
-  if (firstGoodVertex == vertices->end()) return;
 
   reco::BeamSpot beamSpot;
   edm::Handle<reco::BeamSpot> beamSpotHandle;
@@ -100,16 +98,29 @@ void MiniAODMuonIDEmbedder::produce(edm::Event& evt, const edm::EventSetup& es) 
   for(unsigned i = 0 ; i < nbMuon; i++){
     pat::Muon muon(muons->at(i));
 
-    muon.addUserInt("_tight",muon.isTightMuon(*firstGoodVertex));
-    muon.addUserInt("_soft",muon.isSoftMuon(*firstGoodVertex));
-    muon.addUserInt("_isHightPt",muon.isHighPtMuon(*firstGoodVertex));
-//     muon.addUserInt("mediumID",mediumMuon(muon));
-    if(muon.innerTrack().isNonnull()){
-        muon.addUserFloat("_dxy", muon.innerTrack()->dxy(firstGoodVertex->position()));
-        muon.addUserFloat("_dxy_bs", (-1.)*muon.innerTrack()->dxy(point));
-        muon.addUserFloat("_dxy_bs_dz", muon.innerTrack()->dz(point));
-        muon.addUserFloat("_dz", muon.innerTrack()->dz(firstGoodVertex->position()));
-
+    // require a good vertex 
+    if (firstGoodVertex == vertices->end()){
+        muon.addUserInt("_tight", -9999);
+        muon.addUserInt("_soft", -9999);
+        muon.addUserInt("_isHightPt", -9999);
+        if(muon.innerTrack().isNonnull()){
+            muon.addUserFloat("_dxy", -9999);
+            muon.addUserFloat("_dxy_bs", -9999);
+            muon.addUserFloat("_dxy_bs_dz", -9999);
+            muon.addUserFloat("_dz", -9999);
+        }
+    }
+    else{
+        muon.addUserInt("_tight",muon.isTightMuon(*firstGoodVertex));
+        muon.addUserInt("_soft",muon.isSoftMuon(*firstGoodVertex));
+        muon.addUserInt("_isHightPt",muon.isHighPtMuon(*firstGoodVertex));
+    //     muon.addUserInt("mediumID",mediumMuon(muon));
+        if(muon.innerTrack().isNonnull()){
+            muon.addUserFloat("_dxy", muon.innerTrack()->dxy(firstGoodVertex->position()));
+            muon.addUserFloat("_dxy_bs", (-1.)*muon.innerTrack()->dxy(point));
+            muon.addUserFloat("_dxy_bs_dz", muon.innerTrack()->dz(point));
+            muon.addUserFloat("_dz", muon.innerTrack()->dz(firstGoodVertex->position()));
+        }
     }
     output->push_back(muon);
   }
