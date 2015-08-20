@@ -86,6 +86,7 @@ void PATFinalStateAnalysis::endLuminosityBlock(
 bool PATFinalStateAnalysis::filter(const edm::EventBase& evt) {
   // Get the event weight
   double eventWeight = 1.0;
+  double genEventWeight = 1.0;
 
   if (evtWeights_.size()) {
     edm::Handle<PATFinalStateEventCollection> event;
@@ -94,9 +95,18 @@ bool PATFinalStateAnalysis::filter(const edm::EventBase& evt) {
       eventWeight *= evtWeights_[i]( (*event)[0] );
     }
   }
+  //get gen event weight
+  if (!evt.isRealData()){ 
+    edm::Handle<GenEventInfoProduct> genEvt;
+    evt.getByLabel(edm::InputTag("generator"),genEvt);
+
+    // event weight
+    genEventWeight = genEvt->weight();
+  }
+
   // Count this event
   eventCounter_->Fill(0.0);
-  eventCounterWeighted_->Fill(0.0, eventWeight);
+  eventCounterWeighted_->Fill(0.0, genEventWeight);
   eventWeights_->Fill(eventWeight);
 
   // Get the final states to analyze
