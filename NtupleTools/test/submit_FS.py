@@ -132,7 +132,7 @@ if not options.runLocal:
     outFile = "do.sh"
     cmd = "submit_job.py %s make_ntuples_cfg.py channels=\"%s\" isMC=%i nExtraJets=8 runMVAMET=%i runTauTauMVAMET=%i svFit=%i" %(options.name, options.FS, isMC, MVAMET, TauTauMVAMET, SVFit)
     if isMC:
-        cmd += " --campaign-tag=\"RunIISpring15DR74-Asympt50ns*\" --das-replace-tuple=$fsa/MetaData/tuples/MiniAOD-13TeV_RunIISpring15DR74.json --samples %s -o %s" %(samples, tempFile)
+        cmd += " --campaign-tag=\"RunIISpring15DR74-Asympt25ns*\" --das-replace-tuple=$fsa/MetaData/tuples/MiniAOD-13TeV_RunIISpring15DR74.json --samples %s -o %s" %(samples, tempFile)
     else:
         cmd += " --data --das-replace-tuple=$fsa/MetaData/tuples/MiniAOD-13TeV_Data.json --samples %s -o %s" %(samples, tempFile)
 
