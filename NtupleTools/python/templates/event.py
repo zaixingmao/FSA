@@ -94,9 +94,13 @@ gen = PSet(
     # Process ID used to simulate in Pythia
     processID='evt.genEventInfo.signalProcessID',
     isZtautau='evt.findDecay(23,15)',
+    isZee='evt.findDecay(23,11)',
+    isZmumu='evt.findDecay(23,13)',
     isGtautau='evt.findDecay(22,15)',
     isWtaunu='evt.findDecay(24,15)',
     isWmunu='evt.findDecay(24,13)',
+    isWenu='evt.findDecay(24,11)',
+
     NUP='evt.lesHouches.NUP',
     EmbPtWeight='evt.generatorFilter.filterEfficiency',
     genEventWeight='evt.weight("genEventWeight")',

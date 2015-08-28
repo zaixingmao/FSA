@@ -70,7 +70,6 @@ id = PSet(
     objectGenTauEta         = '? (getDaughterGenParticle({object_idx}, 15, 1, 1.0, 0.5).isAvailable && getDaughterGenParticle({object_idx}, 15, 1, 1.0, 0.5).isNonnull) ? getDaughterGenParticle({object_idx}, 15, 1, 1.0, 0.5).eta()   : -999',
     objectGenTauPhi         = '? (getDaughterGenParticle({object_idx}, 15, 1, 1.0, 0.5).isAvailable && getDaughterGenParticle({object_idx}, 15, 1, 1.0, 0.5).isNonnull) ? getDaughterGenParticle({object_idx}, 15, 1, 1.0, 0.5).phi()   : -999',
     objectGenTauPt          = '? (getDaughterGenParticle({object_idx}, 15, 1, 1.0, 0.5).isAvailable && getDaughterGenParticle({object_idx}, 15, 1, 1.0, 0.5).isNonnull) ? getDaughterGenParticle({object_idx}, 15, 1, 1.0, 0.5).pt()   : -999',
-
 )
 
 energyCorrections = PSet(
@@ -132,6 +131,30 @@ TNT_request = PSet(
     object_vtz = '? {object}.innerTrack.isNonnull ? {object}.innerTrack.vz :-9999',
     object_track_pt = '? {object}.innerTrack.isNonnull ? {object}.innerTrack.pt :-9999',
     object_track_ptError = '? {object}.innerTrack.isNonnull ? {object}.innerTrack.ptError :-9999',
+
+    object_dB = '{object}.dB()',
+    object_besttrack_pt = '{object}.muonBestTrack().pt()',
+    object_besttrack_ptError = '{object}.muonBestTrack().ptError()',
+    object_tunePBestTrack_pt = '{object}.tunePMuonBestTrack().pt()',
+#    object_tunePBestTrackType = '{object}.tunePMuonBestTrackType()',
+    object_chi2LocalPosition = '{object}.combinedQuality().chi2LocalPosition',
+    object_trkKink = '{object}.combinedQuality().trkKink',
+    object_segmentCompatibility = '{object}.segmentCompatibility()',
+    object_validFraction = '{object}.innerTrack().validFraction()',
+    object_pixelLayersWithMeasurement = '? {object}.innerTrack.isNonnull ? {object}.innerTrack().hitPattern().pixelLayersWithMeasurement(): -9999',
+    object_qualityhighPurity = '{object}.userFloat("_qualityhighPurity")',
+    object_track_PCAx_bs = '{object}.userFloat("_track_PCAx_bs")',
+    object_track_PCAy_bs = '{object}.userFloat("_track_PCAy_bs")',
+    object_track_PCAz_bs = '{object}.userFloat("_track_PCAz_bs")',
+    object_track_PCAx_pv = '{object}.userFloat("_track_PCAx_pv")',
+    object_track_PCAy_pv = '{object}.userFloat("_track_PCAy_pv")',
+    object_track_PCAz_pv = '{object}.userFloat("_track_PCAz_pv")',
+    object_trackFitErrorMatrix_00 = '{object}.userFloat("_trackFitErrorMatrix_00")',
+    object_trackFitErrorMatrix_01 = '{object}.userFloat("_trackFitErrorMatrix_01")',
+    object_trackFitErrorMatrix_02 = '{object}.userFloat("_trackFitErrorMatrix_02")',
+    object_trackFitErrorMatrix_11 = '{object}.userFloat("_trackFitErrorMatrix_11")',
+    object_trackFitErrorMatrix_12 = '{object}.userFloat("_trackFitErrorMatrix_12")',
+    object_trackFitErrorMatrix_22 = '{object}.userFloat("_trackFitErrorMatrix_22")',
 
     object_isoNeutralHadron = '{object}.pfIsolationR04().sumNeutralHadronEt',
     object_isoPhoton = '{object}.pfIsolationR04().sumPhotonEt',

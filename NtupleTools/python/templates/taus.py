@@ -30,6 +30,9 @@ info = PSet(
     objectGenPt          = '? (getDaughterGenParticle({object_idx}, 15, 1, 1.0, 0.5).isAvailable && getDaughterGenParticle({object_idx}, 15, 1, 1.0, 0.5).isNonnull) ? getDaughterGenParticle({object_idx}, 15, 1, 1.0, 0.5).pt()   : -999',
     objectGenMass        = '? (getDaughterGenParticle({object_idx}, 15, 1, 1.0, 0.5).isAvailable && getDaughterGenParticle({object_idx}, 15, 1, 1.0, 0.5).isNonnull) ? getDaughterGenParticle({object_idx}, 15, 1, 1.0, 0.5).mass()   : -999',
 
+    objectMatchToGenMuPt   = '? (getDaughterGenParticle({object_idx}, 13, 1, 1.0, 0.5).isAvailable && getDaughterGenParticle({object_idx}, 13, 1, 1.0, 0.5).isNonnull) ? getDaughterGenParticle({object_idx}, 11, 1, 1.0, 0.5).pt() : 0',
+    objectMatchToGenElePt  = '? (getDaughterGenParticle({object_idx}, 11, 1, 1.0, 0.5).isAvailable && getDaughterGenParticle({object_idx}, 11, 1, 1.0, 0.5).isNonnull) ? getDaughterGenParticle({object_idx}, 11, 1, 1.0, 0.5).pt() : 0',
+
     objectGenVisPt       = '? getDaughterGenParticleVisMomentum({object_idx}, 15, 1, 1.0, 0.5).pt() > 0 ? getDaughterGenParticleVisMomentum({object_idx}, 15, 1, 1.0, 0.5).pt()  : -999',
     objectGenVisEta       = '? getDaughterGenParticleVisMomentum({object_idx}, 15, 1, 1.0, 0.5).pt() > 0 ? getDaughterGenParticleVisMomentum({object_idx}, 15, 1, 1.0, 0.5).eta()  : -999',
     objectGenVisPhi       = '? getDaughterGenParticleVisMomentum({object_idx}, 15, 1, 1.0, 0.5).pt() > 0 ? getDaughterGenParticleVisMomentum({object_idx}, 15, 1, 1.0, 0.5).phi()  : -999',
@@ -128,6 +131,55 @@ id = PSet(
     objectPuCorrPtSum     = '{object}.tauID("puCorrPtSum")',
 )
 
+TNT_request = PSet(
+#     object_nProngs = '{object}.signalChargedHadrCands().size()',
+#     object_leadChargedCandPt = '{object}.leadChargedHadrCand().hadTauLeadChargedCand().isNonnull() ? {object}.leadChargedHadrCand().hadTauLeadChargedCand().pt() : -9999.',    
+#     object_leadChargedCandEta = '{object}.leadChargedHadrCand().hadTauLeadChargedCand().isNonnull() ? {object}.leadChargedHadrCand().hadTauLeadChargedCand().eta() : -9999.',    
+#     object_leadChargedCandPhi = '{object}.leadChargedHadrCand().hadTauLeadChargedCand().isNonnull() ? {object}.leadChargedHadrCand().hadTauLeadChargedCand().phi() : -9999.',
+#     object_leadChargedCandCharge = '{object}.leadChargedHadrCand().hadTauLeadChargedCand().isNonnull() ? {object}.leadChargedHadrCand().hadTauLeadChargedCand().charge() : -2.',    
+#     object_leadChargedCandChi2 = '{object}.leadTrack().isNonnull() ? {object}.leadTrack().chi2() : -9999.',
+#     object_leadChargedCandValidHits = '{object}.leadTrack().isNonnull() ? {object}.leadTrack().numberOfValidHits() : -9999.',
+#     object_leadChargedCandDxyError = '{object}.leadTrack().isNonnull() ? {object}.leadTrack().d0Error() : -9999.',
+#     object_leadChargedCandDzError = '{object}.leadTrack().isNonnull() ? {object}.leadTrack().dzError() : -9999.',
+#     object_leadChargedCandNdof = '{object}.leadTrack().isNonnull() ? {object}.leadTrack().ndof() : -9999.',
+#     object_leadChargedCandVtx = '{object}.leadTrack().isNonnull() ? {object}.leadTrack().vx() : -9999.',
+#     object_leadChargedCandVty = '{object}.leadTrack().isNonnull() ? {object}.leadTrack().vy() : -9999.',
+#     object_leadChargedCandVtz = '{object}.leadTrack().isNonnull() ? {object}.leadTrack().vz() : -9999.',
+#     object_leadChargedCandTrack_pt = '{object}.leadTrack().isNonnull() ? {object}.leadTrack().pt() : -9999.',
+#     object_leadChargedCandTrack_ptError = '{object}.leadTrack().isNonnull() ? {object}.leadTrack().ptError() : -9999.',
+
+    object_leadChargedCandDxy_pv = '{object}.userFloat("_leadChargedCandDxy_pv")',
+    object_leadChargedCandDxy_bs = '{object}.userFloat("_leadChargedCandDxy_bs")',
+    object_leadChargedCandDz_pv = '{object}.userFloat("_leadChargedCandDz_pv")',
+    object_leadChargedCandDz_bs = '{object}.userFloat("_leadChargedCandDz_bs")',
+
+    #default tau POG lifetime variables
+    object_defaultDxy = '{object}.dxy()',
+    object_defaultDxyError = '{object}.dxy_error()',
+    object_defaultDxySig = '{object}.dxy_Sig()',
+    object_defaultFlightLengthX = '{object}.flightLength().x()',
+    object_defaultFlightLengthY = '{object}.flightLength().y()',
+    object_defaultFlightLengthZ = '{object}.flightLength().z()',
+    object_defaultFlightLengthSig = '{object}.flightLengthSig()',
+    object_default_PCAx_pv = '{object}.dxy_PCA().x()',
+    object_default_PCAy_pv = '{object}.dxy_PCA().y()',
+    object_default_PCAz_pv = '{object}.dxy_PCA().z()',
+
+    object_leadChargedCandTrack_PCAx_bs = '{object}.userFloat("_leadChargedCandTrack_PCAx_bs")',
+    object_leadChargedCandTrack_PCAy_bs = '{object}.userFloat("_leadChargedCandTrack_PCAy_bs")',
+    object_leadChargedCandTrack_PCAz_bs = '{object}.userFloat("_leadChargedCandTrack_PCAz_bs")',
+    object_leadChargedCandTrack_PCAx_pv = '{object}.userFloat("_leadChargedCandTrack_PCAx_pv")',
+    object_leadChargedCandTrack_PCAy_pv = '{object}.userFloat("_leadChargedCandTrack_PCAy_pv")',
+    object_leadChargedCandTrack_PCAz_pv = '{object}.userFloat("_leadChargedCandTrack_PCAz_pv")',
+
+    object_leadChargedCandTrackFitErrorMatrix_00 = '{object}.userFloat("_leadChargedCandTrackFitErrorMatrix_00")',
+    object_leadChargedCandTrackFitErrorMatrix_01 = '{object}.userFloat("_leadChargedCandTrackFitErrorMatrix_01")',
+    object_leadChargedCandTrackFitErrorMatrix_02 = '{object}.userFloat("_leadChargedCandTrackFitErrorMatrix_02")',
+    object_leadChargedCandTrackFitErrorMatrix_11 = '{object}.userFloat("_leadChargedCandTrackFitErrorMatrix_11")',
+    object_leadChargedCandTrackFitErrorMatrix_12 = '{object}.userFloat("_leadChargedCandTrackFitErrorMatrix_12")',
+    object_leadChargedCandTrackFitErrorMatrix_22 = '{object}.userFloat("_leadChargedCandTrackFitErrorMatrix_22")',
+
+)
 
 trigger = PSet(
     objectTau20 = 'matchToHLTFilter({object_idx}, "hltPFTau20TrackLooseIso", 0.5)',
