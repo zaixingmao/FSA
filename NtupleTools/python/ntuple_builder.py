@@ -55,6 +55,7 @@ _tau_template = PSet(
     templates.taus.veto,
     templates.topology.mtToMET,
     templates.taus.trigger,
+    templates.taus.TNT_request
 )
 
 _muon_template = PSet(
