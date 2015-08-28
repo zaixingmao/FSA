@@ -79,9 +79,10 @@ options = TauVarParsing.TauVarParsing(
     dblhMode=False, # For double-charged Higgs analysis
     runTauSpinner=0,
     GlobalTag="",
-    use25ns=0,
+    use25ns=1,
     runDQM=0,
     hzz=0,
+    TNT=0,
     paramFile='',
 )
 
@@ -125,6 +126,9 @@ options.register(
 options.outputFile = "ntuplize.root"
 options.parseArguments()
 
+if options.TNT:
+    print 'running TNT configuration'
+
 # SV Fit requires MVA MET
 options.runMVAMET = options.runMVAMET
 
@@ -154,7 +158,9 @@ if options.eventsToProcess:
 # If desired, apply a luminosity mask
 if options.lumiMask:
     print "Applying LumiMask from", options.lumiMask
-    process.source.lumisToProcess = options.buildPoolSourceLumiMask()
+    import FWCore.PythonUtilities.LumiList as LumiList
+    process.source.lumisToProcess = LumiList.LumiList(filename = options.lumiMask).getVLuminosityBlockRange()
+#     process.source.lumisToProcess = options.buildPoolSourceLumiMask()
 
 process.TFileService = cms.Service(
     "TFileService", fileName=cms.string(options.outputFile)
@@ -173,9 +179,11 @@ process.maxEvents = cms.untracked.PSet(
 # process.printGen = cms.Path(process.printTree)
 process.schedule = cms.Schedule()
 
+if options.TNT:
+    process.load('TrackingTools.TransientTrack.TransientTrackBuilder_cfi')
 #load magfield and geometry (for mass resolution)
 process.load('Configuration.StandardSequences.GeometryRecoDB_cff')
-process.load('Configuration.StandardSequences.MagneticField_38T_cff')
+process.load('Configuration.StandardSequences.MagneticField_cff')
 process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_cff')
 
 # Need the global tag for geometry etc.
@@ -223,7 +231,7 @@ output_commands = []
 electronMVANonTrigIDLabel = "BDTIDNonTrig"
 electronMVATrigIDLabel = "BDTIDTrig"
 from FinalStateAnalysis.NtupleTools.embedElectronIDs import embedElectronIDs
-fs_daughter_inputs['electrons'] = embedElectronIDs(process, True,fs_daughter_inputs['electrons'], fs_daughter_inputs['vertices'], fs_daughter_inputs['beamSpots'])
+fs_daughter_inputs['electrons'] = embedElectronIDs(process, True,fs_daughter_inputs['electrons'], fs_daughter_inputs['vertices'], fs_daughter_inputs['beamSpots'], options.TNT)
 
 # Clean out muon "ghosts" caused by track ambiguities
 process.ghostCleanedMuons = cms.EDProducer("PATMuonCleanerBySegments",
@@ -252,7 +260,7 @@ process.miniPatMuons = cms.EDProducer(
     Muon_vtx_ndof_min = cms.int32(4),
     Muon_vtx_rho_max = cms.int32(2),
     Muon_vtx_position_z_max = cms.double(24.),
-
+    TNT = cms.bool(bool(options.TNT)),
 )
 fs_daughter_inputs['muons'] = "miniPatMuons"
 
@@ -286,6 +294,11 @@ process.miniTausEmbedIp = cms.EDProducer(
     "MiniAODTauIpEmbedder",
     src = cms.InputTag(fs_daughter_inputs['taus']),
     vtxSrc = cms.InputTag("offlineSlimmedPrimaryVertices"),
+    beamSpot =cms.InputTag(fs_daughter_inputs['beamSpots']),
+    Tau_vtx_ndof_min = cms.int32(4),
+    Tau_vtx_rho_max = cms.int32(2),
+    Tau_vtx_position_z_max = cms.double(24.),
+    TNT = cms.bool(bool(options.TNT)),
 )
 fs_daughter_inputs['taus'] = 'miniTausEmbedIp'
 

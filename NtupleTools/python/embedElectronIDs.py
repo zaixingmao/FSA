@@ -1,6 +1,6 @@
 import FWCore.ParameterSet.Config as cms
 
-def embedElectronIDs(process, use25ns, eSrc, vtxSrc, beamSrc):
+def embedElectronIDs(process, use25ns, eSrc, vtxSrc, beamSrc, TNT):
     from PhysicsTools.SelectorUtils.tools.vid_id_tools import setupAllVIDIdsInModule, setupVIDElectronSelection, switchOnVIDElectronIdProducer, DataFormat
     switchOnVIDElectronIdProducer(process, DataFormat.MiniAOD)
     process.egmGsfElectronIDs.physicsObjectSrc = cms.InputTag(eSrc)
@@ -60,6 +60,10 @@ def embedElectronIDs(process, use25ns, eSrc, vtxSrc, beamSrc):
         values = cms.VInputTag(*mvaValues),               # mva values
         categoryLabels = cms.vstring(*mvaCategoryLabels),
         categories = cms.VInputTag(*mvaCategories),
+        patElectron_vtx_ndof_min = cms.int32(4),
+        patElectron_vtx_rho_max = cms.int32(2),
+        patElectron_vtx_position_z_max = cms.double(24.),
+        TNT = cms.bool(bool(TNT)),
     )
     eSrc = "miniAODElectronID"
     

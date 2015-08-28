@@ -18,6 +18,10 @@
 #include "DataFormats/VertexReco/interface/Vertex.h"
 #include "DataFormats/VertexReco/interface/VertexFwd.h"
 
+#include "TrackingTools/Records/interface/TransientTrackRecord.h"
+#include "TrackingTools/TransientTrack/interface/TransientTrackBuilder.h"
+#include "RecoVertex/KinematicFitPrimitives/interface/KinematicParticleFactoryFromTransientTrack.h"
+
 #include "DataFormats/PatCandidates/interface/Muon.h"
 
 #include <math.h>
@@ -38,6 +42,7 @@ class MiniAODMuonIDEmbedder : public edm::EDProducer {
     bool isGoodVertex(const reco::Vertex& vtx);
     int Muon_vtx_ndof_min_, Muon_vtx_rho_max_;
     double Muon_vtx_position_z_max_;
+    bool TNT;
 };
 
 // class member functions
@@ -49,6 +54,7 @@ MiniAODMuonIDEmbedder::MiniAODMuonIDEmbedder(const edm::ParameterSet& pset) {
   Muon_vtx_ndof_min_      = pset.getParameter<int>("Muon_vtx_ndof_min");
   Muon_vtx_rho_max_        = pset.getParameter<int>("Muon_vtx_rho_max");
   Muon_vtx_position_z_max_ = pset.getParameter<double>("Muon_vtx_position_z_max");
+  TNT = pset.getParameter<bool>("TNT");
 
   produces<pat::MuonCollection>();
 }
@@ -81,13 +87,20 @@ void MiniAODMuonIDEmbedder::produce(edm::Event& evt, const edm::EventSetup& es) 
         break;
       }
     }
-
   reco::BeamSpot beamSpot;
   edm::Handle<reco::BeamSpot> beamSpotHandle;
-  evt.getByLabel(beamSrc_, beamSpotHandle);
-  if ( beamSpotHandle.isValid() )  beamSpot = *beamSpotHandle;
-  math::XYZPoint point(beamSpot.x0(),beamSpot.y0(), beamSpot.z0());
+  math::XYZPoint point;
+  GlobalPoint thebs, thepv;
+  edm::ESHandle<TransientTrackBuilder> theB;
 
+  if(TNT){
+      evt.getByLabel(beamSrc_, beamSpotHandle);
+      if ( beamSpotHandle.isValid() )  beamSpot = *beamSpotHandle;
+      math::XYZPoint point(beamSpot.x0(),beamSpot.y0(), beamSpot.z0());
+      GlobalPoint thebs(beamSpot.x0(),beamSpot.y0(),beamSpot.z0());
+      GlobalPoint thepv(firstGoodVertex->position().x(),firstGoodVertex->position().y(),firstGoodVertex->position().z());
+      es.get<TransientTrackRecord>().get("TransientTrackBuilder",theB);
+  }
   const std::vector<pat::Muon> * muons = muonsCollection.product();
 
   unsigned int nbMuon =  muons->size();
@@ -95,9 +108,50 @@ void MiniAODMuonIDEmbedder::produce(edm::Event& evt, const edm::EventSetup& es) 
   std::auto_ptr<pat::MuonCollection> output(new pat::MuonCollection);
   output->reserve(nbMuon);
 
+  const float muonMass = 0.1056583715;
+  float muonSigma = muonMass*1e-6;
+  float chi2 = 0.0;
+  float ndf = 0.0;
+
   for(unsigned i = 0 ; i < nbMuon; i++){
     pat::Muon muon(muons->at(i));
+    if(muon.innerTrack().isNonnull() && TNT){
+        muon.addUserFloat("_qualityhighPurity", muon.innerTrack()->quality(reco::TrackBase::highPurity));
+        reco::TransientTrack muonTransTkPtr = theB->build(*(muon.innerTrack()));
+        GlobalPoint mu_pca_bs = muonTransTkPtr.trajectoryStateClosestToPoint(thebs).position();
+        GlobalPoint mu_pca_pv = muonTransTkPtr.trajectoryStateClosestToPoint(thepv).position();
+        muon.addUserFloat("_track_PCAx_bs", mu_pca_bs.x());
+        muon.addUserFloat("_track_PCAy_bs", mu_pca_bs.y());
+        muon.addUserFloat("_track_PCAz_bs", mu_pca_bs.z());
+        muon.addUserFloat("_track_PCAx_pv", mu_pca_pv.x());
+        muon.addUserFloat("_track_PCAy_pv", mu_pca_pv.y());
+        muon.addUserFloat("_track_PCAz_pv", mu_pca_pv.z());
 
+        // extract track fit errors 
+        KinematicParticleFactoryFromTransientTrack pFactory;
+        RefCountedKinematicParticle muonParticle = pFactory.particle(muonTransTkPtr, muonMass, chi2, ndf, muonSigma);
+        muon.addUserFloat("_trackFitErrorMatrix_00", muonParticle->stateAtPoint(mu_pca_bs).kinematicParametersError().matrix()(0,0));
+        muon.addUserFloat("_trackFitErrorMatrix_01", muonParticle->stateAtPoint(mu_pca_bs).kinematicParametersError().matrix()(0,1));
+        muon.addUserFloat("_trackFitErrorMatrix_02", muonParticle->stateAtPoint(mu_pca_bs).kinematicParametersError().matrix()(0,2));
+        muon.addUserFloat("_trackFitErrorMatrix_11", muonParticle->stateAtPoint(mu_pca_bs).kinematicParametersError().matrix()(1,1));
+        muon.addUserFloat("_trackFitErrorMatrix_12", muonParticle->stateAtPoint(mu_pca_bs).kinematicParametersError().matrix()(1,2));
+        muon.addUserFloat("_trackFitErrorMatrix_22", muonParticle->stateAtPoint(mu_pca_bs).kinematicParametersError().matrix()(2,2));
+    }
+    else{
+        muon.addUserFloat("_qualityhighPurity", -9999.0);
+        muon.addUserFloat("_track_PCAx_bs", -9999.0);
+        muon.addUserFloat("_track_PCAy_bs", -9999.0);
+        muon.addUserFloat("_track_PCAz_bs", -9999.0);
+        muon.addUserFloat("_track_PCAx_pv", -9999.0);
+        muon.addUserFloat("_track_PCAy_pv", -9999.0);
+        muon.addUserFloat("_track_PCAz_pv", -9999.0);
+        muon.addUserFloat("_trackFitErrorMatrix_00", -9999.0);
+        muon.addUserFloat("_trackFitErrorMatrix_01", -9999.0);
+        muon.addUserFloat("_trackFitErrorMatrix_02", -9999.0);
+        muon.addUserFloat("_trackFitErrorMatrix_11", -9999.0);
+        muon.addUserFloat("_trackFitErrorMatrix_12", -9999.0);
+        muon.addUserFloat("_trackFitErrorMatrix_22", -9999.0);
+    }
     // require a good vertex 
     if (firstGoodVertex == vertices->end()){
         muon.addUserInt("_tight", -9999);

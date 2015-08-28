@@ -26,6 +26,9 @@
 #include "DataFormats/Common/interface/View.h"
 #include "FWCore/ServiceRegistry/interface/Service.h"
 #include "CommonTools/UtilAlgos/interface/TFileService.h"
+#include "TrackingTools/Records/interface/TransientTrackRecord.h"
+#include "TrackingTools/TransientTrack/interface/TransientTrackBuilder.h"
+#include "RecoVertex/KinematicFitPrimitives/interface/KinematicParticleFactoryFromTransientTrack.h"
 
 
 class MiniAODElectronIDEmbedder : public edm::EDProducer
@@ -41,7 +44,7 @@ private:
   virtual void beginJob();
   virtual void produce(edm::Event& iEvent, const edm::EventSetup& iSetup);
   virtual void endJob();
-
+  bool isGoodVertex(const reco::Vertex& vtxx);
   // Data
   edm::EDGetTokenT<edm::View<pat::Electron> > electronCollectionToken_;
   std::vector<edm::EDGetTokenT<edm::ValueMap<bool> > > idMapTokens_; // store all ID tokens
@@ -55,6 +58,10 @@ private:
   edm::InputTag vtxSrc_;
   edm::InputTag beamSrc_;
 
+  int patElectron_vtx_ndof_min_;
+  double patElectron_vtx_rho_max_;
+  double patElectron_vtx_position_z_max_;
+  bool TNT;
 };
 
 
@@ -78,7 +85,10 @@ MiniAODElectronIDEmbedder::MiniAODElectronIDEmbedder(const edm::ParameterSet& iC
 
   vtxSrc_ = iConfig.getParameter<edm::InputTag>("vtxSrc");
   beamSrc_ = iConfig.getParameter<edm::InputTag>("beamSrc");
-
+  patElectron_vtx_ndof_min_         = iConfig.getParameter<int>("patElectron_vtx_ndof_min");
+  patElectron_vtx_rho_max_          = iConfig.getParameter<int>("patElectron_vtx_rho_max");
+  patElectron_vtx_position_z_max_   = iConfig.getParameter<double>("patElectron_vtx_position_z_max");
+  TNT = iConfig.getParameter<bool>("TNT");
 
   for(unsigned int i = 0;
       (i < idTags.size() && i < idLabels_.size()); // ignore IDs with no known label
@@ -120,13 +130,31 @@ void MiniAODElectronIDEmbedder::produce(edm::Event& iEvent, const edm::EventSetu
 
   edm::Handle<reco::VertexCollection> vertices;
   iEvent.getByLabel(vtxSrc_, vertices);
-  const reco::Vertex& thePV = *vertices->begin();
-
+  reco::VertexCollection::const_iterator firstGoodVertex = vertices->end();
+  for (reco::VertexCollection::const_iterator it = vertices->begin(); it != firstGoodVertex; it++)
+  {
+        if(isGoodVertex(*it)){
+            firstGoodVertex = it;
+            break;
+        }
+  }
   reco::BeamSpot beamSpot;
   edm::Handle<reco::BeamSpot> beamSpotHandle;
-  iEvent.getByLabel(beamSrc_, beamSpotHandle);
-  if ( beamSpotHandle.isValid() )  beamSpot = *beamSpotHandle;
-  math::XYZPoint point(beamSpot.x0(),beamSpot.y0(), beamSpot.z0());
+  math::XYZPoint point;
+  GlobalPoint thebs, thepv;
+  edm::ESHandle<TransientTrackBuilder> theB; 
+  if(TNT){
+      iSetup.get<TransientTrackRecord>().get("TransientTrackBuilder",theB);
+      GlobalPoint thepv(firstGoodVertex->position().x(),firstGoodVertex->position().y(),firstGoodVertex->position().z());
+      iEvent.getByLabel(beamSrc_, beamSpotHandle);
+      if ( beamSpotHandle.isValid() )  beamSpot = *beamSpotHandle;
+      math::XYZPoint point(beamSpot.x0(),beamSpot.y0(), beamSpot.z0());
+      GlobalPoint thebs(beamSpot.x0(),beamSpot.y0(),beamSpot.z0());
+  }
+  const float elecMass = 0.000510998928;
+  float elecSigma = elecMass*1e-6;
+  float chi2 = 0.0;
+  float ndf = 0.0;
 
   for(unsigned int i = 0;
       i < idMapTokens_.size();
@@ -161,12 +189,49 @@ void MiniAODElectronIDEmbedder::produce(edm::Event& iEvent, const edm::EventSetu
       if(ei->passConversionVeto()) passConversionVeto = 1;
       out->back().addUserInt("passNumberOfHits", passNumberOfHits);
       out->back().addUserInt("passConversionVeto", passConversionVeto);
+      if (firstGoodVertex == vertices->end() || !(ei->track().isNonnull()) || !(ei->gsfTrack().isNonnull()) || !TNT){
+          out->back().addUserFloat("_dxy", -9999);
+          out->back().addUserFloat("_dz", -9999);
+          out->back().addUserFloat("_gsfTrack_PCAx_bs", -9999);
+          out->back().addUserFloat("_gsfTrack_PCAy_bs", -9999);
+          out->back().addUserFloat("_gsfTrack_PCAz_bs", -9999);
+          out->back().addUserFloat("_gsfTrack_PCAx_pv", -9999);
+          out->back().addUserFloat("_gsfTrack_PCAy_pv", -9999);
+          out->back().addUserFloat("_gsfTrack_PCAz_pv", -9999);
+          out->back().addUserFloat("_gsfTrackFitErrorMatrix_00", -9999);
+          out->back().addUserFloat("_gsfTrackFitErrorMatrix_01", -9999);
+          out->back().addUserFloat("_gsfTrackFitErrorMatrix_02", -9999);
+          out->back().addUserFloat("_gsfTrackFitErrorMatrix_11", -9999);
+          out->back().addUserFloat("_gsfTrackFitErrorMatrix_12", -9999);
+          out->back().addUserFloat("_gsfTrackFitErrorMatrix_22", -9999);
 
-      out->back().addUserFloat("_dxy", (-1.0)*ei->gsfTrack()->dxy(thePV.position()));
-      out->back().addUserFloat("_dz", ei->gsfTrack()->dz(thePV.position()));
+      }
+      else{
+          out->back().addUserFloat("_dxy", (-1.0)*ei->gsfTrack()->dxy(firstGoodVertex->position()));
+          out->back().addUserFloat("_dz", ei->gsfTrack()->dz(firstGoodVertex->position()));
+
+          reco::TransientTrack elecTransTkPtr = theB->build(*(ei->track()));
+          GlobalPoint patElectron_pca_bs = elecTransTkPtr.trajectoryStateClosestToPoint(thebs).position();
+          GlobalPoint patElectron_pca_pv = elecTransTkPtr.trajectoryStateClosestToPoint(thepv).position();
+          out->back().addUserFloat("_gsfTrack_PCAx_bs", patElectron_pca_bs.x());
+          out->back().addUserFloat("_gsfTrack_PCAy_bs", patElectron_pca_bs.y());
+          out->back().addUserFloat("_gsfTrack_PCAz_bs", patElectron_pca_bs.z());
+          out->back().addUserFloat("_gsfTrack_PCAx_pv", patElectron_pca_pv.x());
+          out->back().addUserFloat("_gsfTrack_PCAy_pv", patElectron_pca_pv.y());
+          out->back().addUserFloat("_gsfTrack_PCAz_pv", patElectron_pca_pv.z());
+
+          // extract track fit errors
+          KinematicParticleFactoryFromTransientTrack pFactory;
+          RefCountedKinematicParticle elecParticle = pFactory.particle(elecTransTkPtr, elecMass, chi2, ndf, elecSigma);
+          out->back().addUserFloat("_gsfTrackFitErrorMatrix_00", elecParticle->stateAtPoint(patElectron_pca_bs).kinematicParametersError().matrix()(0,0));
+          out->back().addUserFloat("_gsfTrackFitErrorMatrix_01", elecParticle->stateAtPoint(patElectron_pca_bs).kinematicParametersError().matrix()(0,1));
+          out->back().addUserFloat("_gsfTrackFitErrorMatrix_02", elecParticle->stateAtPoint(patElectron_pca_bs).kinematicParametersError().matrix()(0,2));
+          out->back().addUserFloat("_gsfTrackFitErrorMatrix_11", elecParticle->stateAtPoint(patElectron_pca_bs).kinematicParametersError().matrix()(1,1));
+          out->back().addUserFloat("_gsfTrackFitErrorMatrix_12", elecParticle->stateAtPoint(patElectron_pca_bs).kinematicParametersError().matrix()(1,2));
+          out->back().addUserFloat("_gsfTrackFitErrorMatrix_22", elecParticle->stateAtPoint(patElectron_pca_bs).kinematicParametersError().matrix()(2,2));
+      }
       out->back().addUserFloat("_dxy_bs", ei->gsfTrack()->dxy(point));
       out->back().addUserInt("expectedMissingInnerHits", ei->gsfTrack()->hitPattern().numberOfHits(reco::HitPattern::MISSING_INNER_HITS));
-
 
       for(unsigned int i = 0; // Loop over ID working points
 	  i < ids.size(); ++i)
@@ -186,10 +251,16 @@ void MiniAODElectronIDEmbedder::produce(edm::Event& iEvent, const edm::EventSetu
           int result = (*(categories.at(i)))[eptr];
           out->back().addUserFloat(categoryLabels_.at(i), float(result));
         }
-
     }
+    iEvent.put(out);
+}
 
-  iEvent.put(out);
+bool MiniAODElectronIDEmbedder::isGoodVertex(const reco::Vertex& vtxx) {
+  if (vtxx.isFake()) return false;
+  if (vtxx.ndof() < patElectron_vtx_ndof_min_) return false;
+  if (vtxx.position().Rho() > patElectron_vtx_rho_max_) return false;
+  if (fabs(vtxx.position().Z()) > patElectron_vtx_position_z_max_) return false;
+  return true;
 }
 
 
