@@ -39,6 +39,9 @@ def opts():
     parser.add_option("--cpu", dest="cpu", default=False, action="store_true", help="profile CPU usage (igprof pp)")
     parser.add_option("--FS", dest="FS", default='tt', help="final state: tt, et, mt, em")
     parser.add_option("--isData", dest="isData", default=False, action="store_true", help="run over data")
+    parser.add_option("--is50ns", dest="is50ns", default=False, action="store_true", help="run over 50ns sample")
+    parser.add_option("--TNT", dest="TNT", default=False, action="store_true", help="store TNT stuff")
+
     parser.add_option("--newXROOTD", dest="newXROOTD", default="", help="run over data")
 
     options, args = parser.parse_args()
@@ -92,15 +95,18 @@ SVFit = 1 if options.doSVFit else 0
 MVAMET = 1 if options.doMVAMET else 0
 TauTauMVAMET = 1 if options.doTauTauMVAMET else 0
 isMC = 0 if options.isData else 1
- 
+TNT = 1 if options.TNT else 0
+
+useLumiMask =  '/afs/cern.ch/cms/CAF/CMSCOMM/COMM_DQM/certification/Collisions15/13TeV/Cert_246908-254349_13TeV_PromptReco_Collisions15_JSON.txt' if options.isData else ''
+
 localJobInfo = localJob_cfg.localJobInfo
 
 samples = getSamples(options.sample)
 
 if ":" in localJobInfo['eventsToProcess']:
-    cmd = "./make_ntuples_cfg.py eventsToProcess=%s outputFile=myTestFile.root inputFiles=%s channels=%s isMC=%i nExtraJets=8 runMVAMET=%i runTauTauMVAMET=%i svFit=%i " %(localJobInfo['eventsToProcess'], localJobInfo['inputFile'], options.FS, isMC, MVAMET, TauTauMVAMET, SVFit)
+    cmd = "./make_ntuples_cfg.py eventsToProcess=%s outputFile=myTestFile.root inputFiles=%s channels=%s isMC=%i TNT=%i lumiMask=%s nExtraJets=8 runMVAMET=%i runTauTauMVAMET=%i svFit=%i " %(localJobInfo['eventsToProcess'], localJobInfo['inputFile'], options.FS, isMC, TNT, useLumiMask, MVAMET, TauTauMVAMET, SVFit)
 else:
-    cmd = "./make_ntuples_cfg.py maxEvents=%i outputFile=myTestFile.root inputFiles=%s channels=%s isMC=%i nExtraJets=8 runMVAMET=%i runTauTauMVAMET=%i svFit=%i " %(localJobInfo['maxEvents'], localJobInfo['inputFile'], options.FS, isMC, MVAMET, TauTauMVAMET, SVFit)
+    cmd = "./make_ntuples_cfg.py maxEvents=%i outputFile=myTestFile.root inputFiles=%s channels=%s isMC=%i TNT=%i lumiMask=%s nExtraJets=8 runMVAMET=%i runTauTauMVAMET=%i svFit=%i " %(localJobInfo['maxEvents'], localJobInfo['inputFile'], options.FS, isMC, TNT, useLumiMask, MVAMET, TauTauMVAMET, SVFit)
 
 if options.memory:
     checkCmd = 'igprof -d -mp -z -o igprof.mp.gz  cmsRun '#"valgrind --tool=memcheck `cmsvgsupp` --leak-check=yes --show-reachable=yes --num-callers=20 --track-fds=yes cmsRun "
@@ -130,9 +136,17 @@ cmd += cuts
 if not options.runLocal:
     tempFile = "do_test.sh"
     outFile = "do.sh"
-    cmd = "submit_job.py %s make_ntuples_cfg.py channels=\"%s\" isMC=%i nExtraJets=8 runMVAMET=%i runTauTauMVAMET=%i svFit=%i" %(options.name, options.FS, isMC, MVAMET, TauTauMVAMET, SVFit)
+    cmd = "submit_job.py %s make_ntuples_cfg.py channels=\"%s\" isMC=%i  TNT=%i lumiMask=%s nExtraJets=8 runMVAMET=%i runTauTauMVAMET=%i svFit=%i" %(options.name, options.FS, isMC, TNT, useLumiMask,MVAMET, TauTauMVAMET, SVFit)
+    if options.is50ns:
+        cmd += ' use25ns=0'
+    else:
+        cmd += ' use25ns=1'
+
     if isMC:
-        cmd += " --campaign-tag=\"RunIISpring15DR74-Asympt25ns*\" --das-replace-tuple=$fsa/MetaData/tuples/MiniAOD-13TeV_RunIISpring15DR74.json --samples %s -o %s" %(samples, tempFile)
+        if options.is50ns:
+            cmd += " --campaign-tag=\"RunIISpring15DR74-Asympt50ns*\" --das-replace-tuple=$fsa/MetaData/tuples/MiniAOD-13TeV_RunIISpring15DR74.json --samples %s -o %s" %(samples, tempFile)
+        else:
+            cmd += " --campaign-tag=\"RunIISpring15DR74-Asympt25ns*\" --das-replace-tuple=$fsa/MetaData/tuples/MiniAOD-13TeV_RunIISpring15DR74.json --samples %s -o %s" %(samples, tempFile)
     else:
         cmd += " --data --das-replace-tuple=$fsa/MetaData/tuples/MiniAOD-13TeV_Data.json --samples %s -o %s" %(samples, tempFile)
 
