@@ -32,42 +32,34 @@ Checkout the FinalStateAnalysis repository:
 ```bash
   git clone -b miniAOD_dev_74X https://github.com/zaixingmao/FSA.git FinalStateAnalysis
   cd FinalStateAnalysis
-```
-
-Checkout the needed CMSSW tags:
-
-```bash
   cd recipe/
-  # Checkout needed packages and apply patches
-  # do >> HZZ=1 ./recipe.sh  instead if you want H->ZZ MELA stuff.
   ./recipe.sh
-  cd ..
-  # Setup FSA environment
   source environment.sh
-  # Compile
-  pushd ..
-  scram b -j 8
-  popd
+cd ../..
 ```
 
-Checkout METProducers to produce MEt CovMatrix
+
+Checkout SVFit, MVAMET stuff:
+
 ```bash
+git clone https://github.com/veelken/SVfit_standalone.git TauAnalysis/SVfitStandalone
 git cms-addpkg RecoMET/METProducers/
-```
-
-Checkout MVAMet (https://twiki.cern.ch/twiki/bin/view/CMS/MVAMet#CMSSW_7_2_X_requires_slc6_MiniAO)
-
-```bash
 git cms-addpkg RecoMET/METPUSubtraction/
-cd RecoMET/METPUSubtraction/
-git clone https://github.com/rfriese/RecoMET-METPUSubtraction data -b 72X-13TeV-Phys14_25_V4-26Mar15
-cp ../../FinalStateAnalysis/recipe/PFMETAlgorithmMVA.cc src/PFMETAlgorithmMVA.cc
 ```
 
 
-You must always set up the CMSSW environment + some extra variables from FinalStateAnalysis:
+Add Jan's MVATauTau:
 
 ```bash
-  cmsenv
-  source $CMSSW_BASE/src/FinalStateAnalysis/environment.sh
+cd RecoMET/METPUSubtraction/plugins
+wget https://raw.githubusercontent.com/CERN-PH-CMG/cmg-cmssw/CMGTools-from-CMSSW_7_4_3/RecoMET/METPUSubtraction/plugins/PFMETProducerMVATauTau.cc .
+wget https://raw.githubusercontent.com/CERN-PH-CMG/cmg-cmssw/CMGTools-from-CMSSW_7_4_3/RecoMET/METPUSubtraction/plugins/PFMETProducerMVATauTau.h .
+cd ../../../
+```
+
+Build:
+
+```bash
+export USER_CXXFLAGS=" -Wno-delete-non-virtual-dtor -Wno-error=unused-but-set-variable -Wno-error=unused-variable -Wno-error=sign-compare -Wno-error=reorder"
+scram b -j 8
 ```
