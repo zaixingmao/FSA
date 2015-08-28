@@ -320,18 +320,20 @@ const bool findDecay(const reco::GenParticleRefProd genCollectionRef, int pdgIdM
   }
   reco::GenParticleCollection genParticles = *genCollectionRef;
   reco::GenParticleRefVector allMothers;  
-  GenParticlesHelper::findParticles( *genCollectionRef,     
-		 allMothers, std::abs(pdgIdMother), 2);
-  GenParticlesHelper::findParticles( *genCollectionRef,     
-		 allMothers, std::abs(pdgIdMother), 3);
-
-  reco::GenParticleRefVector descendents;
+  GenParticlesHelper::findParticles( *genCollectionRef, allMothers, std::abs(pdgIdMother), 0);
+  int nDecays = 0;
   for ( GenParticlesHelper::IGR iMom = allMothers.begin(); iMom != allMothers.end(); ++iMom ) {
-    GenParticlesHelper::findDescendents( *iMom, descendents, 2, std::abs(pdgIdDaughter)); //Might not be stable, but it's fine
-    GenParticlesHelper::findDescendents( *iMom, descendents, 3, std::abs(pdgIdDaughter)); //Might not be stable, but it's fine
+    bool found = false;
+    int n = (*iMom)->numberOfDaughters();
+    for(int i = 0; i < n; i++){
+        if(abs((*iMom)->daughter(i)->pdgId()) == abs(pdgIdDaughter)){
+            found = true;
+            break;
+        }
+    }
+    if(found) nDecays += 1;
   }
-
-  return (descendents.size() > 0);
+  return nDecays;
 }
 
 
