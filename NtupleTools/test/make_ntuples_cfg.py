@@ -183,7 +183,7 @@ if options.TNT:
     process.load('TrackingTools.TransientTrack.TransientTrackBuilder_cfi')
 #load magfield and geometry (for mass resolution)
 process.load('Configuration.StandardSequences.GeometryRecoDB_cff')
-process.load('Configuration.StandardSequences.MagneticField_cff')
+process.load('Configuration.StandardSequences.MagneticField_38T_PostLS1_cff')
 process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_cff')
 
 # Need the global tag for geometry etc.
@@ -230,6 +230,10 @@ output_commands = []
 # embed electron ids
 electronMVANonTrigIDLabel = "BDTIDNonTrig"
 electronMVATrigIDLabel = "BDTIDTrig"
+# process.load("RecoEgamma.ElectronIdentification.ElectronMVAValueMapProducer_cfi")
+# process.electronMVA = cms.Path(process.electronMVAValueMapProducer)
+# process.schedule.append(process.electronMVA)
+
 from FinalStateAnalysis.NtupleTools.embedElectronIDs import embedElectronIDs
 fs_daughter_inputs['electrons'] = embedElectronIDs(process, True,fs_daughter_inputs['electrons'], fs_daughter_inputs['vertices'], fs_daughter_inputs['beamSpots'], options.TNT)
 
