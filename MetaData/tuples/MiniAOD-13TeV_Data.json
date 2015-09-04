@@ -1,0 +1,10 @@
+{
+  "data_MuonEG_Run2015B_PromptReco_50ns" : "/MuonEG/Run2015B-PromptReco-v1/MINIAOD",
+  "data_Muon_Run2015B_PromptReco_50ns" : "/SingleMuon/Run2015B-PromptReco-v1/MINIAOD",
+  "data_Electron_Run2015B_PromptReco_50ns" : "/SingleElectron/Run2015B-PromptReco-v1/MINIAOD",
+  "data_Tau_Run2015B_PromptReco_50ns" : "/Tau/Run2015B-PromptReco-v1/MINIAOD",
+  "data_Muon_Run2015C_PromptReco_25ns" : "/SingleMuon/Run2015C-PromptReco-v1/MINIAOD",
+  "data_MuonEG_Run2015C_PromptReco_25ns" : "/MuonEG/Run2015C-PromptReco-v1/MINIAOD",
+  "data_Electron_Run2015C_PromptReco_25ns" : "/SingleElectron/Run2015C-PromptReco-v1/MINIAOD",
+  "data_Tau_Run2015C_PromptReco_25ns" : "/Tau/Run2015C-PromptReco-v1/MINIAOD"
+}
