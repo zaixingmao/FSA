@@ -143,6 +143,7 @@ void MiniAODElectronIDEmbedder::produce(edm::Event& iEvent, const edm::EventSetu
   math::XYZPoint point;
   GlobalPoint thebs, thepv;
   edm::ESHandle<TransientTrackBuilder> theB; 
+  TNT = false;
   if(TNT){
       iSetup.get<TransientTrackRecord>().get("TransientTrackBuilder",theB);
       GlobalPoint thepv(firstGoodVertex->position().x(),firstGoodVertex->position().y(),firstGoodVertex->position().z());
@@ -189,7 +190,7 @@ void MiniAODElectronIDEmbedder::produce(edm::Event& iEvent, const edm::EventSetu
       if(ei->passConversionVeto()) passConversionVeto = 1;
       out->back().addUserInt("passNumberOfHits", passNumberOfHits);
       out->back().addUserInt("passConversionVeto", passConversionVeto);
-      if (firstGoodVertex == vertices->end() || !(ei->track().isNonnull()) || !(ei->gsfTrack().isNonnull()) || !TNT){
+      if (firstGoodVertex == vertices->end() || !(ei->closestCtfTrackRef().isNonnull()) || !(ei->gsfTrack().isNonnull()) || !TNT){
           out->back().addUserFloat("_dxy", -9999);
           out->back().addUserFloat("_dz", -9999);
           out->back().addUserFloat("_gsfTrack_PCAx_bs", -9999);
@@ -210,7 +211,7 @@ void MiniAODElectronIDEmbedder::produce(edm::Event& iEvent, const edm::EventSetu
           out->back().addUserFloat("_dxy", (-1.0)*ei->gsfTrack()->dxy(firstGoodVertex->position()));
           out->back().addUserFloat("_dz", ei->gsfTrack()->dz(firstGoodVertex->position()));
 
-          reco::TransientTrack elecTransTkPtr = theB->build(*(ei->track()));
+          reco::TransientTrack elecTransTkPtr = theB->build(*(ei->closestCtfTrackRef()));
           GlobalPoint patElectron_pca_bs = elecTransTkPtr.trajectoryStateClosestToPoint(thebs).position();
           GlobalPoint patElectron_pca_pv = elecTransTkPtr.trajectoryStateClosestToPoint(thepv).position();
           out->back().addUserFloat("_gsfTrack_PCAx_bs", patElectron_pca_bs.x());
