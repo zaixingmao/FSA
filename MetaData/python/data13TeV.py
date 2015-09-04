@@ -288,5 +288,20 @@ datadefs["Tbar_tW-Asympt50ns"] = {
     'x_sec': 35.6*picobarns,
 }
 
+datadefs["GluGluHToTauTau_M125-Asympt25ns"] = {
+    'analyses': [],
+    'datasetpath': '/GluGluHToTauTau_M125_13TeV_powheg_pythia8/RunIISpring15DR74-Asympt25ns_MCRUN2_74_V9-v1/MINIAODSIM',
+    'pu': 'Asympt25ns',
+    'calibrationTarget': 'RunIISpring15DR74',
+    'x_sec': -999,
+}
+datadefs["VBFHToTauTau_M125-Asympt25ns"] = {
+    'analyses': [],
+    'datasetpath': '/VBFHToTauTau_M125_13TeV_powheg_pythia8/RunIISpring15DR74-Asympt25ns_MCRUN2_74_V9-v1/MINIAODSIM',
+    'pu': 'Asympt25ns',
+    'calibrationTarget': 'RunIISpring15DR74',
+    'x_sec': -999,
+}
+
 if __name__=="__main__":
     query_cli(datadefs)

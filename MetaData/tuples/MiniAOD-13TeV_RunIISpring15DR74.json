@@ -19,5 +19,7 @@
   "Tbar_tW": "ST_tW_antitop_5f_inclusiveDecays_13TeV-powheg-pythia8_TuneCUETP8M1",
   "T_tW": "ST_tW_top_5f_inclusiveDecays_13TeV-powheg-pythia8_TuneCUETP8M1",
   "T_t-channel": "ST_t-channel_top_4f_leptonDecays_13TeV-powheg-pythia8_TuneCUETP8M1",
-  "Tbar_t-channel": "ST_t-channel_antitop_4f_leptonDecays_13TeV-powheg-pythia8_TuneCUETP8M1"
+  "Tbar_t-channel": "ST_t-channel_antitop_4f_leptonDecays_13TeV-powheg-pythia8_TuneCUETP8M1",
+  "ggH125": "GluGluHToTauTau_M125_13TeV_powheg_pythia8",
+  "VBFH125": "VBFHToTauTau_M125_13TeV_powheg_pythia8"
 }
