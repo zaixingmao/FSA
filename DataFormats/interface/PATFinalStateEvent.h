@@ -152,6 +152,8 @@ class PATFinalStateEvent {
 
     //Finds a decay in MC
     const bool findDecay(const int pdgIdMother, const int pdgIdDaughter) const;
+    int findPromptDecay(const int pdgId, const int status = 1) const;
+    int nDirectPromptTauDecayProductFinalState(const int pdgId) const;
 
     /// Get the PU scenario used to generate this events (if MC)
     const std::string& puTag() const;

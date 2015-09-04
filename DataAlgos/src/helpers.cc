@@ -336,6 +336,35 @@ const bool findDecay(const reco::GenParticleRefProd genCollectionRef, int pdgIdM
   return nDecays;
 }
 
+int findPromptDecay(const reco::GenParticleRefProd genCollectionRef, int pdgId, int status)
+{
+  int nPromptParticles = 0;
+  //if no genPaticle no matching
+  if(!genCollectionRef){
+    return nPromptParticles;
+  }
+  reco::GenParticleCollection genParticles = *genCollectionRef;
+  for(size_t m = 0; m != genParticles.size(); ++m) {
+    const reco::GenParticle& match = genParticles[m];
+    if (abs(match.pdgId()) == pdgId && match.statusFlags().isPrompt() && match.status() == status) nPromptParticles += 1;
+  }
+  return nPromptParticles;
+}
+
+int nDirectPromptTauDecayProductFinalState(const reco::GenParticleRefProd genCollectionRef, int pdgId)
+{
+  int nPromptParticles = 0;
+  //if no genPaticle no matching
+  if(!genCollectionRef){
+    return nPromptParticles;
+  }
+  reco::GenParticleCollection genParticles = *genCollectionRef;
+  for(size_t m = 0; m != genParticles.size(); ++m) {
+    const reco::GenParticle& match = genParticles[m];
+    if (abs(match.pdgId()) == pdgId && match.isDirectPromptTauDecayProductFinalState()) nPromptParticles += 1;
+  }
+  return nPromptParticles;
+}
 
 float jetQGVariables(const reco::CandidatePtr  jetptr, const std::string& myvar, const std::vector<edm::Ptr<reco::Vertex>>& recoVertices)
 {

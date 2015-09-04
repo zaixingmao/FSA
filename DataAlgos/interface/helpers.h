@@ -48,6 +48,8 @@ const reco::Candidate::LorentzVector getGenNu(const reco::GenParticleRefProd gen
 
 ///Helper function to find a gen particle given pdgid and status
 const bool findDecay(const reco::GenParticleRefProd genCollectionRef, int pdgIdMother, int pdgIdDaughter);
+int findPromptDecay(const reco::GenParticleRefProd genCollectionRef, int pdgId, int status);
+int nDirectPromptTauDecayProductFinalState(const reco::GenParticleRefProd genCollectionRef, int pdgId);
 
 /// Helper function to get the first interesting mother particle 
 const reco::GenParticleRef getMotherSmart(const reco::GenParticleRef genPart, int idNOTtoMatch = -999);

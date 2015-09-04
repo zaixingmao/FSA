@@ -101,6 +101,12 @@ gen = PSet(
     isWmunu='evt.findDecay(24,13)',
     isWenu='evt.findDecay(24,11)',
 
+    nPromptTaus='evt.findPromptDecay(15, 2)',
+    nPromptElec='evt.findPromptDecay(11, 1)',
+    nPromptMuon='evt.findPromptDecay(13, 1)',
+    nTauNuFromPromptTaus='evt.nDirectPromptTauDecayProductFinalState(16)',
+
+
     NUP='evt.lesHouches.NUP',
     EmbPtWeight='evt.generatorFilter.filterEfficiency',
     genEventWeight='evt.weight("genEventWeight")',

@@ -376,6 +376,15 @@ const bool PATFinalStateEvent::findDecay(const int pdgIdMother, const int pdgIdD
   return fshelpers::findDecay(genParticles_, pdgIdMother, pdgIdDaughter);
 }
 
+int PATFinalStateEvent::findPromptDecay(const int pdgId, const int status) const{
+  return fshelpers::findPromptDecay(genParticles_, pdgId, status);
+}
+
+int PATFinalStateEvent::nDirectPromptTauDecayProductFinalState(const int pdgId) const{
+  return fshelpers::nDirectPromptTauDecayProductFinalState(genParticles_, pdgId);
+}
+
+
 float  PATFinalStateEvent::jetVariables(const reco::CandidatePtr jet, const std::string& myvar) const{
   return fshelpers::jetQGVariables( jet, myvar, recoVertices_);
 }
