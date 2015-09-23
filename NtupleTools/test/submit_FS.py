@@ -69,14 +69,14 @@ skimCuts['tt'] = {"ID": "object.tauID(\\\"decayModeFindingNewDMs\\\") > 0.5",
                  "Pt": "object.pt() > 45",
                   "Eta": "abs(object.eta()) < 2.1",
                   }
-skimCuts['et'] = {"ID_e": "object.userFloat(\'MVANonTrigWP80\')> 0.5",
+skimCuts['et'] = {# "ID_e": "object.userFloat(\'MVANonTrigWP80\')> 0.5",
                   "Pt_e": "object.pt() > 23",
                   "Eta_e": "abs(object.eta()) < 2.1",
                   "ID_t": "object.tauID(\\\"decayModeFindingNewDMs\\\") > 0.5",
                   "Pt_t": "object.pt() > 20",
                   "Eta_t": "abs(object.eta()) < 2.3",
                   }
-skimCuts['em'] = {"ID_e": "object.userFloat(\'MVANonTrigWP80\')> 0.5",
+skimCuts['em'] = {# "ID_e": "object.userFloat(\'MVANonTrigWP80\')> 0.5",
                   "Pt_e": "object.pt() > 13",
                   "Eta_e": "abs(object.eta()) < 2.5",
                   "ID_m": "object.isMediumMuon() > 0.5",
@@ -90,6 +90,9 @@ skimCuts['mt'] = {"ID_m": "object.isMediumMuon() > 0.5",
                   "Pt_t": "object.pt() > 20",
                   "Eta_t": "abs(object.eta()) < 2.3",
                   }
+skimCuts['ee'] = {"Pt": "object.pt() > 13",
+                  "Eta": "abs(object.eta()) < 2.5",
+                  }
 
 SVFit = 1 if options.doSVFit else 0
 MVAMET = 1 if options.doMVAMET else 0
@@ -98,7 +101,7 @@ isMC = 0 if options.isData else 1
 TNT = 1 if options.TNT else 0
 
 #useLumiMask =  '/afs/cern.ch/cms/CAF/CMSCOMM/COMM_DQM/certification/Collisions15/13TeV/Cert_246908-254349_13TeV_PromptReco_Collisions15_JSON.txt' if options.isData else ''
-useLumiMask =  '/afs/cern.ch/cms/CAF/CMSCOMM/COMM_DQM/certification/Collisions15/13TeV/Cert_246908-255031_13TeV_PromptReco_Collisions15_25ns_JSON.txt' if options.isData else ''
+useLumiMask =  '/afs/cern.ch/cms/CAF/CMSCOMM/COMM_DQM/certification/Collisions15/13TeV/Cert_246908-255031_13TeV_PromptReco_Collisions15_25ns_JSON_v2.txt' if options.isData else ''
 localJobInfo = localJob_cfg.localJobInfo
 
 samples = getSamples(options.sample)
@@ -120,7 +123,7 @@ fs = expandFinalStates(options.FS)
 cuts = " "
 for iFS in fs:
     cuts += "skimCuts-%s=\"" %iFS
-    if iFS == 'tt':
+    if iFS == 'tt' or iFS == 'ee':
         for ikey in skimCuts[iFS].keys():
             cuts+= "%s," %(skimCuts[iFS][ikey].replace("object", "daughter(0)"))
             cuts+= "%s," %(skimCuts[iFS][ikey].replace("object", "daughter(1)"))
