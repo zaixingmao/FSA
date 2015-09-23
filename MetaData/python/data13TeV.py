@@ -153,6 +153,22 @@ datadefs["ZprimeToTauTau_M_500-Asympt25ns"] = {
     'x_sec': -999,
 }
 
+datadefs["ZprimeToTauTau_M_1000-Asympt25ns"] = {
+    'analyses': [],
+    'datasetpath': '/ZprimeToTauTau_M_1000_TuneCUETP8M1_tauola_13TeV_pythia8/RunIISpring15DR74-Asympt25ns_MCRUN2_74_V9-v1/MINIAODSIM',
+    'pu': 'Asympt25ns',
+    'calibrationTarget': 'RunIISpring15DR74',
+    'x_sec': -999,
+}
+
+datadefs["ZprimeToTauTau_M_1500-Asympt25ns"] = {
+    'analyses': [],
+    'datasetpath': '/ZprimeToTauTau_M_1500_TuneCUETP8M1_tauola_13TeV_pythia8/RunIISpring15DR74-Asympt25ns_MCRUN2_74_V9-v1/MINIAODSIM',
+    'pu': 'Asympt25ns',
+    'calibrationTarget': 'RunIISpring15DR74',
+    'x_sec': -999,
+}
+
 datadefs["ZprimeToTauTau_M_2000-Asympt25ns"] = {
     'analyses': [],
     'datasetpath': '/ZprimeToTauTau_M_2000_TuneCUETP8M1_tauola_13TeV_pythia8/RunIISpring15DR74-Asympt25ns_MCRUN2_74_V9-v1/MINIAODSIM',
@@ -164,6 +180,46 @@ datadefs["ZprimeToTauTau_M_2000-Asympt25ns"] = {
 datadefs["ZprimeToTauTau_M_2500-Asympt25ns"] = {
     'analyses': [],
     'datasetpath': '/ZprimeToTauTau_M_2500_TuneCUETP8M1_tauola_13TeV_pythia8/RunIISpring15DR74-Asympt25ns_MCRUN2_74_V9-v1/MINIAODSIM',
+    'pu': 'Asympt25ns',
+    'calibrationTarget': 'RunIISpring15DR74',
+    'x_sec': -999,
+}
+
+datadefs["ZprimeToTauTau_M_3000-Asympt25ns"] = {
+    'analyses': [],
+    'datasetpath': '/ZprimeToTauTau_M_3000_TuneCUETP8M1_tauola_13TeV_pythia8/RunIISpring15DR74-Asympt25ns_MCRUN2_74_V9-v2/MINIAODSIM',
+    'pu': 'Asympt25ns',
+    'calibrationTarget': 'RunIISpring15DR74',
+    'x_sec': -999,
+}
+
+datadefs["ZprimeToTauTau_M_3500-Asympt25ns"] = {
+    'analyses': [],
+    'datasetpath': '/ZprimeToTauTau_M_3500_TuneCUETP8M1_tauola_13TeV_pythia8/RunIISpring15DR74-Asympt25ns_MCRUN2_74_V9-v1/MINIAODSIM',
+    'pu': 'Asympt25ns',
+    'calibrationTarget': 'RunIISpring15DR74',
+    'x_sec': -999,
+}
+
+datadefs["ZprimeToTauTau_M_4000-Asympt25ns"] = {
+    'analyses': [],
+    'datasetpath': '/ZprimeToTauTau_M_4000_TuneCUETP8M1_tauola_13TeV_pythia8/RunIISpring15DR74-Asympt25ns_MCRUN2_74_V9-v1/MINIAODSIM',
+    'pu': 'Asympt25ns',
+    'calibrationTarget': 'RunIISpring15DR74',
+    'x_sec': -999,
+}
+
+datadefs["ZprimeToTauTau_M_4500-Asympt25ns"] = {
+    'analyses': [],
+    'datasetpath': '/ZprimeToTauTau_M_4500_TuneCUETP8M1_tauola_13TeV_pythia8/RunIISpring15DR74-Asympt25ns_MCRUN2_74_V9-v1/MINIAODSIM',
+    'pu': 'Asympt25ns',
+    'calibrationTarget': 'RunIISpring15DR74',
+    'x_sec': -999,
+}
+
+datadefs["ZprimeToTauTau_M_5000-Asympt25ns"] = {
+    'analyses': [],
+    'datasetpath': '/ZprimeToTauTau_M_5000_TuneCUETP8M1_tauola_13TeV_pythia8/RunIISpring15DR74-Asympt25ns_MCRUN2_74_V9-v1/MINIAODSIM',
     'pu': 'Asympt25ns',
     'calibrationTarget': 'RunIISpring15DR74',
     'x_sec': -999,
@@ -286,21 +342,6 @@ datadefs["Tbar_tW-Asympt50ns"] = {
     'pu': 'Asympt50ns',
     'calibrationTarget': 'RunIISpring15DR74',
     'x_sec': 35.6*picobarns,
-}
-
-datadefs["GluGluHToTauTau_M125-Asympt25ns"] = {
-    'analyses': [],
-    'datasetpath': '/GluGluHToTauTau_M125_13TeV_powheg_pythia8/RunIISpring15DR74-Asympt25ns_MCRUN2_74_V9-v1/MINIAODSIM',
-    'pu': 'Asympt25ns',
-    'calibrationTarget': 'RunIISpring15DR74',
-    'x_sec': -999,
-}
-datadefs["VBFHToTauTau_M125-Asympt25ns"] = {
-    'analyses': [],
-    'datasetpath': '/VBFHToTauTau_M125_13TeV_powheg_pythia8/RunIISpring15DR74-Asympt25ns_MCRUN2_74_V9-v1/MINIAODSIM',
-    'pu': 'Asympt25ns',
-    'calibrationTarget': 'RunIISpring15DR74',
-    'x_sec': -999,
 }
 
 if __name__=="__main__":
