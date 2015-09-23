@@ -76,20 +76,28 @@ id = PSet(
     objectGenMotherPdgId = '? (getDaughterGenParticleMotherSmart({object_idx}, 11, 0).isAvailable && getDaughterGenParticleMotherSmart({object_idx}, 11, 0).isNonnull) ? getDaughterGenParticleMotherSmart({object_idx}, 11, 0).pdgId() : -999',
     objectComesFromHiggs = 'comesFromHiggs({object_idx}, 11, 1)',
 
-    objectGenPdgId       = '? (getDaughterGenParticle({object_idx}, 11, 1, 0.5, 0.5).isAvailable && getDaughterGenParticle({object_idx}, 11, 1, 0.5, 0.5).isNonnull) ? getDaughterGenParticle({object_idx}, 11, 1, 0.5, 0.5).pdgId() : -999',
-    objectGenMass      = '? (getDaughterGenParticle({object_idx}, 11, 1, 0.5, 0.5).isAvailable && getDaughterGenParticle({object_idx}, 11, 1, 0.5, 0.5).isNonnull) ? getDaughterGenParticle({object_idx}, 11, 1, 0.5, 0.5).mass() : -999',
-    objectGenEta         = '? (getDaughterGenParticle({object_idx}, 11, 1, 0.5, 0.5).isAvailable && getDaughterGenParticle({object_idx}, 11, 1, 0.5, 0.5).isNonnull) ? getDaughterGenParticle({object_idx}, 11, 1, 0.5, 0.5).eta()   : -999',
-    objectGenPhi         = '? (getDaughterGenParticle({object_idx}, 11, 1, 0.5, 0.5).isAvailable && getDaughterGenParticle({object_idx}, 11, 1, 0.5, 0.5).isNonnull) ? getDaughterGenParticle({object_idx}, 11, 1, 0.5, 0.5).phi()   : -999',
-    objectGenPt          = '? (getDaughterGenParticle({object_idx}, 11, 1, 0.5, 0.5).isAvailable && getDaughterGenParticle({object_idx}, 11, 1, 0.5, 0.5).isNonnull) ? getDaughterGenParticle({object_idx}, 11, 1, 0.5, 0.5).pt()   : -999',
-    objectGenVZ          = '? (getDaughterGenParticle({object_idx}, 11, 1, 0.5, 0.5).isAvailable && getDaughterGenParticle({object_idx}, 11, 1, 0.5, 0.5).isNonnull) ? getDaughterGenParticle({object_idx}, 11, 1, 0.5, 0.5).vz()   : -999',
+    objectGenPdgId       = '? (getDaughterGenParticle({object_idx}, 11, 1, 0.5, 0.5, 0, 0).isAvailable && getDaughterGenParticle({object_idx}, 11, 1, 0.5, 0.5, 0, 0).isNonnull) ? getDaughterGenParticle({object_idx}, 11, 1, 0.5, 0.5, 0, 0).pdgId() : -999',
+    objectGenMass      = '? (getDaughterGenParticle({object_idx}, 11, 1, 0.5, 0.5, 0, 0).isAvailable && getDaughterGenParticle({object_idx}, 11, 1, 0.5, 0.5, 0, 0).isNonnull) ? getDaughterGenParticle({object_idx}, 11, 1, 0.5, 0.5, 0, 0).mass() : -999',
+    objectGenEta         = '? (getDaughterGenParticle({object_idx}, 11, 1, 0.5, 0.5, 0, 0).isAvailable && getDaughterGenParticle({object_idx}, 11, 1, 0.5, 0.5, 0, 0).isNonnull) ? getDaughterGenParticle({object_idx}, 11, 1, 0.5, 0.5, 0, 0).eta()   : -999',
+    objectGenPhi         = '? (getDaughterGenParticle({object_idx}, 11, 1, 0.5, 0.5, 0, 0).isAvailable && getDaughterGenParticle({object_idx}, 11, 1, 0.5, 0.5, 0, 0).isNonnull) ? getDaughterGenParticle({object_idx}, 11, 1, 0.5, 0.5, 0, 0).phi()   : -999',
+    objectGenPt          = '? (getDaughterGenParticle({object_idx}, 11, 1, 0.5, 0.5, 0, 0).isAvailable && getDaughterGenParticle({object_idx}, 11, 1, 0.5, 0.5, 0, 0).isNonnull) ? getDaughterGenParticle({object_idx}, 11, 1, 0.5, 0.5, 0, 0).pt()   : -999',
+    objectGenVZ          = '? (getDaughterGenParticle({object_idx}, 11, 1, 0.5, 0.5, 0, 0).isAvailable && getDaughterGenParticle({object_idx}, 11, 1, 0.5, 0.5, 0, 0).isNonnull) ? getDaughterGenParticle({object_idx}, 11, 1, 0.5, 0.5, 0, 0).vz()   : -999',
     objectGenVtxPVMatch  = 'genVtxPVMatch({object_idx})', # is PV closest vtx to gen vtx?
 
-    objectGenTauPdgId       = '? (getDaughterGenParticle({object_idx}, 15, 1, 1, 0.5).isAvailable && getDaughterGenParticle({object_idx}, 15, 1, 1, 0.5).isNonnull) ? getDaughterGenParticle({object_idx}, 15, 1, 1, 0.5).pdgId() : -999',
-    objectGenTauMass      = '? (getDaughterGenParticle({object_idx}, 15, 1, 1, 0.5).isAvailable && getDaughterGenParticle({object_idx}, 15, 1, 1, 0.5).isNonnull) ? getDaughterGenParticle({object_idx}, 15, 1, 1, 0.5).mass() : -999',
-    objectGenTauEta         = '? (getDaughterGenParticle({object_idx}, 15, 1, 1, 0.5).isAvailable && getDaughterGenParticle({object_idx}, 15, 1, 1, 0.5).isNonnull) ? getDaughterGenParticle({object_idx}, 15, 1, 1, 0.5).eta()   : -999',
-    objectGenTauPhi         = '? (getDaughterGenParticle({object_idx}, 15, 1, 1, 0.5).isAvailable && getDaughterGenParticle({object_idx}, 15, 1, 1, 0.5).isNonnull) ? getDaughterGenParticle({object_idx}, 15, 1, 1, 0.5).phi()   : -999',
-    objectGenTauPt          = '? (getDaughterGenParticle({object_idx}, 15, 1, 1, 0.5).isAvailable && getDaughterGenParticle({object_idx}, 15, 1, 1, 0.5).isNonnull) ? getDaughterGenParticle({object_idx}, 15, 1, 1, 0.5).pt()   : -999',
-    
+    objectGenTauPdgId       = '? (getDaughterGenParticle({object_idx}, 15, 1, 1, 0.5, 0, 0).isAvailable && getDaughterGenParticle({object_idx}, 15, 1, 1, 0.5, 0, 0).isNonnull) ? getDaughterGenParticle({object_idx}, 15, 1, 1, 0.5, 0, 0).pdgId() : -999',
+    objectGenTauMass      = '? (getDaughterGenParticle({object_idx}, 15, 1, 1, 0.5, 0, 0).isAvailable && getDaughterGenParticle({object_idx}, 15, 1, 1, 0.5, 0, 0).isNonnull) ? getDaughterGenParticle({object_idx}, 15, 1, 1, 0.5, 0, 0).mass() : -999',
+    objectGenTauEta         = '? (getDaughterGenParticle({object_idx}, 15, 1, 1, 0.5, 0, 0).isAvailable && getDaughterGenParticle({object_idx}, 15, 1, 1, 0.5, 0, 0).isNonnull) ? getDaughterGenParticle({object_idx}, 15, 1, 1, 0.5, 0, 0).eta()   : -999',
+    objectGenTauPhi         = '? (getDaughterGenParticle({object_idx}, 15, 1, 1, 0.5, 0, 0).isAvailable && getDaughterGenParticle({object_idx}, 15, 1, 1, 0.5, 0, 0).isNonnull) ? getDaughterGenParticle({object_idx}, 15, 1, 1, 0.5, 0, 0).phi()   : -999',
+    objectGenTauPt          = '? (getDaughterGenParticle({object_idx}, 15, 1, 1, 0.5, 0, 0).isAvailable && getDaughterGenParticle({object_idx}, 15, 1, 1, 0.5, 0, 0).isNonnull) ? getDaughterGenParticle({object_idx}, 15, 1, 1, 0.5, 0, 0).pt()   : -999',
+
+    objectIsPromptElectron  = '? (getDaughterGenParticle({object_idx}, 11, 1, 1, 0.5, 8, 1).isAvailable && getDaughterGenParticle({object_idx}, 11, 1, 1, 0.5, 8, 1).isNonnull) ? 1 : 0',
+    objectIsPromptMuon      = '? (getDaughterGenParticle({object_idx}, 13, 1, 1, 0.5, 8, 2).isAvailable && getDaughterGenParticle({object_idx}, 13, 1, 1, 0.5, 8, 2).isNonnull) ? 1 : 0',
+    objectIsTau2Electron    = '? (getDaughterGenParticle({object_idx}, 11, 1, 1, 0.5, 8, 3).isAvailable && getDaughterGenParticle({object_idx}, 11, 1, 1, 0.5, 8, 3).isNonnull) ? 1 : 0',
+    objectIsTau2Muon        = '? (getDaughterGenParticle({object_idx}, 13, 1, 1, 0.5, 8, 4).isAvailable && getDaughterGenParticle({object_idx}, 13, 1, 1, 0.5, 8, 4).isNonnull) ? 1 : 0',
+    objectIsTauh            = '? (getDaughterGenParticle({object_idx}, 15, 1, 1, 0.5, 15, 5).isAvailable && getDaughterGenParticle({object_idx}, 15, 1, 1, 0.5, 15, 5).isNonnull) ? 1 : 0',
+
+    objectGenMatchCategory = 'getGenMatchCategory({object_idx})',
+
     # How close is the nearest muon passing some basic quality cuts?
     objectNearestMuonDR = "electronClosestMuonDR({object_idx})",
 )
