@@ -101,6 +101,13 @@ options.register(
     'additional cuts to impose on the NTuple'
 )
 options.register(
+    'skimCuts-ee',
+    '',
+    TauVarParsing.TauVarParsing.multiplicity.list,
+    TauVarParsing.TauVarParsing.varType.string,
+    'additional cuts to impose on the NTuple'
+)
+options.register(
     'skimCuts-mt',
     '',
     TauVarParsing.TauVarParsing.multiplicity.list,
