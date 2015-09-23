@@ -314,10 +314,11 @@ class PATFinalState : public pat::PATObject<reco::LeafCandidate> {
         size_t i, const std::string& label) const = 0;
 
     /// Get the specified overlaps for the ith daughter
-    const reco::GenParticleRef getDaughterGenParticle(size_t i, int pdgIdToMatch, int checkCharge, double maxDPtRel, double maxDeltaR) const;
+    const reco::GenParticleRef getDaughterGenParticle(size_t i, int pdgIdToMatch, int checkCharge, double maxDPtRel, double maxDeltaR, double minPt, int statusFlag) const;
     const reco::Candidate::LorentzVector getDaughterGenParticleVisMomentum(size_t i, int pdgIdToMatch, int checkCharge, double maxDPtRel, double maxDeltaR) const;
     const reco::Candidate::LorentzVector getGenParticleNuMomentum(size_t i, int pdgIdToMatch, int checkCharge, double maxDPtRel, double maxDeltaR) const;
     const reco::Candidate::LorentzVector getGenNu() const;
+    const int getGenMatchCategory(size_t i) const;
 
     const reco::GenParticleRef getDaughterGenParticleMotherSmart(size_t i, int pdgIdToMatch, int checkCharge) const;
 

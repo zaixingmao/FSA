@@ -915,9 +915,9 @@ edm::Ptr<pat::Photon> PATFinalState::daughterAsPhoton(size_t i) const {
   return daughterAs<pat::Photon>(i);
 }
 
-const reco::GenParticleRef PATFinalState::getDaughterGenParticle(size_t i, int pdgIdToMatch, int checkCharge, double maxDPtRel = 0.5, double maxDeltaR = 0.5) const {
+const reco::GenParticleRef PATFinalState::getDaughterGenParticle(size_t i, int pdgIdToMatch, int checkCharge, double maxDPtRel = 0.5, double maxDeltaR = 0.5, double minPt = 0.0, int statusFlag = 0) const {
   bool charge = (bool) checkCharge;
-  return fshelpers::getGenParticle( daughter(i), event_->genParticleRefProd(), pdgIdToMatch, charge, maxDPtRel, maxDeltaR);
+  return fshelpers::getGenParticle( daughter(i), event_->genParticleRefProd(), pdgIdToMatch, charge, maxDPtRel, maxDeltaR, minPt, statusFlag);
 }
 
 const reco::Candidate::LorentzVector PATFinalState::getDaughterGenParticleVisMomentum(size_t i, int pdgIdToMatch, int checkCharge, double maxDPtRel = 0.5, double maxDeltaR = 0.5) const {
@@ -932,7 +932,9 @@ const reco::Candidate::LorentzVector PATFinalState::getGenParticleNuMomentum(siz
 const reco::Candidate::LorentzVector PATFinalState::getGenNu() const {
   return fshelpers::getGenNu(event_->genParticleRefProd());
 }
-
+const int PATFinalState::getGenMatchCategory(size_t i) const{
+  return fshelpers::getGenMatchCategory( daughter(i), event_->genParticleRefProd());
+}
 
 const reco::GenParticleRef PATFinalState::getDaughterGenParticleMotherSmart(size_t i, int pdgIdToMatch, int checkCharge) const {
   const reco::GenParticleRef genp = getDaughterGenParticle(i, pdgIdToMatch, checkCharge);
