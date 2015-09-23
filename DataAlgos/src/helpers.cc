@@ -124,7 +124,7 @@ void addFourMomenta( reco::Candidate & c ) {
 }
 
 /// Helper function to get the matched gen particle 
-const reco::GenParticleRef getGenParticle(const reco::Candidate*   daughter, const reco::GenParticleRefProd genCollectionRef, int pdgIdToMatch, bool checkCharge, double maxDPtRel, double maxDeltaR)
+const reco::GenParticleRef getGenParticle(const reco::Candidate* daughter, const reco::GenParticleRefProd genCollectionRef, int pdgIdToMatch, bool checkCharge, double maxDPtRel, double maxDeltaR, double minPt, int statusFlag)
 {
   //if no genPaticle no matching
   if(!genCollectionRef){
@@ -165,26 +165,60 @@ const reco::GenParticleRef getGenParticle(const reco::Candidate*   daughter, con
     //check if it's final gen particle before decay
     bool final = true;
     if(abs(match.pdgId()) == pdgIdToMatch){
-        size_t nDaughters = match.numberOfDaughters();
-        for(size_t iDaughter = 0; iDaughter < nDaughters; iDaughter++){
-            if(abs(match.daughter(iDaughter)->pdgId()) == pdgIdToMatch) final = false;
-        }
+        if(statusFlag == 0){
+            size_t nDaughters = match.numberOfDaughters();
+            for(size_t iDaughter = 0; iDaughter < nDaughters; iDaughter++){
+                if(abs(match.daughter(iDaughter)->pdgId()) == pdgIdToMatch) final = false;
+            }
 //         if(final) std::cout<<"gen pt: "<<match.pt()<<"  eta: "<<match.eta()<<"  phi: "<<match.phi()<<std::endl;
+        }
     }
     else final = false;
     if(!final) continue;
 
-    // check lock and preselection
-    if ( slector(*daughter, match) ) {
-      // matching requirement fulfilled -> store pair of indices
-      if ( matcher(*daughter,match) )  {
-	double curDr = reco::deltaR(*daughter,match);
-	if(curDr < minDr){
-	  minDr = curDr;
-	  index = m;
-	}
-      }
+    double curDr = ROOT::Math::VectorUtil::DeltaR(daughter->p4(), match.p4());
+
+    //check status flag
+    if(statusFlag == 1 && !match.statusFlags().isPrompt()) continue;
+    if(statusFlag == 2 && !match.isPromptFinalState()) continue;
+    if(statusFlag == 3 && !match.statusFlags().isDirectPromptTauDecayProduct()) continue;
+    if(statusFlag == 4 && !match.isDirectPromptTauDecayProductFinalState()) continue;
+    if(statusFlag == 5){
+        size_t nDaughters = match.numberOfDaughters();
+        bool pass = false;
+        for(size_t iDaughter = 0; iDaughter < nDaughters; iDaughter++){
+            if(abs(match.daughter(iDaughter)->pdgId()) == pdgIdToMatch) pass = true;
+            if(abs(match.daughter(iDaughter)->pdgId()) == 13 or abs(match.daughter(iDaughter)->pdgId()) == 11) pass = true;
+        } 
+       if(pass) continue;
+        GeneratorTau tau(match);
+        tau.init();
+        if((tau.getVisibleFourVector()).pt() <= minPt) continue;
+        else curDr = ROOT::Math::VectorUtil::DeltaR(daughter->p4(), tau.getVisibleFourVector());
     }
+    else{//check pt threshold
+        if(match.pt() <= minPt) continue;
+    }
+//     if(checkCharge && (daughter->charge() != match.charge())) continue;
+    if(curDr < maxDeltaR){
+	    if(curDr < minDr){
+	        minDr = curDr;
+	        index = m;
+	    }
+    }
+
+
+    // check lock and preselection
+//     if ( slector(*daughter, match) ) {
+//       // matching requirement fulfilled -> store pair of indices
+//       if ( matcher(*daughter,match) )  {
+// 	    double curDr = reco::deltaR(*daughter,match);
+// 	    if(curDr < minDr){
+// 	        minDr = curDr;
+// 	        index = m;
+// 	    }
+//       }
+//     }
   }
 
   // if match(es) found and no global ambiguity resolution requested
@@ -204,9 +238,59 @@ const reco::GenParticleRef getGenParticle(const reco::Candidate*   daughter, con
 
 }
 
+/// Helper function to get the matched gen particle 
+const int getGenMatchCategory(const reco::Candidate* daughter, const reco::GenParticleRefProd genCollectionRef)
+{
+
+    reco::GenParticleRef promptElectron  = getGenParticle(daughter, genCollectionRef, 11, 1, 0, 0.5, 8, 1);
+    reco::GenParticleRef promptMuon      = getGenParticle(daughter, genCollectionRef, 13, 1, 0, 0.5, 8, 2);
+    reco::GenParticleRef tau2Electron    = getGenParticle(daughter, genCollectionRef, 11, 1, 0, 0.5, 8, 3);
+    reco::GenParticleRef tau2Muon        = getGenParticle(daughter, genCollectionRef, 13, 1, 0, 0.5, 8, 4);
+    reco::GenParticleRef tauh            = getGenParticle(daughter, genCollectionRef, 15, 1, 0, 0.5, 15, 5);
+
+  double minDR = 0.5;
+  int category = 6;
+  double curDR = 0.0;
+  if(promptElectron.isAvailable() && promptElectron.isNonnull()){
+    minDR = ROOT::Math::VectorUtil::DeltaR(daughter->p4(), promptElectron->p4());
+    category = 1;
+  }
+  if(promptMuon.isAvailable() && promptMuon.isNonnull()){
+    curDR = ROOT::Math::VectorUtil::DeltaR(daughter->p4(), promptMuon->p4());
+    if(curDR < minDR){
+        minDR = curDR;
+        category = 2;
+    }
+  }
+  if(tau2Electron.isAvailable() && tau2Electron.isNonnull()){
+    curDR = ROOT::Math::VectorUtil::DeltaR(daughter->p4(), tau2Electron->p4());
+    if(curDR < minDR){
+        minDR = curDR;
+        category = 3;
+    }
+  }
+  if(tau2Muon.isAvailable() && tau2Muon.isNonnull()){
+    curDR = ROOT::Math::VectorUtil::DeltaR(daughter->p4(), tau2Muon->p4());
+    if(curDR < minDR){
+        minDR = curDR;
+        category = 4;
+    }
+  }
+  if(tauh.isAvailable() && tauh.isNonnull()){
+    GeneratorTau tau(*tauh);
+    tau.init();
+    curDR = ROOT::Math::VectorUtil::DeltaR(daughter->p4(), tau.getVisibleFourVector());
+
+    if(curDR < minDR){
+        minDR = curDR;
+        category = 5;
+    }
+  }
+  return category;
+}
 
 /// Helper function to get the matched gen particle 
-const reco::Candidate::LorentzVector getGenParticleVisMomentum(const reco::Candidate*   daughter, const reco::GenParticleRefProd genCollectionRef, int pdgIdToMatch, bool checkCharge, double maxDPtRel, double maxDeltaR)
+const reco::Candidate::LorentzVector getGenParticleVisMomentum(const reco::Candidate* daughter, const reco::GenParticleRefProd genCollectionRef, int pdgIdToMatch, bool checkCharge, double maxDPtRel, double maxDeltaR)
 {
   reco::Candidate::LorentzVector p4Vis(0,0,0,0);
   reco::GenParticleRef mother = getGenParticle(daughter, genCollectionRef, pdgIdToMatch, checkCharge, maxDPtRel, maxDeltaR);
