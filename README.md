@@ -57,6 +57,12 @@ wget https://raw.githubusercontent.com/CERN-PH-CMG/cmg-cmssw/CMGTools-from-CMSSW
 cd ../../../
 ```
 
+New ElectronID:
+```bash
+git cms-merge-topic ikrav:egm_id_7.4.12_v1
+```
+
+
 Build:
 
 ```bash
