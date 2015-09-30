@@ -47,6 +47,7 @@ def produce_final_states(process, collections, output_commands,
                          rochCor="", eleCor="", use25ns=False, **kwargs):
 
     src = collections
+    print 'here1'
 
     # Build the PATFinalStateEventObject
     if buildFSAEvent:
@@ -226,13 +227,9 @@ def produce_final_states(process, collections, output_commands,
             continue
         if (diobject[0][0], diobject[1][0]) == ('Pho', 'Pho'):
             continue
-        if (diobject[0][0], diobject[1][0]) == ('Elec', 'Elec'):
-            continue
         if (diobject[0][0], diobject[1][0]) == ('Elec', 'Pho'):
             continue
         if (diobject[0][0], diobject[1][0]) == ('Elec', 'Jet'):
-            continue
-        if (diobject[0][0], diobject[1][0]) == ('Mu', 'Mu'):
             continue
         if (diobject[0][0], diobject[1][0]) == ('Mu', 'Pho'):
             continue
