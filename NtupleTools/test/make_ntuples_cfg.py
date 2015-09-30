@@ -61,7 +61,7 @@ process.options = cms.untracked.PSet(
 import FinalStateAnalysis.Utilities.TauVarParsing as TauVarParsing
 options = TauVarParsing.TauVarParsing(
     skipEvents=0,  # Start at an event offset (for debugging)
-    reportEvery=500,
+    reportEvery=1000,
     channels='mm,mjj,mj',
     rerunMCMatch=False,
     eventView=0,  # Switch between final state view (0) and event view (1)
@@ -102,6 +102,13 @@ options.register(
 )
 options.register(
     'skimCuts-ee',
+    '',
+    TauVarParsing.TauVarParsing.multiplicity.list,
+    TauVarParsing.TauVarParsing.varType.string,
+    'additional cuts to impose on the NTuple'
+)
+options.register(
+    'skimCuts-mm',
     '',
     TauVarParsing.TauVarParsing.multiplicity.list,
     TauVarParsing.TauVarParsing.varType.string,
