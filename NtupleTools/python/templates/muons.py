@@ -112,6 +112,7 @@ trigger = PSet(
     objectIsoMu27 = 'matchToHLTFilter({object_idx}, "hltL3crIsoL1sMu25L1f0L2f10QL3f27QL3trkIsoFiltered0p09", 0.5)',
     objectMuTau = 'matchToHLTFilter({object_idx}, "hltL3crIsoL1sMu16erTauJet20erL1f0L2f10QL3f17QL3trkIsoFiltered0p09", 0.5)',
     objectMuTauOverlap = 'matchToHLTFilter({object_idx}, "hltOverlapFilterIsoMu17LooseIsoPFTau20", 0.5)',
+    objectMatchesDoubleMu = 'matchToHLTFilter({object_idx}, "hltL3crIsoL1sDoubleMu125L1f16erL2f10QL3f17QL3Dz0p2L3crIsoRhoFiltered0p15IterTrk02", 0.5)',
  )
 
 veto = PSet(
