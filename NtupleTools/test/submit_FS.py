@@ -91,7 +91,7 @@ skimCuts['mt'] = {"ID_m": "object.isMediumMuon() > 0.5",
                   "Eta_t": "abs(object.eta()) < 2.3",
                   }
 skimCuts['ee'] = {"Pt": "object.pt() > 13",
-                  "Eta": "abs(object.eta()) < 2.5",
+                  "Eta": "abs(object.eta()) < 2.1",
                   }
 
 SVFit = 1 if options.doSVFit else 0
@@ -101,7 +101,7 @@ isMC = 0 if options.isData else 1
 TNT = 1 if options.TNT else 0
 
 #useLumiMask =  '/afs/cern.ch/cms/CAF/CMSCOMM/COMM_DQM/certification/Collisions15/13TeV/Cert_246908-254349_13TeV_PromptReco_Collisions15_JSON.txt' if options.isData else ''
-useLumiMask =  '/afs/cern.ch/cms/CAF/CMSCOMM/COMM_DQM/certification/Collisions15/13TeV/Cert_246908-255031_13TeV_PromptReco_Collisions15_25ns_JSON_v2.txt' if options.isData else ''
+useLumiMask =  '/afs/cern.ch/cms/CAF/CMSCOMM/COMM_DQM/certification/Collisions15/13TeV/Cert_246908-256869_13TeV_PromptReco_Collisions15_25ns_JSON.txt' if options.isData else ''
 localJobInfo = localJob_cfg.localJobInfo
 
 samples = getSamples(options.sample)
