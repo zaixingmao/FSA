@@ -47,7 +47,6 @@ def produce_final_states(process, collections, output_commands,
                          rochCor="", eleCor="", use25ns=False, **kwargs):
 
     src = collections
-    print 'here1'
 
     # Build the PATFinalStateEventObject
     if buildFSAEvent:
