@@ -178,9 +178,14 @@ trigger = PSet(
     objectEle22 = 'matchToHLTFilter({object_idx}, "hltEle22WP75L1IsoEG20erTau20erGsfTrackIsoFilter", 0.5)',
     objectOverlapEle22 = 'matchToHLTFilter({object_idx}, "hltOverlapFilterIsoEle22WP75GsfLooseIsoPFTau20", 0.5)',
     objectSingleEle = 'matchToHLTFilter({object_idx}, "hltEle32WP75GsfTrackIsoFilter", 0.5)',
+    objectSingleEle_WP85 = 'matchToHLTFilter({object_idx}, "hltL1EG25Ele27WP85GsfTrackIsoFilter", 0.5)',
     objectEle22Loose = 'matchToHLTFilter({object_idx}, "hltSingleEle22WPLooseGsfTrackIsoFilter", 0.5)',
     objectOverlapEle22Loose = 'matchToHLTFilter({object_idx}, "hltOverlapFilterIsoEle22WPLooseGsfLooseIsoPFTau20", 0.5)',
     objectSingleEleTight = 'matchToHLTFilter({object_idx}, "hltEle32WPTightGsfTrackIsoFilter", 0.5)',
+    objectDoubleE_WPLooseLeg1 = 'matchToHLTFilter({object_idx},"hltEle24Ele22WPLooseGsfleg1TrackIsoFilter",0.5)',
+    objectDoubleE_WPLooseLeg2 = 'matchToHLTFilter({object_idx},"hltEle24Ele22WPLooseGsfleg2TrackIsoFilter",0.5)',
+    objectDoubleE_WP75Leg1 = 'matchToHLTFilter({object_idx},"hltEle24Ele22WP75Gsfleg1TrackIsoFilter",0.5)',
+    objectDoubleE_WP75Leg2 = 'matchToHLTFilter({object_idx},"hltEle24Ele22WP75Gsfleg2TrackIsoFilter",0.5)',
 )
 
 veto = PSet(
