@@ -33,7 +33,10 @@ singleLepton = PSet(
         name='singleE_WP85',
         paths=r'HLT_Ele27_WP85_Gsf_v\\d+'
         ),
-
+    _trig_template.replace(
+        name='singleE_105',
+        paths=r'HLT_Ele105_CaloIdVT_GsfTrkIdT_v\\d+'
+        ),
     _trig_template.replace(
         name='singleETight',
         paths=r'HLT_Ele32_eta2p1_WPTight_Gsf_v\\d+'
