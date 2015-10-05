@@ -28,5 +28,7 @@
   "T_t-channel": "ST_t-channel_top_4f_leptonDecays_13TeV-powheg-pythia8_TuneCUETP8M1",
   "Tbar_t-channel": "ST_t-channel_antitop_4f_leptonDecays_13TeV-powheg-pythia8_TuneCUETP8M1",
   "ggH125": "GluGluHToTauTau_M125_13TeV_powheg_pythia8",
-  "VBFH125": "VBFHToTauTau_M125_13TeV_powheg_pythia8"
+  "VBFH125": "VBFHToTauTau_M125_13TeV_powheg_pythia8",
+  "WRToNuTauToTauTau_2700": "WRToNuTauToTauTau_2700",
+  "WRToNuTauToTauTau_1000": "WRToNuTauToTauTau_1000"
 }

@@ -16,6 +16,21 @@ datadefs["DYJets_M10-Asympt25ns"] = {
     'x_sec': 18610.0*picobarns,
 }
 
+datadefs["WRToNuTauToTauTau_2700"] = {
+    'analyses': [],
+    'datasetpath': '/WRToNuTauToTauTau_2700/',
+    'pu': 'Asympt25ns',
+    'calibrationTarget': 'RunIISpring15DR74',
+    'x_sec': 1.0*picobarns,
+}
+
+datadefs["WRToNuTauToTauTau_1000"] = {
+    'analyses': [],
+    'datasetpath': '/WRToNuTauToTauTau_1000/',
+    'pu': 'Asympt25ns',
+    'calibrationTarget': 'RunIISpring15DR74',
+    'x_sec': 1.0*picobarns,
+}
 
 datadefs["DYJets_M50-Asympt25ns"] = {
     'analyses': [],
