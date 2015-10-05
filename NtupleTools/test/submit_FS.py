@@ -41,6 +41,7 @@ def opts():
     parser.add_option("--isData", dest="isData", default=False, action="store_true", help="run over data")
     parser.add_option("--is50ns", dest="is50ns", default=False, action="store_true", help="run over 50ns sample")
     parser.add_option("--TNT", dest="TNT", default=False, action="store_true", help="store TNT stuff")
+    parser.add_option("--notFromDAS", dest="notFromDAS", default=False, action="store_true", help="submit files defined in data13TeV.py")
 
     parser.add_option("--newXROOTD", dest="newXROOTD", default="", help="run over data")
 
@@ -101,7 +102,7 @@ isMC = 0 if options.isData else 1
 TNT = 1 if options.TNT else 0
 
 #useLumiMask =  '/afs/cern.ch/cms/CAF/CMSCOMM/COMM_DQM/certification/Collisions15/13TeV/Cert_246908-254349_13TeV_PromptReco_Collisions15_JSON.txt' if options.isData else ''
-useLumiMask =  '/afs/cern.ch/cms/CAF/CMSCOMM/COMM_DQM/certification/Collisions15/13TeV/Cert_246908-256869_13TeV_PromptReco_Collisions15_25ns_JSON.txt' if options.isData else ''
+useLumiMask =  '/afs/cern.ch/cms/CAF/CMSCOMM/COMM_DQM/certification/Collisions15/13TeV/Cert_246908-257599_13TeV_PromptReco_Collisions15_25ns_JSON.txt' if options.isData else ''
 localJobInfo = localJob_cfg.localJobInfo
 
 samples = getSamples(options.sample)
@@ -146,10 +147,14 @@ if not options.runLocal:
         cmd += ' use25ns=1'
 
     if isMC:
-        if options.is50ns:
-            cmd += " --campaign-tag=\"RunIISpring15DR74-Asympt50ns*\" --das-replace-tuple=$fsa/MetaData/tuples/MiniAOD-13TeV_RunIISpring15DR74.json --samples %s -o %s" %(samples, tempFile)
+        cmd += " --das-replace-tuple=$fsa/MetaData/tuples/MiniAOD-13TeV_RunIISpring15DR74.json --samples %s -o %s" %(samples, tempFile)
+        if not options.notFromDAS:
+            if options.is50ns:
+                cmd += " --campaign-tag=\"RunIISpring15DR74-Asympt50ns*\" --fromDAS"
+            else:
+                cmd += " --campaign-tag=\"RunIISpring15DR74-Asympt25ns*\" --fromDAS"
         else:
-            cmd += " --campaign-tag=\"RunIISpring15DR74-Asympt25ns*\" --das-replace-tuple=$fsa/MetaData/tuples/MiniAOD-13TeV_RunIISpring15DR74.json --samples %s -o %s" %(samples, tempFile)
+            cmd += " --input-dir=/nfs_scratch/zmao/"
     else:
         cmd += " --data --das-replace-tuple=$fsa/MetaData/tuples/MiniAOD-13TeV_Data.json --samples %s -o %s" %(samples, tempFile)
 
