@@ -40,6 +40,13 @@ from FinalStateAnalysis.Utilities.dbsinterface import get_das_info
 log = logging.getLogger("submit_job")
 logging.basicConfig(level=logging.INFO, stream=sys.stderr)
 
+def getFromDataDefs(dataset_name):
+    if dataset_name in datadefs.keys():
+        return 'root://cmsxrootd.hep.wisc.edu//store/user/zmao/%s' %datadefs[dataset_name]['datasetpath']
+    else:
+        print "dataset: %s not found!!" %dataset_name
+        return ''
+
 def getFarmoutCommand(args, dataset_name, full_dataset_name):
     ''' Builds the command to submit an ntuple job for the given dataset 
 
@@ -86,21 +93,24 @@ def getFarmoutCommand(args, dataset_name, full_dataset_name):
     )
 
     input_commands = []
-
-    files = get_das_info('file dataset=%s' % full_dataset_name)
-    mkdir_cmd = "mkdir -p %s" % (dag_dir+"inputs")
-    os.system(mkdir_cmd)
-    input_txt = '%s_inputfiles.txt' % dataset_name
-    input_txt_path = os.path.join(dag_dir+"inputs", input_txt)
-    with open(input_txt_path, 'w') as txt:
-        txt.write('\n'.join(files))
-    input_commands.extend([
-        '--input-file-list=%s' % input_txt_path,
-        '--assume-input-files-exist', 
-        '--input-dir=root://cmsxrootd.fnal.gov/',
-        #'--input-dir=root://cmsxrootd.hep.wisc.edu',
-    ])
-
+    if args.fromDAS:
+        files = get_das_info('file dataset=%s' % full_dataset_name)
+        mkdir_cmd = "mkdir -p %s" % (dag_dir+"inputs")
+        os.system(mkdir_cmd)
+        input_txt = '%s_inputfiles.txt' % dataset_name
+        input_txt_path = os.path.join(dag_dir+"inputs", input_txt)
+        with open(input_txt_path, 'w') as txt:
+            txt.write('\n'.join(files))
+        input_commands.extend([
+                '--input-file-list=%s' % input_txt_path,
+                '--assume-input-files-exist', 
+                '--input-dir=root://cmsxrootd.fnal.gov/',
+        ])
+    else:
+        input_commands.extend([
+                '--assume-input-files-exist',
+                '--input-dir=%s' %getFromDataDefs(dataset_name),
+        ])
     command = [
         'farmoutAnalysisJobs',
         '--infer-cmssw-path',
@@ -215,6 +225,12 @@ def datasets_from_das(args):
         log.warning("No datasets found matching %s", args.samples)
     return script_content
 
+def datasets_from_datadefs(args):
+    script_content = ''
+    for pattern in args.samples:
+        script_content += getFarmoutCommand(args, pattern, '')
+    return script_content
+
 def get_com_line_args():
     parser = argparse.ArgumentParser()
 
@@ -256,6 +272,10 @@ def get_com_line_args():
     input_group.add_argument(
         '--data', dest='isData', action='store_true',
         help = 'Run over data',
+    )
+    input_group.add_argument(
+        '--fromDAS', dest='fromDAS', action='store_true',
+        help = 'get info from DAS',
     )
 
     filter_group = parser.add_argument_group('Sample Filters')
@@ -311,6 +331,7 @@ if __name__ == "__main__":
     # first, make DAS query for dataset if not using local dataset or hdfs/dbs tuple list
     if args.campaignstring or args.isData:
         script_content += datasets_from_das(args)
+        print script_content
     else:
         # this is the old version that uses datadefs
         script_content += datasets_from_datadefs(args)
