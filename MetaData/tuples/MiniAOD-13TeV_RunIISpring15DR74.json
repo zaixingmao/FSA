@@ -30,5 +30,11 @@
   "ggH125": "GluGluHToTauTau_M125_13TeV_powheg_pythia8",
   "VBFH125": "VBFHToTauTau_M125_13TeV_powheg_pythia8",
   "WRToNuTauToTauTau_2700": "WRToNuTauToTauTau_2700",
-  "WRToNuTauToTauTau_1000": "WRToNuTauToTauTau_1000"
+  "WRToNuTauToTauTau_1000": "WRToNuTauToTauTau_1000",
+  "QCD_Pt_30_50": "QCD_Pt-30to50_EMEnriched_TuneCUETP8M1_13TeV_pythia8",
+  "QCD_Pt_50_80": "QCD_Pt-50to80_EMEnriched_TuneCUETP8M1_13TeV_pythia8",
+  "QCD_Pt_80_120": "QCD_Pt-80to120_EMEnriched_TuneCUETP8M1_13TeV_pythia8",
+  "QCD_Pt_120_170": "QCD_Pt-120to170_EMEnriched_TuneCUETP8M1_13TeV_pythia8",
+  "QCD_Pt_170_300": "QCD_Pt-170to300_EMEnriched_TuneCUETP8M1_13TeV_pythia8",
+  "QCD_Pt_300_Inf": "QCD_Pt-300toInf_EMEnriched_TuneCUETP8M1_13TeV_pythia8"
 }
