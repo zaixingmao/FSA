@@ -61,6 +61,10 @@ doubleLepton = PSet(
         paths=r'HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_v\\d+'
         ),
     _trig_template.replace(
+        name='Mu30e30',
+        paths=r'HLT_Mu30_Ele30_CaloIdL_GsfTrkIdVL_v\\d+'
+        ),
+    _trig_template.replace(
         name='doubleE_WPLoose',
         paths=r'HLT_DoubleEle24_22_eta2p1_WPLoose_Gsf_v\\d+'
         ),

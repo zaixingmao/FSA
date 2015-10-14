@@ -188,6 +188,7 @@ trigger = PSet(
     objectDoubleE_WPLooseLeg2 = 'matchToHLTFilter({object_idx},"hltEle24Ele22WPLooseGsfleg2TrackIsoFilter",0.5)',
     objectDoubleE_WP75Leg1 = 'matchToHLTFilter({object_idx},"hltEle24Ele22WP75Gsfleg1TrackIsoFilter",0.5)',
     objectDoubleE_WP75Leg2 = 'matchToHLTFilter({object_idx},"hltEle24Ele22WP75Gsfleg2TrackIsoFilter",0.5)',
+    objectMu30El30 = 'matchToHLTFilter({object_idx}, "hltEle30CaloIdLGsfTrkIdVLDPhiUnseededFilter", 0.5)',
 
 )
 
