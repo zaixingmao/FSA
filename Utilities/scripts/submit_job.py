@@ -93,7 +93,7 @@ def getFarmoutCommand(args, dataset_name, full_dataset_name):
     )
 
     input_commands = []
-    if args.fromDAS or args.isData:
+    if args.fromDAS or args.isData or args.campaignstring:
         files = get_das_info('file dataset=%s' % full_dataset_name)
         mkdir_cmd = "mkdir -p %s" % (dag_dir+"inputs")
         os.system(mkdir_cmd)
