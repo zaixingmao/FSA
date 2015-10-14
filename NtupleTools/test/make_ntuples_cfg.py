@@ -198,13 +198,13 @@ if options.TNT:
 #load magfield and geometry (for mass resolution)
 process.load('Configuration.StandardSequences.GeometryRecoDB_cff')
 process.load('Configuration.StandardSequences.MagneticField_38T_PostLS1_cff')
-process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_cff')
 
+process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_condDBv2_cff')
 # Need the global tag for geometry etc.
 envvar = 'mcgt' if options.isMC else 'datagt'
-GT = {'mcgt': 'MCRUN2_74_V9A::All', 'datagt': '74X_dataRun2_Prompt_v2::All'}
+GT = {'mcgt': '74X_mcRun2_asymptotic_v2', 'datagt': '74X_dataRun2_v2'}
 if options.use25ns:
-    GT['mcgt'] = 'MCRUN2_74_V9::All'
+    GT['mcgt'] = '74X_mcRun2_asymptotic_v2'
 
 
 if options.GlobalTag:
