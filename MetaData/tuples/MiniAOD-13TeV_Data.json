@@ -8,5 +8,7 @@
   "data_Electron_Run2015C_PromptReco_25ns" : "/SingleElectron/Run2015C-PromptReco-v1/MINIAOD",
   "data_Tau_Run2015C_PromptReco_25ns" : "/Tau/Run2015C-PromptReco-v1/MINIAOD",
   "data_Electron_Run2015D_PromptReco_25ns" : "/SingleElectron/Run2015D-PromptReco-v3/MINIAOD",
-  "data_MuonEG_Run2015D_PromptReco_25ns" : "/MuonEG/Run2015D-PromptReco-v3/MINIAOD"
+  "data_MuonEG_Run2015D_PromptReco_25ns" : "/MuonEG/Run2015D-PromptReco-v3/MINIAOD",
+  "data_Electron_Run2015DV4_PromptReco_25ns" : "/SingleElectron/Run2015D-PromptReco-v4/MINIAOD",
+  "data_MuonEG_Run2015DV4_PromptReco_25ns" : "/MuonEG/Run2015D-PromptReco-v4/MINIAOD"
 }

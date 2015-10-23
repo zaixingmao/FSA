@@ -3,6 +3,7 @@
   "DYJetsToLL_M-50" : "DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8",
   "TTJets" : "TTJets_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8",
   "WJetsToLNu" : "WJetsToLNu_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8",
+  "WJetsToLNu_MG":"WJetsToLNu_TuneCUETP8M1_13TeV-madgraphMLM-pythia8",
   "WW_" : "WW_TuneCUETP8M1_13TeV-pythia8",
   "WZ_" : "WZ_TuneCUETP8M1_13TeV-pythia8",
   "ZZ_" : "ZZ_TuneCUETP8M1_13TeV-pythia8",
