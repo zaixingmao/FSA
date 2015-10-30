@@ -67,8 +67,11 @@ tautauMVAMET = PSet(
 met = PSet(
     pfMetEt        = 'evt.met4vector("pfmet","",1).Et',
     pfMetPhi       = 'evt.met4vector("pfmet","",1).Phi',
-    type1_pfMetEt  = 'evt.met4vector("pfmet","type1",1).Et', #1 --> phi correction not in miniAOD
-    type1_pfMetPhi = 'evt.met4vector("pfmet","type1",1).Phi',
+    pfMetNoHFEt        = 'evt.met4vector("pfmetNoHF","",1).Et',
+    pfMetNoHFPhi       = 'evt.met4vector("pfmetNoHF","",1).Phi',
+    metPuppiEt        = 'evt.met4vector("pfmetPuppi","",1).Et',
+    metPuppiPhi       = 'evt.met4vector("pfmetPuppi","",1).Phi',
+
     #systematics
     pfMet_mes_Et   = 'evt.met4vector("pfmet","mes+", 1).Et',
     pfMet_tes_Et   = 'evt.met4vector("pfmet","tes+", 1).Et',
@@ -85,6 +88,19 @@ met = PSet(
     pfmetCovariance_01 = 'evt.met("pfmet").getSignificanceMatrix()[0][1]',
     pfmetCovariance_10 = 'evt.met("pfmet").getSignificanceMatrix()[1][0]',
     pfmetCovariance_11 = 'evt.met("pfmet").getSignificanceMatrix()[1][1]',
+
+#     pfmetNoHF cov matrix
+#     pfmetNoHFCovariance_00 = 'evt.met("pfmetNoHF").getSignificanceMatrix()[0][0]',
+#     pfmetNoHFCovariance_01 = 'evt.met("pfmetNoHF").getSignificanceMatrix()[0][1]',
+#     pfmetNoHFCovariance_10 = 'evt.met("pfmetNoHF").getSignificanceMatrix()[1][0]',
+#     pfmetNoHFCovariance_11 = 'evt.met("pfmetNoHF").getSignificanceMatrix()[1][1]',
+# 
+#     pfmetNoHF cov matrix
+#     metPuppiCovariance_00 = 'evt.met("pfmetPuppi").getSignificanceMatrix()[0][0]',
+#     metPuppiCovariance_01 = 'evt.met("pfmetPuppi").getSignificanceMatrix()[0][1]',
+#     metPuppiCovariance_10 = 'evt.met("pfmetPuppi").getSignificanceMatrix()[1][0]',
+#     metPuppiCovariance_11 = 'evt.met("pfmetPuppi").getSignificanceMatrix()[1][1]',
+
 
     recoilDaught='getDaughtersRecoil().R()',
     recoilWithMet='getDaughtersRecoilWithMet().R()',
