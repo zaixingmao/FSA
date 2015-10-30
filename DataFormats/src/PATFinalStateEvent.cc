@@ -237,14 +237,14 @@ int PATFinalStateEvent::hltGroup(const std::string& pattern) const {
 }
 
 int PATFinalStateEvent::matchedToFilter(const reco::Candidate& cand,
-    const std::string& pattern, double maxDeltaR) const {
+    const std::string& pattern, double maxDeltaR, double minPt) const {
   std::vector<const pat::TriggerFilter*> filters = matchingTriggerFilters(trigStandAlone(), names(), pattern);
   if (!filters.size())
     return -1;
   std::vector<pat::TriggerObjectStandAlone> trgObjects = trigStandAlone();
   std::vector<pat::TriggerObjectStandAlone> matchedTrgObjects;
   for (size_t i = 0; i < trgObjects.size(); ++i) {
-    if (trgObjects.at(i).hasFilterLabel(pattern)) matchedTrgObjects.push_back(trgObjects.at(i));
+    if (trgObjects.at(i).hasFilterLabel(pattern) && trgObjects.at(i).pt() > minPt) matchedTrgObjects.push_back(trgObjects.at(i));
   }
 
   return matchedToAnObject(matchedTrgObjects, cand, maxDeltaR);

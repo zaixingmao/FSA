@@ -115,7 +115,7 @@ class PATFinalState : public pat::PATObject<reco::LeafCandidate> {
     /// Check if the ith daughter is matched to a given filter.  Returns -1
     /// if filter doesn't exist.
     int matchToHLTFilter(size_t i, const std::string& filter,
-        double maxDeltaR = 0.3) const;
+        double maxDeltaR = 0.3, double minPt = -1) const;
     /// Check if the ith daughter is matched to a given path.  Returns -1
     /// if filter doesn't exists.
     int matchToHLTPath(size_t i, const std::string& path,

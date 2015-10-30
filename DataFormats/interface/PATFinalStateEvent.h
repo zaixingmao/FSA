@@ -144,7 +144,7 @@ class PATFinalStateEvent {
 
     /// Determine if a candidate is matched to an HLT filter
     int matchedToFilter(const reco::Candidate& cand, const std::string& filter,
-        double maxDeltaR = 0.3) const;
+        double maxDeltaR = 0.3, double minPt = -1) const;
 
     /// Determine if a candidate is matched to an HLT path
     int matchedToPath(const reco::Candidate& cand, const std::string& pattern,

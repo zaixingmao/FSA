@@ -256,10 +256,10 @@ PATFinalState::ptOrdered(size_t i, size_t j, const std::string& tags) const {
 
 int
 PATFinalState::matchToHLTFilter(size_t i, const std::string& filter,
-    double maxDeltaR) const {
+    double maxDeltaR, double minPt) const {
   const reco::Candidate* dau = this->daughter(i);
   assert(dau);
-  return evt()->matchedToFilter(*dau, filter, maxDeltaR);
+  return evt()->matchedToFilter(*dau, filter, maxDeltaR, minPt);
 }
 
 int
