@@ -17,11 +17,17 @@ mtToMET = PSet(
 
     #PF Type1 MET (and systematics)
     objectMtToPFMET      = 'mtMET({object_idx}, "", "pfmet", ""     , 1)',#1, apply phi correction; all PFMET is type1 in miniAOD ...
-    objectMtToPfMet_Ty1  = 'mtMET({object_idx}, "", "pfmet", "type1", 1)',#    but scale uncertainties (jes,ues, etc.) may still be applied
     objectMtToPfMet_mes  = 'mtMET({object_idx}, "", "pfmet", "mes+" , 1)',#    Phi corrections not implemented for miniAOD... maybe already in?
     objectMtToPfMet_tes  = 'mtMET({object_idx}, "", "pfmet", "tes+" , 1)',
     objectMtToPfMet_jes  = 'mtMET({object_idx}, "", "pfmet", "jes+" , 1)',
     objectMtToPfMet_ues  = 'mtMET({object_idx}, "", "pfmet", "ues+" , 1)',
+
+    #PF Type1 MET (and systematics)
+    objectMtToPFMETNoHF      = 'mtMET({object_idx}, "", "pfmetNoHF", ""     , 1)',#1, apply phi correction; all PFMET is type1 in miniAOD ...
+
+    #PF Type1 MET (and systematics)
+    objectMtToMETPUPPI      = 'mtMET({object_idx}, "", "pfmetPuppi", ""     , 1)',#1, apply phi correction; all PFMET is type1 in miniAOD ...
+
 
     #MVA MET
     objectMtToMVAMET     = 'mtMET({object_idx}, "", "mvamet", "", 0)',
