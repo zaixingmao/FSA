@@ -23,6 +23,8 @@ id = PSet(
     objectCBIDTight = '{object}.userFloat("CBIDTight")',
     objectMVANonTrigWP80 = '{object}.userFloat("MVANonTrigWP80")',
     objectMVANonTrigWP90 = '{object}.userFloat("MVANonTrigWP90")',
+    objectMVATrigWP80 = '{object}.userFloat("MVATrigWP80")',
+    objectMVATrigWP90 = '{object}.userFloat("MVATrigWP90")',
     objectHEEPIDD = '{object}.userFloat("heepElectronID")',
     
     # Use cms.string so we get the parentheses formatting bonus

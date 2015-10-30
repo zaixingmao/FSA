@@ -8,8 +8,8 @@ def embedElectronIDs(process, use25ns, eSrc, vtxSrc, beamSrc, TNT):
     if use25ns:
         id_modules = [
             'RecoEgamma.ElectronIdentification.Identification.cutBasedElectronID_Spring15_25ns_V1_cff',
-#             'RecoEgamma.ElectronIdentification.Identification.mvaElectronID_PHYS14_PU20bx25_nonTrig_V1_cff',
             'RecoEgamma.ElectronIdentification.Identification.mvaElectronID_Spring15_25ns_nonTrig_V1_cff',
+            'RecoEgamma.ElectronIdentification.Identification.mvaElectronID_Spring15_25ns_Trig_V1_cff',
             'RecoEgamma.ElectronIdentification.Identification.heepElectronID_HEEPV60_cff',
             ]
     else:
@@ -18,7 +18,7 @@ def embedElectronIDs(process, use25ns, eSrc, vtxSrc, beamSrc, TNT):
     for idmod in id_modules:
         setupAllVIDIdsInModule(process,idmod,setupVIDElectronSelection)
     
-    CBIDLabels = ["CBIDVeto", "CBIDLoose", "CBIDMedium", "CBIDTight", "MVANonTrigWP80", "MVANonTrigWP90", "heepElectronID"] # keys of cut based id user floats
+    CBIDLabels = ["CBIDVeto", "CBIDLoose", "CBIDMedium", "CBIDTight", "MVANonTrigWP80", "MVANonTrigWP90", "MVATrigWP80", "MVATrigWP90", "heepElectronID"] # keys of cut based id user floats
     if use25ns:
         CBIDTags = [
             cms.InputTag('egmGsfElectronIDs:cutBasedElectronID-Spring15-25ns-V1-standalone-veto'),
@@ -29,6 +29,8 @@ def embedElectronIDs(process, use25ns, eSrc, vtxSrc, beamSrc, TNT):
 #             cms.InputTag("egmGsfElectronIDs:mvaEleID-PHYS14-PU20bx25-nonTrig-V1-wp90"),
             cms.InputTag("egmGsfElectronIDs:mvaEleID-Spring15-25ns-nonTrig-V1-wp80"),
             cms.InputTag("egmGsfElectronIDs:mvaEleID-Spring15-25ns-nonTrig-V1-wp90"),
+            cms.InputTag("egmGsfElectronIDs:mvaEleID-Spring15-25ns-Trig-V1-wp80"),
+            cms.InputTag("egmGsfElectronIDs:mvaEleID-Spring15-25ns-Trig-V1-wp90"),
             cms.InputTag("egmGsfElectronIDs:heepElectronID-HEEPV60"),
             ]
     else:
