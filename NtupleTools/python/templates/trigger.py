@@ -18,12 +18,20 @@ _trig_template = PSet(
 
 singleLepton = PSet(
     _trig_template.replace(
+        name='singleMu17', 
+        paths=r'HLT_IsoMu17_eta2p1_v\\d+'
+        ),
+    _trig_template.replace(
         name='singleMu24', 
         paths=r'HLT_IsoMu24_eta2p1_v\\d+'
         ),
     _trig_template.replace(
         name='singleMu27', 
         paths=r'HLT_IsoMu27_v\\d+'
+        ),
+    _trig_template.replace(
+        name='singleE22',
+        paths=r'HLT_Ele22_eta2p1_WP75_Gsf_v\\d+'
         ),
     _trig_template.replace(
         name='singleE',
