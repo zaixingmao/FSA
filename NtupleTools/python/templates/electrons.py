@@ -177,6 +177,9 @@ trigger = PSet(
     objectMu8El23 = 'matchToHLTFilter({object_idx}, "hltMu8TrkIsoVVLEle23CaloIdLTrackIdLIsoVLElectronlegTrackIsoFilter", 0.5)',
     objectEle22 = 'matchToHLTFilter({object_idx}, "hltEle22WP75L1IsoEG20erTau20erGsfTrackIsoFilter", 0.5)',
     objectOverlapEle22 = 'matchToHLTFilter({object_idx}, "hltOverlapFilterIsoEle22WP75GsfLooseIsoPFTau20", 0.5)',
+    objectSingleEle22 = 'matchToHLTFilter({object_idx}, "hltSingleEle22WP75GsfTrackIsoFilter", 0.5)',
+    objectSingleEle22hlt23 = 'matchToHLTFilter({object_idx}, "hltSingleEle22WP75GsfTrackIsoFilter", 0.5, 23)',
+  
     objectSingleEle = 'matchToHLTFilter({object_idx}, "hltEle32WP75GsfTrackIsoFilter", 0.5)',
     objectSingleEle_WP85 = 'matchToHLTFilter({object_idx}, "hltL1EG25Ele27WP85GsfTrackIsoFilter", 0.5)',
     objectSingleEle_105 = 'matchToHLTFilter({object_idx}, "hltEle105CaloIdVTGsfTrkIdTGsfDphiFilter", 0.5)',
