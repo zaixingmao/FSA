@@ -38,48 +38,31 @@ void MiniAODJetIdEmbedder::produce(edm::Event& evt, const edm::EventSetup& es) {
   for (size_t i = 0; i < input->size(); ++i) {
     pat::Jet jet = input->at(i);
     bool loose = true;
-    bool medium = true;
     bool tight = true;
-    if (jet.neutralHadronEnergyFraction() >= 0.99)
-      loose = false;
-    if (jet.neutralHadronEnergyFraction() >= 0.95)
-      medium = false;
-    if (jet.neutralHadronEnergyFraction() >= 0.90)
-      tight = false;
+    bool tightLepVeto = true;
 
-    if (jet.neutralEmEnergyFraction() >= 0.99)
-      loose = false;
-    if (jet.neutralEmEnergyFraction() >= 0.95)
-      medium = false;
-    if (jet.neutralEmEnergyFraction() >= 0.90)
-      tight = false;
 
-    if (jet.numberOfDaughters() <= 1) { //getPFConstitutents broken in miniAOD
-      loose = false;
-      medium = false;
-      tight = false;
+    double NHF = jet.neutralHadronEnergyFraction();
+    double NEMF = jet.neutralEmEnergyFraction();
+    double CHF = jet.chargedHadronEnergyFraction();
+    double MUF = jet.muonEnergyFraction();
+    double CEMF = jet.chargedEmEnergyFraction();
+    double NumConst = jet.chargedMultiplicity()+jet.neutralMultiplicity();
+    double NumNeutralParticles =jet.neutralMultiplicity();
+    double CHM = jet.chargedMultiplicity();
+    double eta = jet.eta();
+    if (std::abs(eta) <= 3.0){
+        loose = (NHF<0.99 && NEMF<0.99 && NumConst>1) && ((abs(eta)<=2.4 && CHF>0 && CHM>0 && CEMF<0.99) || std::abs(eta)>2.4) && std::abs(eta)<=3.0;
+        tight = (NHF<0.90 && NEMF<0.90 && NumConst>1) && ((std::abs(eta)<=2.4 && CHF>0 && CHM>0 && CEMF<0.99) || std::abs(eta)>2.4) && std::abs(eta)<=3.0;
+        tightLepVeto = (NHF<0.90 && NEMF<0.90 && NumConst>1 && MUF<0.8) && ((std::abs(eta)<=2.4 && CHF>0 && CHM>0 && CEMF<0.90) || std::abs(eta)>2.4) && std::abs(eta)<=3.0;
     }
-
-    if (std::abs(jet.eta()) < 2.4) {
-      if (jet.chargedHadronEnergyFraction() == 0) {
-        loose = false;
-        medium = false;
-        tight = false;
-      }
-      if (jet.chargedHadronMultiplicity() == 0) {
-        loose = false;
-        medium = false;
-        tight = false;
-      }
-      if (jet.chargedEmEnergyFraction() >= 0.99) {
-        loose = false;
-        medium = false;
-        tight = false;
-      }
+    else{
+        loose = (NEMF<0.90 && NumNeutralParticles>10 && std::abs(eta)>3.0 );
+        tight = (NEMF<0.90 && NumNeutralParticles>10 && std::abs(eta)>3.0 );
     }
     jet.addUserFloat("idLoose", loose);
-    jet.addUserFloat("idMedium", medium);
     jet.addUserFloat("idTight", tight);
+    jet.addUserFloat("idTightLepVeto", tightLepVeto);
 
     // Pileup discriminant
     bool passPU = true;
