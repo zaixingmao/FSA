@@ -135,10 +135,10 @@ def getFarmoutCommand(args, dataset_name, full_dataset_name):
     command.append("'outputFile=$outputFileName'")
 
     # temp hardcode
-    if args.apply_cms_lumimask:
-        filename = 'Cert_246908-254349_13TeV_PromptReco_Collisions15_JSON.txt'
-        lumi_mask_path = os.path.join('/afs/cern.ch/cms/CAF/CMSCOMM/COMM_DQM/certification/Collisions15/13TeV',filename)
-        command.append('lumiMask=%s' % lumi_mask_path)
+    #if args.apply_cms_lumimask:
+    #    filename = 'Cert_246908-254349_13TeV_PromptReco_Collisions15_JSON.txt'
+    #    lumi_mask_path = os.path.join('/afs/cern.ch/cms/CAF/CMSCOMM/COMM_DQM/certification/Collisions15/13TeV',filename)
+    #    command.append('lumiMask=%s' % lumi_mask_path)
 
     #if args.apply_cms_lumimask and 'lumi_mask' in sample_info:
     #    lumi_mask_path = os.path.join(
