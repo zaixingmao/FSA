@@ -487,8 +487,18 @@ double PATFinalState::mtMET(int i, const std::string& metTag) const {
 double PATFinalState::mtMET(int i, const std::string& tag,
                             const std::string& metName, const std::string& metTag, 
                             const int applyPhiCorr) const {
-  return mtMET(i, tag, metTag);
-}
+  reco::Candidate::LorentzVector metP4;
+  if(metTag == "jes+")
+    metP4 = event_->met(metName)->shiftedP4(pat::MET::JetEnUp);
+  else if(metTag == "ues+")
+    metP4 = event_->met(metName)->shiftedP4(pat::MET::UnclusteredEnUp);
+  else if(metTag == "tes+")
+    metP4 = event_->met(metName)->shiftedP4(pat::MET::TauEnUp);
+  else if(metTag == "mes+")
+    metP4 = met()->shiftedP4(pat::MET::MuonEnUp);
+  else // all miniAOD pfMET is Type 1
+    metP4 = event_->met(metName)->p4();
+  return fshelpers::transverseMass(daughterUserCandP4(i, tag), metP4);}
 
 double PATFinalState::ht(const std::string& sysTags) const {
   std::vector<const reco::Candidate*> theDaughters = daughters(sysTags);
