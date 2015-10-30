@@ -154,7 +154,8 @@ if not options.runLocal:
             if options.is50ns:
                 cmd += " --campaign-tag=\"RunIISpring15DR74-Asympt50ns*\" "
             else:
-                cmd += " --campaign-tag=\"RunIISpring15DR74-Asympt25ns*\" "
+#                cmd += " --campaign-tag=\"RunIISpring15DR74-Asympt25ns*\" "
+                cmd += " --campaign-tag=\"RunIISpring15MiniAODv2-74X_mcRun2_asymptotic*\" "
         else:
             cmd += " --input-dir=/nfs_scratch/zmao/"
     else:
