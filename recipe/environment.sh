@@ -24,8 +24,8 @@ MINOR_VERSION=`echo $CMSSW_VERSION | sed "s|CMSSW_\([0-9]\)_\([0-9]\)_.*|\2|"`
 
 if [ "$MAJOR_VERSION" -eq "7" ]; then
   echo "Setting up CMSSW 7 global tags"
-  export datagt=74X_dataRun2_v2
-  export mcgt=MCRUN2_74_V9::All
+  export datagt=74X_dataRun2_Prompt_v4
+  export mcgt=74X_mcRun2_asymptotic_v2
 fi
 
 echo "Data global tag: $datagt"
