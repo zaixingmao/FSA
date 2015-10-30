@@ -223,7 +223,9 @@ fs_daughter_inputs = {
     'taus': 'slimmedTaus',
     'photons': 'slimmedPhotons',
     'jets': 'slimmedJets',
-    'pfmet': 'slimmedMETs',         # only one MET in miniAOD
+    'pfmet': 'slimmedMETs',         
+    'pfmetNoHF': 'slimmedMETsNoHF',         
+    'pfmetPuppi': 'slimmedMETsPuppi',
     'mvamet': 'fixme',              # produced later
     'tautaumvamet': 'fixme',              # produced later
     'fsr': 'slimmedPhotons',
@@ -255,13 +257,26 @@ process.ghostCleanedMuons = cms.EDProducer("PATMuonCleanerBySegments",
 # process.miniCleanedMuons = cms.Path(process.ghostCleanedMuons)
 # process.schedule.append(process.miniCleanedMuons)
 
-#calculate pfmet covmatrix
+#calculate covmatrix
+
 process.load("FinalStateAnalysis.PatTools.met.METSignificance_cfi")
 process.load("RecoMET/METProducers.METSignificanceParams_cfi")
-process.MiniAODMETSignificanceEmbedder.srcMet = cms.InputTag(fs_daughter_inputs['pfmet'])
-process.miniPatMET = cms.Path(process.MiniAODMETSignificanceEmbedder)
-process.schedule.append(process.miniPatMET)
-fs_daughter_inputs['pfmet'] = "MiniAODMETSignificanceEmbedder"
+#for pfmet
+process.pfmetSigEmbed = process.MiniAODMETSignificanceEmbedder.clone(srcMet = cms.InputTag(fs_daughter_inputs['pfmet']))
+process.pfmetSigEmbedder = cms.Path(process.pfmetSigEmbed)
+process.schedule.append(process.pfmetSigEmbedder)
+fs_daughter_inputs['pfmet'] = "pfmetSigEmbed"
+# for pfmetNoHF
+# process.pfmetNoHFSigEmbed = process.MiniAODMETSignificanceEmbedder.clone( srcMet = cms.InputTag(fs_daughter_inputs['pfmetNoHF']))
+# process.pfmetNoHFSigEmbedder = cms.Path(process.pfmetNoHFSigEmbed)
+# process.schedule.append(process.pfmetNoHFSigEmbedder)
+# fs_daughter_inputs['pfmetNoHF'] = "pfmetNoHFSigEmbed"
+# for pfmetPuppi
+# process.pfmetPuppiSigEmbed = process.MiniAODMETSignificanceEmbedder.clone( srcMet = cms.InputTag(fs_daughter_inputs['pfmetPuppi']))
+# process.pfmetPuppiSigEmbedder = cms.Path(process.pfmetPuppiSigEmbed)
+# process.schedule.append(process.pfmetPuppiSigEmbedder)
+# fs_daughter_inputs['pfmetPuppi'] = "pfmetPuppiSigEmbed"
+
 
 process.miniPatMuons = cms.EDProducer(
     "MiniAODMuonIDEmbedder",
