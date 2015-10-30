@@ -21,6 +21,8 @@ patFinalStateEventProducer = cms.EDProducer(
     mets = cms.PSet(
         pfmet = cms.InputTag("fixme"),
         mvamet = cms.InputTag("fixme"),
+        pfmetNoHF = cms.InputTag("fixme"),
+        pfmetPuppi = cms.InputTag("fixme"),
     ),
     extraWeights = cms.PSet(
         #anyOldThing = cms.double(9999), # just an example
