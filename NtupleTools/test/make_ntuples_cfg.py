@@ -203,7 +203,7 @@ process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_condD
 # Need the global tag for geometry etc.
 envvar = 'mcgt' if options.isMC else 'datagt'
 GT = {'mcgt': '74X_mcRun2_asymptotic_v2', 
-      'datagt': '74X_dataRun2_v2'}
+      'datagt': '74X_dataRun2_Prompt_v4'}
 
 if options.GlobalTag:
     process.GlobalTag.globaltag = cms.string(options.GlobalTag)
