@@ -116,6 +116,9 @@ gen = PSet(
     isWtaunu='evt.findDecay(24,15)',
     isWmunu='evt.findDecay(24,13)',
     isWenu='evt.findDecay(24,11)',
+    
+    binningValue = '? evt.genEventInfo.binningValues().size()>0 ? evt.genEventInfo.binningValues()[0]: -9999',
+    binningValue2 = '? evt.genEventInfo.binningValues().size()>1 ? evt.genEventInfo.binningValues()[1]: -9999',
 
     nPromptTaus='evt.findPromptDecay(15, 2)',
     nPromptElec='evt.findPromptDecay(11, 1)',
@@ -124,6 +127,7 @@ gen = PSet(
 
 
     NUP='evt.lesHouches.NUP',
+    genHT = 'evt.genHT',
     EmbPtWeight='evt.generatorFilter.filterEfficiency',
     genEventWeight='evt.weight("genEventWeight")',
     genNuPt       = '? getGenNu().pt() > 0 ? getGenNu().pt() : -999',
