@@ -18,6 +18,10 @@ _trig_template = PSet(
 
 singleLepton = PSet(
     _trig_template.replace(
+        name='singleMu18', 
+        paths=r'HLT_IsoMu18_v\\d+'
+        ),
+    _trig_template.replace(
         name='singleMu17', 
         paths=r'HLT_IsoMu17_eta2p1_v\\d+'
         ),
@@ -34,11 +38,36 @@ singleLepton = PSet(
         paths=r'HLT_Ele22_eta2p1_WP75_Gsf_v\\d+'
         ),
     _trig_template.replace(
+        name='singleE22_WPLoose',
+        paths=r'HLT_Ele22_eta2p1_WPLoose_Gsf_v\\d+'
+        ),
+    _trig_template.replace(
+        name='singleE22_WPTight',
+        paths=r'HLT_Ele22_eta2p1_WPTight_Gsf_v\\d+'
+        ),
+
+    _trig_template.replace(
         name='singleE',
         paths=r'HLT_Ele32_eta2p1_WP75_Gsf_v\\d+'
         ),
     _trig_template.replace(
-        name='singleE_WP85',
+        name='singleE27_WPLoose',
+        paths=r'HLT_Ele27_WPLoose_Gsf_v\\d+'
+        ),
+    _trig_template.replace(
+        name='singleE27_2p1_WPLoose',
+        paths=r'HLT_Ele27_eta2p1_WPLoose_Gsf_v\\d+'
+        ),
+    _trig_template.replace(
+        name='singleE27_2p1_WPTight',
+        paths=r'HLT_Ele27_eta2p1_WPTight_Gsf_v\\d+'
+        ),
+    _trig_template.replace(
+        name='singleE27_2p1_WP75',
+        paths=r'HLT_Ele27_eta2p1_WP75_Gsf_v\\d+'
+        ),
+    _trig_template.replace(
+        name='singleE27_WP85',
         paths=r'HLT_Ele27_WP85_Gsf_v\\d+'
         ),
     _trig_template.replace(
