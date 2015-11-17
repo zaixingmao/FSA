@@ -133,6 +133,23 @@ const lhef::HEPEUP& PATFinalStateEvent::lesHouches() const {
   return lhe_;
 }
 
+const double PATFinalStateEvent::genHT() const{
+    size_t iMax = lhe_.NUP;
+
+    //get gen HT http://cvs.web.cern.ch/cvs/cgi-bin/viewcvs.cgi/UserCode/SusyCAF/interface/SusyCAF_Gen.h?revision=1.28
+    //https://hypernews.cern.ch/HyperNews/CMS/get/generators/1234/1/1/1.html
+    double htEvent = 0.0;
+    for(size_t i = 2; i < iMax; ++i) {
+       if( lhe_.ISTUP[i] != 1 ) continue;
+       int idabs = abs( lhe_.IDUP[i] );
+       if( idabs != 21 && (idabs<1 || idabs>6) ) continue;
+       double ptPart = sqrt( pow(lhe_.PUP[i][0],2) + pow(lhe_.PUP[i][1],2) );
+       //std::cout << ">>>>>>>> Pt Parton: " << ptPart << std::endl;
+       htEvent += ptPart;
+    } // iMax
+    return htEvent;
+}
+
 const GenEventInfoProduct& PATFinalStateEvent::genEventInfo() const {
   return genEventInfoProduct_;
 }

@@ -155,6 +155,9 @@ class PATFinalStateEvent {
     int findPromptDecay(const int pdgId, const int status = 1) const;
     int nDirectPromptTauDecayProductFinalState(const int pdgId) const;
 
+    //get gen HT
+    const double genHT() const;
+
     /// Get the PU scenario used to generate this events (if MC)
     const std::string& puTag() const;
 
