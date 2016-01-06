@@ -150,6 +150,33 @@ const double PATFinalStateEvent::genHT() const{
     return htEvent;
 }
 
+const double PATFinalStateEvent::genHT_BSM3G() const{
+    const int nup_ = lhe_.NUP;
+    const std::vector<lhef::HEPEUP::FiveVector> pup_ = lhe_.PUP;
+
+    int id, status, idabs, mothIdx, mothIdxTwo, mothStatus, mothStatusTwo;
+    bool hasIncomingAsMother;
+    double lheHTIncoming = 0;
+    for ( unsigned int icount = 0 ; icount < (unsigned int)nup_; icount++ ) {
+        id = lhe_.IDUP[icount];
+        status = lhe_.ISTUP[icount];
+        idabs = abs(id);
+        mothIdx = std::max(lhe_.MOTHUP[icount].first - 1,0);
+        mothIdxTwo = std::max(lhe_.MOTHUP[icount].second - 1,0);
+
+        mothStatus  = lhe_.ISTUP[mothIdx];
+        mothStatusTwo  = lhe_.ISTUP[mothIdxTwo];
+
+        if( (mothStatus < 0) || (mothStatusTwo < 0) ) {hasIncomingAsMother = true;}
+        else {hasIncomingAsMother = false;}
+
+        if( (status == 1) && ((idabs == 21) || (idabs > 0 and idabs < 7)) && (hasIncomingAsMother) ) { // gluons and quarks
+            lheHTIncoming += sqrt(pow((pup_[icount])[0],2) + pow((pup_[icount])[1],2));
+        }
+    }
+    return lheHTIncoming;
+}
+
 const GenEventInfoProduct& PATFinalStateEvent::genEventInfo() const {
   return genEventInfoProduct_;
 }

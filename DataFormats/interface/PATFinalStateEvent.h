@@ -157,6 +157,7 @@ class PATFinalStateEvent {
 
     //get gen HT
     const double genHT() const;
+    const double genHT_BSM3G() const;
 
     /// Get the PU scenario used to generate this events (if MC)
     const std::string& puTag() const;
