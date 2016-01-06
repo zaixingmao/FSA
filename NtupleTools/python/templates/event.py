@@ -128,6 +128,7 @@ gen = PSet(
 
     NUP='evt.lesHouches.NUP',
     genHT = 'evt.genHT',
+    genHT_BSM3G = 'evt.genHT_BSM3G',
     EmbPtWeight='evt.generatorFilter.filterEfficiency',
     genEventWeight='evt.weight("genEventWeight")',
     genNuPt       = '? getGenNu().pt() > 0 ? getGenNu().pt() : -999',
