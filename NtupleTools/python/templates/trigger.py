@@ -45,6 +45,10 @@ singleLepton = PSet(
         name='singleE22_WPTight',
         paths=r'HLT_Ele22_eta2p1_WPTight_Gsf_v\\d+'
         ),
+    _trig_template.replace(
+        name='singleE23_WPLoose',
+        paths=r'HLT_Ele23_WPLoose_Gsf_v\\d+'
+        ),
 
     _trig_template.replace(
         name='singleE',
@@ -98,6 +102,14 @@ doubleLepton = PSet(
         paths=r'HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_v\\d+'
         ),
     _trig_template.replace(
+        name='Mu8e17',
+        paths=r'HLT_Mu8_TrkIsoVVL_Ele17_CaloIdL_TrackIdL_IsoVL_v\\d+'
+        ),
+    _trig_template.replace(
+        name='Mu17e12',
+        paths=r'HLT_Mu17_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_v\\d+'
+        ),
+    _trig_template.replace(
         name='Mu30e30',
         paths=r'HLT_Mu30_Ele30_CaloIdL_GsfTrkIdVL_v\\d+'
         ),
@@ -120,6 +132,10 @@ doubleLepton = PSet(
     _trig_template.replace(
         name='doubleTau',
         paths=r'HLT_DoubleMediumIsoPFTau40_Trk1_eta2p1_Reg_v\\d+'
+        ),
+    _trig_template.replace(
+        name='doubleTau35',
+        paths=r'HLT_DoubleMediumIsoPFTau35_Trk1_eta2p1_Reg_v\\d+'
         ),
     )
 

@@ -108,6 +108,9 @@ tracking = PSet(
 trigger = PSet(
     objectMu23El12 = 'matchToHLTFilter({object_idx}, "hltMu23TrkIsoVVLEle12CaloIdLTrackIdLIsoVLMuonlegL3IsoFiltered23", 0.5)',
     objectMu8El23 = 'matchToHLTFilter({object_idx}, "hltMu8TrkIsoVVLEle23CaloIdLTrackIdLIsoVLMuonlegL3IsoFiltered8", 0.5)',
+    objectMu17El12 = 'matchToHLTFilter({object_idx}, "hltMu17TrkIsoVVLEle12CaloIdLTrackIdLIsoVLMuonlegL3IsoFiltered17", 0.5)',
+    objectMu8El17 = 'matchToHLTFilter({object_idx}, "hltMu8TrkIsoVVLEle17CaloIdLTrackIdLIsoVLMuonlegL3IsoFiltered8", 0.5)',
+
     objectIsoMu17 = 'matchToHLTFilter({object_idx}, "hltL3crIsoL1sSingleMu16erL1f0L2f10QL3f17QL3trkIsoFiltered0p09", 0.5)',
     objectIsoMu17hlt18 = 'matchToHLTFilter({object_idx}, "hltL3crIsoL1sSingleMu16erL1f0L2f10QL3f17QL3trkIsoFiltered0p09", 0.5, 18)',
     objectIsoMu18 = 'matchToHLTFilter({object_idx}, "hltL3crIsoL1sMu16L1f0L2f10QL3f18QL3trkIsoFiltered0p09", 0.5)',
