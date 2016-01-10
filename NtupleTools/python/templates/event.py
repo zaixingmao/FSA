@@ -73,16 +73,25 @@ met = PSet(
     metPuppiPhi       = 'evt.met4vector("pfmetPuppi","",1).Phi',
 
     #systematics
-    pfMet_mes_Et   = 'evt.met4vector("pfmet","mes+", 1).Et',
-    pfMet_tes_Et   = 'evt.met4vector("pfmet","tes+", 1).Et',
-    pfMet_jes_Et   = 'evt.met4vector("pfmet","jes+", 1).Et',
-    pfMet_ues_Et   = 'evt.met4vector("pfmet","ues+", 1).Et',
+    pfMet_mesUp_Et   = 'evt.met4vector("pfmet","mes+", 1).Et',
+    pfMet_tesUp_Et   = 'evt.met4vector("pfmet","tes+", 1).Et',
+    pfMet_jesUp_Et   = 'evt.met4vector("pfmet","jes+", 1).Et',
+    pfMet_uesUp_Et   = 'evt.met4vector("pfmet","ues+", 1).Et',
+    pfMet_mesDown_Et   = 'evt.met4vector("pfmet","mes-", 1).Et',
+    pfMet_tesDown_Et   = 'evt.met4vector("pfmet","tes-", 1).Et',
+    pfMet_jesDown_Et   = 'evt.met4vector("pfmet","jes-", 1).Et',
+    pfMet_uesDown_Et   = 'evt.met4vector("pfmet","ues-", 1).Et',
 
-    pfMet_mes_Phi  = 'evt.met4vector("pfmet","mes+", 1).Phi',
-    pfMet_tes_Phi  = 'evt.met4vector("pfmet","tes+", 1).Phi',
-    pfMet_jes_Phi  = 'evt.met4vector("pfmet","jes+", 1).Phi',
-    pfMet_ues_Phi  = 'evt.met4vector("pfmet","ues+", 1).Phi',
-    
+
+    pfMet_mesUp_Phi  = 'evt.met4vector("pfmet","mes+", 1).Phi',
+    pfMet_tesUp_Phi  = 'evt.met4vector("pfmet","tes+", 1).Phi',
+    pfMet_jesUp_Phi  = 'evt.met4vector("pfmet","jes+", 1).Phi',
+    pfMet_uesUp_Phi  = 'evt.met4vector("pfmet","ues+", 1).Phi',
+    pfMet_mesDown_Phi  = 'evt.met4vector("pfmet","mes-", 1).Phi',
+    pfMet_tesDown_Phi  = 'evt.met4vector("pfmet","tes-", 1).Phi',
+    pfMet_jesDown_Phi  = 'evt.met4vector("pfmet","jes-", 1).Phi',
+    pfMet_uesDown_Phi  = 'evt.met4vector("pfmet","ues-", 1).Phi',    
+
     #pfmet cov matrix
     pfmetCovariance_00 = 'evt.met("pfmet").getSignificanceMatrix()[0][0]',
     pfmetCovariance_01 = 'evt.met("pfmet").getSignificanceMatrix()[0][1]',

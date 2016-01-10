@@ -292,10 +292,10 @@ fs_daughter_inputs['muons'] = "miniPatMuons"
 
 process.miniPatJets = cms.EDProducer(
     "MiniAODJetIdEmbedder",
+    isMC=cms.int32(options.isMC),
     src=cms.InputTag(fs_daughter_inputs['jets'])
 )
 fs_daughter_inputs['jets'] = 'miniPatJets'
-
 process.runMiniAODObjectEmbedding = cms.Path(
     process.miniPatMuons+
     process.miniPatJets
@@ -482,12 +482,42 @@ process.miniAODTauJetInfoEmbedding = cms.EDProducer(
     maxDeltaR = cms.double(0.1),
 )
 fs_daughter_inputs['taus'] = 'miniAODTauJetInfoEmbedding'
+
 process.jetInfoEmbedding = cms.Path(
     process.miniAODElectronJetInfoEmbedding +
     process.miniAODMuonJetInfoEmbedding +
     process.miniAODTauJetInfoEmbedding
 )
 process.schedule.append(process.jetInfoEmbedding)
+
+
+#systematcs embedding
+process.sysEmbedTau = cms.EDProducer(
+    "PATTauSystematicsEmbedder",
+    src = cms.InputTag(fs_daughter_inputs['taus']),
+    tauEnergyScale = cms.PSet(
+        applyCorrection = cms.bool(False),
+        uncLabelUp = cms.string("AK5PF"),
+        uncLabelDown = cms.string("AK5PF"),
+        uncTag = cms.string("Uncertainty"),
+        flavorUncertainty = cms.double(0),
+    ),
+)
+fs_daughter_inputs['taus'] = 'sysEmbedTau'
+
+process.sysEmbedJets = cms.EDProducer(
+"PATJetSystematicsEmbedder",
+    src = cms.InputTag(fs_daughter_inputs['jets']),
+    corrLabel = cms.string("AK5PF"),
+    unclusteredEnergyScale = cms.double(0.1),
+)
+fs_daughter_inputs['jets'] = 'sysEmbedJets'
+process.sysEmbedding = cms.Path(
+    process.sysEmbedTau +
+    process.sysEmbedJets
+)
+process.schedule.append(process.sysEmbedding)
+
 
 # mvamet
 if options.runMVAMET:
