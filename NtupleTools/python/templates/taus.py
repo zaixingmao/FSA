@@ -20,6 +20,9 @@ info = PSet(
     objectDecayMode = '{object}.decayMode',
     objectTNPId = '{object}.userInt("ps_sel_nom")',
 
+    objectEC_up = '{object}.userFloat("tes+")',
+    objectEC_down = '{object}.userFloat("tes-")',
+
     # gen matching
     objectPdgId = '? ({object}.genParticleRef().isNonnull && {object}.genParticleRef().isAvailable) ? {object}.genParticleRef().pdgId() : -999',
     objectComesFromHiggs = 'comesFromHiggs({object_idx},15,0)',

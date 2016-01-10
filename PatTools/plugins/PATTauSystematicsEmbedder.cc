@@ -139,13 +139,13 @@ PATTauSystematicsEmbedder::PATTauSystematicsEmbedder(
   tauJetCorrection_(pset.getParameterSet("tauEnergyScale"))
 {
   src_ = pset.getParameter<edm::InputTag>("src");
-
-  // Produce the (corrected) nominal p4 collections for the jet and taus
-  produces<ShiftedCandCollection>("p4OutNomTaus");
-
-  // TES affects the tau
-  produces<ShiftedCandCollection>("p4OutTESUpTaus");
-  produces<ShiftedCandCollection>("p4OutTESDownTaus");
+// 
+//   // Produce the (corrected) nominal p4 collections for the jet and taus
+//   produces<ShiftedCandCollection>("p4OutNomTaus");
+// 
+//   // TES affects the tau
+//   produces<ShiftedCandCollection>("p4OutTESUpTaus");
+//   produces<ShiftedCandCollection>("p4OutTESDownTaus");
 
   produces<pat::TauCollection>();
 }
@@ -161,46 +161,51 @@ void PATTauSystematicsEmbedder::produce(edm::Event& evt, const edm::EventSetup& 
   std::auto_ptr<pat::TauCollection> output(new pat::TauCollection);
   output->reserve(nTaus);
 
-  std::auto_ptr<ShiftedCandCollection> p4OutNomTaus(new ShiftedCandCollection);
-  std::auto_ptr<ShiftedCandCollection> p4OutTESUpTaus(new ShiftedCandCollection);
-  std::auto_ptr<ShiftedCandCollection> p4OutTESDownTaus(new ShiftedCandCollection);
-
-  p4OutNomTaus->reserve(nTaus);
-  p4OutTESUpTaus->reserve(nTaus);
-  p4OutTESDownTaus->reserve(nTaus);
+//   std::auto_ptr<ShiftedCandCollection> p4OutNomTaus(new ShiftedCandCollection);
+//   std::auto_ptr<ShiftedCandCollection> p4OutTESUpTaus(new ShiftedCandCollection);
+//   std::auto_ptr<ShiftedCandCollection> p4OutTESDownTaus(new ShiftedCandCollection);
+// 
+//   p4OutNomTaus->reserve(nTaus);
+//   p4OutTESUpTaus->reserve(nTaus);
+//   p4OutTESDownTaus->reserve(nTaus);
 
   for (size_t i = 0; i < nTaus; ++i) {
-    const pat::Tau& origTau = taus->at(i);
-    output->push_back(origTau); // make our own copy
+    pat::Tau origTau = taus->at(i);
     ShiftedCand p4OutNomTau = *origTau.clone();
-    p4OutNomTaus->push_back(p4OutNomTau);
+//     p4OutNomTaus->push_back(p4OutNomTau);
     // Now make the smeared versions of the jets and taus
     // TES uncertainty
     ShiftedLorentzVectors tesShifts = tauJetCorrection_.uncertainties(
         p4OutNomTau.p4());
-    ShiftedCand p4OutTESUpTau = *p4OutNomTau.clone();
-    p4OutTESUpTau.setP4(tesShifts.shiftedUp);
-    p4OutTESUpTaus->push_back(p4OutTESUpTau);
+//     ShiftedCand p4OutTESUpTau = *p4OutNomTau.clone();
+//     p4OutTESUpTau.setP4(tesShifts.shiftedUp);
+//     p4OutTESUpTaus->push_back(p4OutTESUpTau);
 
-    ShiftedCand p4OutTESDownTau = *p4OutNomTau.clone();
-    p4OutTESDownTau.setP4(tesShifts.shiftedDown);
-    p4OutTESDownTaus->push_back(p4OutTESDownTau);
+//     ShiftedCand p4OutTESDownTau = *p4OutNomTau.clone();
+//     p4OutTESDownTau.setP4(tesShifts.shiftedDown);
+//     p4OutTESDownTaus->push_back(p4OutTESDownTau);
+
+    origTau.addUserFloat("tes+", tesShifts.shiftedUp.pt());
+    origTau.addUserFloat("tes-", tesShifts.shiftedDown.pt());
+
+    output->push_back(origTau); // make our own copy
+
   }
 
   // Put the shifted collections in the event
-  typedef edm::OrphanHandle<ShiftedCandCollection> PutHandle;
-
-  PutHandle p4OutNomTausH = evt.put(p4OutNomTaus, "p4OutNomTaus");
-  PutHandle p4OutTESUpTausH = evt.put(p4OutTESUpTaus, "p4OutTESUpTaus");
-  PutHandle p4OutTESDownTausH = evt.put(p4OutTESDownTaus, "p4OutTESDownTaus");
-
-  // Now embed the shifted collections into our output pat taus
-  for (size_t i = 0; i < output->size(); ++i) {
-    pat::Tau& tau = output->at(i);
-    tau.addUserCand("uncorr", CandidatePtr(p4OutNomTausH, i));
-    tau.addUserCand("tes+", CandidatePtr(p4OutTESUpTausH, i));
-    tau.addUserCand("tes-", CandidatePtr(p4OutTESDownTausH, i));
-  }
+//   typedef edm::OrphanHandle<ShiftedCandCollection> PutHandle;
+// 
+//   PutHandle p4OutNomTausH = evt.put(p4OutNomTaus, "p4OutNomTaus");
+//   PutHandle p4OutTESUpTausH = evt.put(p4OutTESUpTaus, "p4OutTESUpTaus");
+//   PutHandle p4OutTESDownTausH = evt.put(p4OutTESDownTaus, "p4OutTESDownTaus");
+// 
+//   // Now embed the shifted collections into our output pat taus
+//   for (size_t i = 0; i < output->size(); ++i) {
+//     pat::Tau& tau = output->at(i);
+//     tau.addUserCand("uncorr", CandidatePtr(p4OutNomTausH, i));
+//     tau.addUserCand("tes+", CandidatePtr(p4OutTESUpTausH, i));
+//     tau.addUserCand("tes-", CandidatePtr(p4OutTESDownTausH, i));
+//   }
   evt.put(output);
 }
 
