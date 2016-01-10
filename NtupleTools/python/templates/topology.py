@@ -134,6 +134,9 @@ extraJet = PSet(
     objectCSVBtag = '? evt.jets.size()>{object_idx} ? {object}.bDiscriminator("pfCombinedInclusiveSecondaryVertexV2BJetTags") : -999',
     objectPFJetIDLoose = '? evt.jets.size()>{object_idx} ? {object}.userFloat("idLoose") : -999',
 
+    objectEC_up = '? evt.jets.size()>{object_idx} ? {object}.userFloat("jes+") : -999',
+    objectEC_down = '? evt.jets.size()>{object_idx} ? {object}.userFloat("jes-") : -999',
+
     objectCSVL =  '? evt.jets.size()>{object_idx} ? {object}.userFloat("CSVL") : -999',
     objectCSVL_sysUp =  '? evt.jets.size()>{object_idx} ? {object}.userFloat("CSVL_sysUp") : -999',
     objectCSVL_sysDown =  '? evt.jets.size()>{object_idx} ? {object}.userFloat("CSVL_sysDown") : -999',
