@@ -44,6 +44,7 @@ def opts():
     parser.add_option("--notFromDAS", dest="notFromDAS", default=False, action="store_true", help="submit files defined in data13TeV.py")
 
     parser.add_option("--newXROOTD", dest="newXROOTD", default="", help="run over data")
+    parser.add_option("--sys", dest="sys", default="jetEC", help="jetEC, jetBTag, tauEC")
 
     options, args = parser.parse_args()
 
@@ -64,6 +65,7 @@ if resubmitDir != '':
 if resubmitDir != '':
     print 'moving previous log file to %s_old' %resubmitDir
     os.system("mv %s %s_old" %(resubmitDir, resubmitDir))
+    os.system("ls %s" %(resubmitDir[:resubmitDir.rfind('/')]))
 
 skimCuts = {}
 skimCuts['tt'] = {"ID": "object.tauID(\\\"decayModeFindingNewDMs\\\") > 0.5",
@@ -74,8 +76,8 @@ skimCuts['et'] = {# "ID_e": "object.userFloat(\'MVANonTrigWP80\')> 0.5",
                   "Pt_e": "object.pt() > 23",
                   "Eta_e": "abs(object.eta()) < 2.1",
                   "ID_t": "object.tauID(\\\"decayModeFindingNewDMs\\\") > 0.5",
-                  "Pt_t": "object.pt() > 20",
-                  "Eta_t": "abs(object.eta()) < 2.3",
+                  "Pt_t": "object.pt() > 15",
+                  "Eta_t": "abs(object.eta()) < 2.1",
                   }
 skimCuts['em'] = {# "ID_e": "object.userFloat(\'MVANonTrigWP80\')> 0.5",
                   "Pt_e": "object.pt() > 13",
@@ -110,9 +112,9 @@ localJobInfo = localJob_cfg.localJobInfo
 samples = getSamples(options.sample)
 
 if ":" in localJobInfo['eventsToProcess']:
-    cmd = "./make_ntuples_cfg.py eventsToProcess=%s outputFile=myTestFile.root inputFiles=%s channels=%s isMC=%i TNT=%i lumiMask=%s nExtraJets=8 runMVAMET=%i runTauTauMVAMET=%i svFit=%i " %(localJobInfo['eventsToProcess'], localJobInfo['inputFile'], options.FS, isMC, TNT, useLumiMask, MVAMET, TauTauMVAMET, SVFit)
+    cmd = "./make_ntuples_cfg.py eventsToProcess=%s outputFile=myTestFile.root inputFiles=%s channels=%s isMC=%i TNT=%i lumiMask=%s nExtraJets=8 sys=%s runMVAMET=%i runTauTauMVAMET=%i svFit=%i " %(localJobInfo['eventsToProcess'], localJobInfo['inputFile'], options.FS, isMC, TNT, useLumiMask, options.sys, MVAMET, TauTauMVAMET, SVFit)
 else:
-    cmd = "./make_ntuples_cfg.py maxEvents=%i outputFile=myTestFile.root inputFiles=%s channels=%s isMC=%i TNT=%i lumiMask=%s nExtraJets=8 runMVAMET=%i runTauTauMVAMET=%i svFit=%i " %(localJobInfo['maxEvents'], localJobInfo['inputFile'], options.FS, isMC, TNT, useLumiMask, MVAMET, TauTauMVAMET, SVFit)
+    cmd = "./make_ntuples_cfg.py maxEvents=%i outputFile=myTestFile.root inputFiles=%s channels=%s isMC=%i TNT=%i lumiMask=%s nExtraJets=8 sys=%s runMVAMET=%i runTauTauMVAMET=%i svFit=%i " %(localJobInfo['maxEvents'], localJobInfo['inputFile'], options.FS, isMC, TNT, useLumiMask, options.sys, MVAMET, TauTauMVAMET, SVFit)
 
 if options.memory:
     checkCmd = 'igprof -d -mp -z -o igprof.mp.gz  cmsRun '#"valgrind --tool=memcheck `cmsvgsupp` --leak-check=yes --show-reachable=yes --num-callers=20 --track-fds=yes cmsRun "
@@ -142,7 +144,7 @@ cmd += cuts
 if not options.runLocal:
     tempFile = "do_test.sh"
     outFile = "do.sh"
-    cmd = "submit_job.py %s make_ntuples_cfg.py channels=\"%s\" isMC=%i  TNT=%i lumiMask=%s nExtraJets=8 runMVAMET=%i runTauTauMVAMET=%i svFit=%i" %(options.name, options.FS, isMC, TNT, useLumiMask,MVAMET, TauTauMVAMET, SVFit)
+    cmd = "submit_job.py %s make_ntuples_cfg.py channels=\"%s\" isMC=%i  TNT=%i lumiMask=%s nExtraJets=8 sys=%s runMVAMET=%i runTauTauMVAMET=%i svFit=%i" %(options.name, options.FS, isMC, TNT, useLumiMask, options.sys, MVAMET, TauTauMVAMET, SVFit)
     if options.is50ns:
         cmd += ' use25ns=0'
     else:
@@ -155,7 +157,7 @@ if not options.runLocal:
                 cmd += " --campaign-tag=\"RunIISpring15DR74-Asympt50ns*\" "
             else:
 #                cmd += " --campaign-tag=\"RunIISpring15DR74-Asympt25ns*\" "
-                cmd += " --campaign-tag=\"RunIISpring15MiniAODv2-74X_mcRun2_asymptotic*\" "
+                cmd += " --campaign-tag=\"RunIISpring15MiniAODv2-74X_mcRun2_asymptotic_v2-v1\" "
         else:
             cmd += " --input-dir=/nfs_scratch/zmao/"
     else:
@@ -183,7 +185,7 @@ if not options.runLocal:
             newLine += "farmoutAnalysisJobs "
             if nJobs != 9999:
                 newLine += "--job-count=%s " %nJobs
-            newLine += "--assume-input-files-exist --vsize-limit=8000 "
+            newLine += "--assume-input-files-exist --vsize-limit=8000 --memory-requirements=5000 "
             newLine += currentLine[currentLine.find("farmoutAnalysisJobs") + 19:currentLine.find("\"--output-dag-file")]
             if resubmitDir != '':
                 newLine += "--resubmit-failed-jobs "
