@@ -23,14 +23,14 @@ mtToMET = PSet(
     objectMtToPfMet_ues  = 'mtMET({object_idx}, "", "pfmet", "ues+" , 1)',
 
     #PF Type1 MET (and systematics)
-    objectMtToPFMETNoHF      = 'mtMET({object_idx}, "", "pfmetNoHF", ""     , 1)',#1, apply phi correction; all PFMET is type1 in miniAOD ...
+#    objectMtToPFMETNoHF      = 'mtMET({object_idx}, "", "pfmetNoHF", ""     , 1)',#1, apply phi correction; all PFMET is type1 in miniAOD ...
 
     #PF Type1 MET (and systematics)
-    objectMtToMETPUPPI      = 'mtMET({object_idx}, "", "pfmetPuppi", ""     , 1)',#1, apply phi correction; all PFMET is type1 in miniAOD ...
+#    objectMtToMETPUPPI      = 'mtMET({object_idx}, "", "pfmetPuppi", ""     , 1)',#1, apply phi correction; all PFMET is type1 in miniAOD ...
 
 
     #MVA MET
-    objectMtToMVAMET     = 'mtMET({object_idx}, "", "mvamet", "", 0)',
+#    objectMtToMVAMET     = 'mtMET({object_idx}, "", "mvamet", "", 0)',
 
     objectToMETDPhi = 'deltaPhi({object}.phi, met().phi())',
 )
