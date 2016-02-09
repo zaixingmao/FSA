@@ -133,21 +133,8 @@ extraJet = PSet(
     objectPUMVA = '? evt.jets.size()>{object_idx} ? {object}.userFloat("pileupJetId:fullDiscriminant") : -999',
     objectCSVBtag = '? evt.jets.size()>{object_idx} ? {object}.bDiscriminator("pfCombinedInclusiveSecondaryVertexV2BJetTags") : -999',
     objectPFJetIDLoose = '? evt.jets.size()>{object_idx} ? {object}.userFloat("idLoose") : -999',
-<<<<<<< HEAD
-    objectCSVL = '? evt.jets.size()>{object_idx} ? {object}.userFloat("CSVL") : -999',
-    objectCSVL_sysUp = '? evt.jets.size()>{object_idx} ? {object}.userFloat("CSVL_sysUp") : -999',
-    objectCSVL_sysDown = '? evt.jets.size()>{object_idx} ? {object}.userFloat("CSVL_sysDown") : -999',
-    objectCSVL_misUp = '? evt.jets.size()>{object_idx} ? {object}.userFloat("CSVL_misUp") : -999',
-    objectCSVL_misDown = '? evt.jets.size()>{object_idx} ? {object}.userFloat("CSVL_misDown") : -999',
-    objectCSVL_up = '? evt.jets.size()>{object_idx} ? {object}.userFloat("CSVL_up") : -999',
-    objectCSVL_down = '? evt.jets.size()>{object_idx} ? {object}.userFloat("CSVL_down") : -999',
-    objectJES_Up = '? evt.jets.size()>{object_idx} ? {object}.userFloat("jes+") : -999',
-    objectJES_Down = '? evt.jets.size()>{object_idx} ? {object}.userFloat("jes-") : -999',
-=======
-
     objectEC_up = '? evt.jets.size()>{object_idx} ? {object}.userFloat("jes+") : -999',
     objectEC_down = '? evt.jets.size()>{object_idx} ? {object}.userFloat("jes-") : -999',
-
     objectCSVL =  '? evt.jets.size()>{object_idx} ? {object}.userFloat("CSVL") : -999',
     objectCSVL_sysUp =  '? evt.jets.size()>{object_idx} ? {object}.userFloat("CSVL_sysUp") : -999',
     objectCSVL_sysDown =  '? evt.jets.size()>{object_idx} ? {object}.userFloat("CSVL_sysDown") : -999',
@@ -155,5 +142,5 @@ extraJet = PSet(
     objectCSVL_misDown =  '? evt.jets.size()>{object_idx} ? {object}.userFloat("CSVL_misDown") : -999',
     objectCSVL_up =  '? evt.jets.size()>{object_idx} ? {object}.userFloat("CSVL_up") : -999',
     objectCSVL_down =  '? evt.jets.size()>{object_idx} ? {object}.userFloat("CSVL_down") : -999',
->>>>>>> 67f34d0e4985886c580839cfa6fcaf810664d67a
+
 )

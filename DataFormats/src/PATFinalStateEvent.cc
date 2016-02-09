@@ -242,15 +242,6 @@ const reco::Candidate::LorentzVector PATFinalStateEvent::met4vector(
   else if(tag == "mes+")
     return met(type)->shiftedP4(pat::MET::MuonEnUp);
   else if(tag == "jes-")
-<<<<<<< HEAD
-    return met()->shiftedP4(pat::MET::JetEnDown);
-  else if(tag == "ues-")
-    return met()->shiftedP4(pat::MET::UnclusteredEnDown);
-  else if(tag == "tes-")
-    return met()->shiftedP4(pat::MET::TauEnDown);
-  else if(tag == "mes-")
-    return met()->shiftedP4(pat::MET::MuonEnDown);
-=======
     return met(type)->shiftedP4(pat::MET::JetEnDown);
   else if(tag == "ues-")
     return met(type)->shiftedP4(pat::MET::UnclusteredEnDown);
@@ -258,7 +249,6 @@ const reco::Candidate::LorentzVector PATFinalStateEvent::met4vector(
     return met(type)->shiftedP4(pat::MET::TauEnDown);
   else if(tag == "mes-")
     return met(type)->shiftedP4(pat::MET::MuonEnDown);
->>>>>>> 67f34d0e4985886c580839cfa6fcaf810664d67a
   else
     return met(type)->p4();      
 
