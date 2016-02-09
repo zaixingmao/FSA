@@ -138,6 +138,10 @@ id = PSet(
     objectNeutralIsoPtSum = '{object}.tauID("neutralIsoPtSum")',
     objectChargedIsoPtSum = '{object}.tauID("chargedIsoPtSum")',
     objectPuCorrPtSum     = '{object}.tauID("puCorrPtSum")',
+
+    objectES_up = '{object}.userFloat("tes+")',
+    objectES_down = '{object}.userFloat("tes-")',
+
 )
 
 TNT_request = PSet(
