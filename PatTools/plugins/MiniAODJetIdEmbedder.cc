@@ -13,18 +13,29 @@
 #include "FWCore/Framework/interface/EDProducer.h"
 
 #include "DataFormats/PatCandidates/interface/Jet.h"
+#include "FinalStateAnalysis/PatTools/interface/BTagSF.h"
 
 class MiniAODJetIdEmbedder : public edm::EDProducer {
   public:
     MiniAODJetIdEmbedder(const edm::ParameterSet& pset);
     virtual ~MiniAODJetIdEmbedder(){}
     void produce(edm::Event& evt, const edm::EventSetup& es);
+    void setBTSF(BtagSFV * btsf) {btsf_=  btsf;}
+
   private:
     edm::InputTag src_;
+    bool isData_;
+    int isMC_;
+
+    BtagSFV* btsf_; 
+
 };
 
 MiniAODJetIdEmbedder::MiniAODJetIdEmbedder(const edm::ParameterSet& pset) {
   src_ = pset.getParameter<edm::InputTag>("src");
+  isMC_ = pset.getParameter<int>("isMC");
+  if(isMC_) isData_ = false;
+  else isData_ = true;
   produces<pat::JetCollection>();
 }
 
@@ -35,11 +46,13 @@ void MiniAODJetIdEmbedder::produce(edm::Event& evt, const edm::EventSetup& es) {
   evt.getByLabel(src_, input);
 
   output->reserve(input->size());
+
   for (size_t i = 0; i < input->size(); ++i) {
     pat::Jet jet = input->at(i);
     bool loose = true;
     bool tight = true;
     bool tightLepVeto = true;
+    bool btaggedL = false;
 
 
     double NHF = jet.neutralHadronEnergyFraction();
@@ -101,6 +114,12 @@ void MiniAODJetIdEmbedder::produce(edm::Event& evt, const edm::EventSetup& es) {
       }
 
     jet.addUserFloat("puID", float(passPU));
+
+
+    if(jet.pt() > 30 && fabs(jet.eta())<2.4){
+        btaggedL = btsf_->isbtagged(jet.pt(), jet.eta(), jet.phi(),jet.bDiscriminator("pfCombinedInclusiveSecondaryVertexV2BJetTags"),jet.partonFlavour(), isData_, 0, 0, 0.605);
+     }
+    jet.addUserFloat("CSVL", float(btaggedL));
 
     output->push_back(jet);
   }

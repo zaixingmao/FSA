@@ -35,10 +35,10 @@ PATJetSystematicsEmbedder::PATJetSystematicsEmbedder(const edm::ParameterSet& ps
   label_ = pset.getParameter<std::string>("corrLabel");
   unclusteredEnergyScale_ = pset.getParameter<double>("unclusteredEnergyScale");
   produces<pat::JetCollection>();
-  produces<ShiftedCandCollection>("p4OutJESUpJets");
-  produces<ShiftedCandCollection>("p4OutJESDownJets");
-  produces<ShiftedCandCollection>("p4OutUESUpJets");
-  produces<ShiftedCandCollection>("p4OutUESDownJets");
+//   produces<ShiftedCandCollection>("p4OutJESUpJets");
+//   produces<ShiftedCandCollection>("p4OutJESDownJets");
+//   produces<ShiftedCandCollection>("p4OutUESUpJets");
+//   produces<ShiftedCandCollection>("p4OutUESDownJets");
 }
 void PATJetSystematicsEmbedder::produce(edm::Event& evt, const edm::EventSetup& es) {
   std::auto_ptr<pat::JetCollection> output(new pat::JetCollection);
@@ -49,13 +49,13 @@ void PATJetSystematicsEmbedder::produce(edm::Event& evt, const edm::EventSetup& 
 
   std::auto_ptr<ShiftedCandCollection> p4OutJESUpJets(new ShiftedCandCollection);
   std::auto_ptr<ShiftedCandCollection> p4OutJESDownJets(new ShiftedCandCollection);
-  std::auto_ptr<ShiftedCandCollection> p4OutUESUpJets(new ShiftedCandCollection);
-  std::auto_ptr<ShiftedCandCollection> p4OutUESDownJets(new ShiftedCandCollection);
+//   std::auto_ptr<ShiftedCandCollection> p4OutUESUpJets(new ShiftedCandCollection);
+//   std::auto_ptr<ShiftedCandCollection> p4OutUESDownJets(new ShiftedCandCollection);
 
   p4OutJESUpJets->reserve(nJets);
   p4OutJESDownJets->reserve(nJets);
-  p4OutUESUpJets->reserve(nJets);
-  p4OutUESDownJets->reserve(nJets);
+//   p4OutUESUpJets->reserve(nJets);
+//   p4OutUESDownJets->reserve(nJets);
 
   edm::ESHandle<JetCorrectorParametersCollection> JetCorParColl;
   es.get<JetCorrectionsRecord>().get(label_, JetCorParColl);
@@ -64,54 +64,61 @@ void PATJetSystematicsEmbedder::produce(edm::Event& evt, const edm::EventSetup& 
       new JetCorrectionUncertainty(JetCorPar));
 
   for (size_t i = 0; i < nJets; ++i) {
-    const pat::Jet& jet = jets->at(i);
-    output->push_back(jet); // make our own copy
+    pat::Jet jet = jets->at(i);
 
     double unc = 0;
-    if (std::abs(jet.eta()) < 5.2 && jet.pt() > 9) {
+    double pt_up = 0;
+    double pt_down = 0;
+
+    if (std::abs(jet.eta()) < 2.4 && jet.pt() > 25) {
       jecUnc->setJetEta(jet.eta());
       jecUnc->setJetPt(jet.pt()); // here you must use the CORRECTED jet pt
       unc = jecUnc->getUncertainty(true);
+      // Get uncorrected pt
+      assert(jet.jecSetsAvailable());
+
+      LorentzVector uncDown = (1-unc)*jet.p4();
+      LorentzVector uncUp = (1+unc)*jet.p4();
+      //     LorentzVector uncUESDown = (1-unclusteredEnergyScale_)*jet.p4();
+      //     LorentzVector uncUESUp = (1+unclusteredEnergyScale_)*jet.p4();
+
+      ShiftedCand candUncDown = *jet.clone();
+      candUncDown.setP4(uncDown);
+      ShiftedCand candUncUp = *jet.clone();
+      candUncUp.setP4(uncUp);
+      pt_up = candUncUp.pt();
+      pt_down = candUncDown.pt();
     }
+    jet.addUserFloat("jes+", float(pt_up));
+    jet.addUserFloat("jes-", float(pt_down));
 
-    // Get uncorrected pt
-    assert(jet.jecSetsAvailable());
+    output->push_back(jet); // make our own copy
 
-    LorentzVector uncDown = (1-unc)*jet.p4();
-    LorentzVector uncUp = (1+unc)*jet.p4();
-    LorentzVector uncUESDown = (1-unclusteredEnergyScale_)*jet.p4();
-    LorentzVector uncUESUp = (1+unclusteredEnergyScale_)*jet.p4();
+//     ShiftedCand candUncUESDown = *jet.clone();
+//     candUncUESDown.setP4(uncUESDown);
+//     ShiftedCand candUncUESUp = *jet.clone();
+//     candUncUESUp.setP4(uncUESUp);
 
-    ShiftedCand candUncDown = *jet.clone();
-    candUncDown.setP4(uncDown);
-    ShiftedCand candUncUp = *jet.clone();
-    candUncUp.setP4(uncUp);
-
-    ShiftedCand candUncUESDown = *jet.clone();
-    candUncUESDown.setP4(uncUESDown);
-    ShiftedCand candUncUESUp = *jet.clone();
-    candUncUESUp.setP4(uncUESUp);
-
-    p4OutJESUpJets->push_back(candUncUp);
-    p4OutJESDownJets->push_back(candUncDown);
-    p4OutUESUpJets->push_back(candUncUESUp);
-    p4OutUESDownJets->push_back(candUncUESDown);
+//     p4OutJESUpJets->push_back(candUncUp);
+//     p4OutJESDownJets->push_back(candUncDown);
+//     p4OutUESUpJets->push_back(candUncUESUp);
+//     p4OutUESDownJets->push_back(candUncUESDown);
   }
 
-  typedef edm::OrphanHandle<ShiftedCandCollection> PutHandle;
-  PutHandle p4OutJESUpJetsH = evt.put(p4OutJESUpJets, "p4OutJESUpJets");
-  PutHandle p4OutJESDownJetsH = evt.put(p4OutJESDownJets, "p4OutJESDownJets");
-  PutHandle p4OutUESUpJetsH = evt.put(p4OutUESUpJets, "p4OutUESUpJets");
-  PutHandle p4OutUESDownJetsH = evt.put(p4OutUESDownJets, "p4OutUESDownJets");
+//   typedef edm::OrphanHandle<ShiftedCandCollection> PutHandle;
+//   PutHandle p4OutJESUpJetsH = evt.put(p4OutJESUpJets, "p4OutJESUpJets");
+//   PutHandle p4OutJESDownJetsH = evt.put(p4OutJESDownJets, "p4OutJESDownJets");
+//   PutHandle p4OutUESUpJetsH = evt.put(p4OutUESUpJets, "p4OutUESUpJets");
+//   PutHandle p4OutUESDownJetsH = evt.put(p4OutUESDownJets, "p4OutUESDownJets");
 
   // Now embed the shifted collections into our output pat taus
-  for (size_t i = 0; i < output->size(); ++i) {
-    pat::Jet& jet = output->at(i);
-    jet.addUserCand("jes+", CandidatePtr(p4OutJESUpJetsH, i));
-    jet.addUserCand("jes-", CandidatePtr(p4OutJESDownJetsH, i));
-    jet.addUserCand("ues+", CandidatePtr(p4OutUESUpJetsH, i));
-    jet.addUserCand("ues-", CandidatePtr(p4OutUESDownJetsH, i));
-  }
+//   for (size_t i = 0; i < output->size(); ++i) {
+//     pat::Jet& jet = output->at(i);
+//     jet.addUserFloat("jes+", float(CandidatePtr(p4OutJESUpJetsH, i)->pt()));
+//     jet.addUserFloat("jes-", float(CandidatePtr(p4OutJESDownJetsH, i)->pt());
+//     jet.addUserCand("ues+", CandidatePtr(p4OutUESUpJetsH, i));
+//     jet.addUserCand("ues-", CandidatePtr(p4OutUESDownJetsH, i));
+//   }
 
   evt.put(output);
 }

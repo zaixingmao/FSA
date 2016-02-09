@@ -83,6 +83,7 @@ options = TauVarParsing.TauVarParsing(
     runDQM=0,
     hzz=0,
     TNT=0,
+    sys="",
     paramFile='',
 )
 
@@ -292,10 +293,10 @@ fs_daughter_inputs['muons'] = "miniPatMuons"
 
 process.miniPatJets = cms.EDProducer(
     "MiniAODJetIdEmbedder",
+    isMC=cms.int32(options.isMC),
     src=cms.InputTag(fs_daughter_inputs['jets'])
 )
 fs_daughter_inputs['jets'] = 'miniPatJets'
-
 process.runMiniAODObjectEmbedding = cms.Path(
     process.miniPatMuons+
     process.miniPatJets
@@ -482,12 +483,53 @@ process.miniAODTauJetInfoEmbedding = cms.EDProducer(
     maxDeltaR = cms.double(0.1),
 )
 fs_daughter_inputs['taus'] = 'miniAODTauJetInfoEmbedding'
+
 process.jetInfoEmbedding = cms.Path(
     process.miniAODElectronJetInfoEmbedding +
     process.miniAODMuonJetInfoEmbedding +
     process.miniAODTauJetInfoEmbedding
 )
 process.schedule.append(process.jetInfoEmbedding)
+
+
+#systematcs embedding
+if options.sys == 'tauEC':
+    process.sysEmbedTau = cms.EDProducer(
+        "PATTauSystematicsEmbedder",
+        src = cms.InputTag(fs_daughter_inputs['taus']),
+        tauEnergyScale = cms.PSet(
+            applyCorrection = cms.bool(False),
+            uncLabelUp = cms.string("AK5PF"),
+            uncLabelDown = cms.string("AK5PF"),
+            uncTag = cms.string("Uncertainty"),
+            flavorUncertainty = cms.double(0),
+        ),
+    )
+    fs_daughter_inputs['taus'] = 'sysEmbedTau'
+    process.sysEmbedding = cms.Path(process.sysEmbedTau)
+    process.schedule.append(process.sysEmbedding)
+
+elif options.sys == 'jetBTag':
+    process.bTagSysJets = cms.EDProducer(
+        "MiniAODJetBTagSysEmbedder",
+        isMC=cms.int32(options.isMC),
+        src=cms.InputTag(fs_daughter_inputs['jets'])
+    )
+    fs_daughter_inputs['jets'] = 'bTagSysJets'
+    process.sysEmbedding = cms.Path(process.bTagSysJets)
+    process.schedule.append(process.sysEmbedding)
+
+elif options.sys == 'jetEC':
+    process.sysEmbedJets = cms.EDProducer(
+    "PATJetSystematicsEmbedder",
+        src = cms.InputTag(fs_daughter_inputs['jets']),
+        corrLabel = cms.string("AK5PF"),
+        unclusteredEnergyScale = cms.double(0.1),
+    )
+    fs_daughter_inputs['jets'] = 'sysEmbedJets'
+    process.sysEmbedding = cms.Path(process.sysEmbedJets)
+    process.schedule.append(process.sysEmbedding)
+
 
 # mvamet
 if options.runMVAMET:

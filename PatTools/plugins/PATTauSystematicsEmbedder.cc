@@ -141,11 +141,11 @@ PATTauSystematicsEmbedder::PATTauSystematicsEmbedder(
   src_ = pset.getParameter<edm::InputTag>("src");
 
   // Produce the (corrected) nominal p4 collections for the jet and taus
-  produces<ShiftedCandCollection>("p4OutNomTaus");
+//   produces<ShiftedCandCollection>("p4OutNomTaus");
 
   // TES affects the tau
-  produces<ShiftedCandCollection>("p4OutTESUpTaus");
-  produces<ShiftedCandCollection>("p4OutTESDownTaus");
+//   produces<ShiftedCandCollection>("p4OutTESUpTaus");
+//   produces<ShiftedCandCollection>("p4OutTESDownTaus");
 
   produces<pat::TauCollection>();
 }
@@ -165,42 +165,51 @@ void PATTauSystematicsEmbedder::produce(edm::Event& evt, const edm::EventSetup& 
   std::auto_ptr<ShiftedCandCollection> p4OutTESUpTaus(new ShiftedCandCollection);
   std::auto_ptr<ShiftedCandCollection> p4OutTESDownTaus(new ShiftedCandCollection);
 
-  p4OutNomTaus->reserve(nTaus);
-  p4OutTESUpTaus->reserve(nTaus);
-  p4OutTESDownTaus->reserve(nTaus);
+//   p4OutNomTaus->reserve(nTaus);
+//   p4OutTESUpTaus->reserve(nTaus);
+//   p4OutTESDownTaus->reserve(nTaus);
+
+  double tauUp = 0.0;
+  double tauDown = 0.0;
 
   for (size_t i = 0; i < nTaus; ++i) {
-    const pat::Tau& origTau = taus->at(i);
-    output->push_back(origTau); // make our own copy
+    tauUp = 0.0;
+    tauDown = 0.0;
+
+    pat::Tau origTau = taus->at(i);
     ShiftedCand p4OutNomTau = *origTau.clone();
-    p4OutNomTaus->push_back(p4OutNomTau);
+//     p4OutNomTaus->push_back(p4OutNomTau);
     // Now make the smeared versions of the jets and taus
     // TES uncertainty
-    ShiftedLorentzVectors tesShifts = tauJetCorrection_.uncertainties(
-        p4OutNomTau.p4());
-    ShiftedCand p4OutTESUpTau = *p4OutNomTau.clone();
-    p4OutTESUpTau.setP4(tesShifts.shiftedUp);
-    p4OutTESUpTaus->push_back(p4OutTESUpTau);
+    if(origTau.pt() > 15 && std::abs(origTau.eta()) < 2.1){
+        ShiftedLorentzVectors tesShifts = tauJetCorrection_.uncertainties(p4OutNomTau.p4());
+        ShiftedCand p4OutTESUpTau = *p4OutNomTau.clone();
+        p4OutTESUpTau.setP4(tesShifts.shiftedUp);
+        ShiftedCand p4OutTESDownTau = *p4OutNomTau.clone();
+        p4OutTESDownTau.setP4(tesShifts.shiftedDown);
+        tauUp = p4OutTESUpTau.pt();
+        tauDown = p4OutTESDownTau.pt();
+    }
+    origTau.addUserFloat("tes+", float(tauUp));
+    origTau.addUserFloat("tes-", float(tauDown));
+    output->push_back(origTau); // make our own copy
 
-    ShiftedCand p4OutTESDownTau = *p4OutNomTau.clone();
-    p4OutTESDownTau.setP4(tesShifts.shiftedDown);
-    p4OutTESDownTaus->push_back(p4OutTESDownTau);
   }
 
   // Put the shifted collections in the event
-  typedef edm::OrphanHandle<ShiftedCandCollection> PutHandle;
-
-  PutHandle p4OutNomTausH = evt.put(p4OutNomTaus, "p4OutNomTaus");
-  PutHandle p4OutTESUpTausH = evt.put(p4OutTESUpTaus, "p4OutTESUpTaus");
-  PutHandle p4OutTESDownTausH = evt.put(p4OutTESDownTaus, "p4OutTESDownTaus");
+//   typedef edm::OrphanHandle<ShiftedCandCollection> PutHandle;
+// 
+//   PutHandle p4OutNomTausH = evt.put(p4OutNomTaus, "p4OutNomTaus");
+//   PutHandle p4OutTESUpTausH = evt.put(p4OutTESUpTaus, "p4OutTESUpTaus");
+//   PutHandle p4OutTESDownTausH = evt.put(p4OutTESDownTaus, "p4OutTESDownTaus");
 
   // Now embed the shifted collections into our output pat taus
-  for (size_t i = 0; i < output->size(); ++i) {
-    pat::Tau& tau = output->at(i);
-    tau.addUserCand("uncorr", CandidatePtr(p4OutNomTausH, i));
-    tau.addUserCand("tes+", CandidatePtr(p4OutTESUpTausH, i));
-    tau.addUserCand("tes-", CandidatePtr(p4OutTESDownTausH, i));
-  }
+//   for (size_t i = 0; i < output->size(); ++i) {
+//     pat::Tau& tau = output->at(i);
+//     tau.addUserFloat("uncorr", CandidatePtr(p4OutNomTausH, i));
+//     tau.addUserFloat("tes+", CandidatePtr(p4OutTESUpTausH, i).pt());
+//     tau.addUserFloat("tes-", CandidatePtr(p4OutTESDownTausH, i).pt());
+//   }
   evt.put(output);
 }
 
