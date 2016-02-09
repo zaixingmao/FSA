@@ -139,11 +139,19 @@ PATTauSystematicsEmbedder::PATTauSystematicsEmbedder(
   tauJetCorrection_(pset.getParameterSet("tauEnergyScale"))
 {
   src_ = pset.getParameter<edm::InputTag>("src");
+<<<<<<< HEAD
 
   // Produce the (corrected) nominal p4 collections for the jet and taus
 //   produces<ShiftedCandCollection>("p4OutNomTaus");
 
   // TES affects the tau
+=======
+// 
+//   // Produce the (corrected) nominal p4 collections for the jet and taus
+//   produces<ShiftedCandCollection>("p4OutNomTaus");
+// 
+//   // TES affects the tau
+>>>>>>> 67f34d0e4985886c580839cfa6fcaf810664d67a
 //   produces<ShiftedCandCollection>("p4OutTESUpTaus");
 //   produces<ShiftedCandCollection>("p4OutTESDownTaus");
 
@@ -161,6 +169,7 @@ void PATTauSystematicsEmbedder::produce(edm::Event& evt, const edm::EventSetup& 
   std::auto_ptr<pat::TauCollection> output(new pat::TauCollection);
   output->reserve(nTaus);
 
+<<<<<<< HEAD
   std::auto_ptr<ShiftedCandCollection> p4OutNomTaus(new ShiftedCandCollection);
   std::auto_ptr<ShiftedCandCollection> p4OutTESUpTaus(new ShiftedCandCollection);
   std::auto_ptr<ShiftedCandCollection> p4OutTESDownTaus(new ShiftedCandCollection);
@@ -176,11 +185,23 @@ void PATTauSystematicsEmbedder::produce(edm::Event& evt, const edm::EventSetup& 
     tauUp = 0.0;
     tauDown = 0.0;
 
+=======
+//   std::auto_ptr<ShiftedCandCollection> p4OutNomTaus(new ShiftedCandCollection);
+//   std::auto_ptr<ShiftedCandCollection> p4OutTESUpTaus(new ShiftedCandCollection);
+//   std::auto_ptr<ShiftedCandCollection> p4OutTESDownTaus(new ShiftedCandCollection);
+// 
+//   p4OutNomTaus->reserve(nTaus);
+//   p4OutTESUpTaus->reserve(nTaus);
+//   p4OutTESDownTaus->reserve(nTaus);
+
+  for (size_t i = 0; i < nTaus; ++i) {
+>>>>>>> 67f34d0e4985886c580839cfa6fcaf810664d67a
     pat::Tau origTau = taus->at(i);
     ShiftedCand p4OutNomTau = *origTau.clone();
 //     p4OutNomTaus->push_back(p4OutNomTau);
     // Now make the smeared versions of the jets and taus
     // TES uncertainty
+<<<<<<< HEAD
     if(origTau.pt() > 15 && std::abs(origTau.eta()) < 2.1){
         ShiftedLorentzVectors tesShifts = tauJetCorrection_.uncertainties(p4OutNomTau.p4());
         ShiftedCand p4OutTESUpTau = *p4OutNomTau.clone();
@@ -192,6 +213,21 @@ void PATTauSystematicsEmbedder::produce(edm::Event& evt, const edm::EventSetup& 
     }
     origTau.addUserFloat("tes+", float(tauUp));
     origTau.addUserFloat("tes-", float(tauDown));
+=======
+    ShiftedLorentzVectors tesShifts = tauJetCorrection_.uncertainties(
+        p4OutNomTau.p4());
+//     ShiftedCand p4OutTESUpTau = *p4OutNomTau.clone();
+//     p4OutTESUpTau.setP4(tesShifts.shiftedUp);
+//     p4OutTESUpTaus->push_back(p4OutTESUpTau);
+
+//     ShiftedCand p4OutTESDownTau = *p4OutNomTau.clone();
+//     p4OutTESDownTau.setP4(tesShifts.shiftedDown);
+//     p4OutTESDownTaus->push_back(p4OutTESDownTau);
+
+    origTau.addUserFloat("tes+", tesShifts.shiftedUp.pt());
+    origTau.addUserFloat("tes-", tesShifts.shiftedDown.pt());
+
+>>>>>>> 67f34d0e4985886c580839cfa6fcaf810664d67a
     output->push_back(origTau); // make our own copy
 
   }
@@ -202,6 +238,7 @@ void PATTauSystematicsEmbedder::produce(edm::Event& evt, const edm::EventSetup& 
 //   PutHandle p4OutNomTausH = evt.put(p4OutNomTaus, "p4OutNomTaus");
 //   PutHandle p4OutTESUpTausH = evt.put(p4OutTESUpTaus, "p4OutTESUpTaus");
 //   PutHandle p4OutTESDownTausH = evt.put(p4OutTESDownTaus, "p4OutTESDownTaus");
+<<<<<<< HEAD
 
   // Now embed the shifted collections into our output pat taus
 //   for (size_t i = 0; i < output->size(); ++i) {
@@ -209,6 +246,15 @@ void PATTauSystematicsEmbedder::produce(edm::Event& evt, const edm::EventSetup& 
 //     tau.addUserFloat("uncorr", CandidatePtr(p4OutNomTausH, i));
 //     tau.addUserFloat("tes+", CandidatePtr(p4OutTESUpTausH, i).pt());
 //     tau.addUserFloat("tes-", CandidatePtr(p4OutTESDownTausH, i).pt());
+=======
+// 
+//   // Now embed the shifted collections into our output pat taus
+//   for (size_t i = 0; i < output->size(); ++i) {
+//     pat::Tau& tau = output->at(i);
+//     tau.addUserCand("uncorr", CandidatePtr(p4OutNomTausH, i));
+//     tau.addUserCand("tes+", CandidatePtr(p4OutTESUpTausH, i));
+//     tau.addUserCand("tes-", CandidatePtr(p4OutTESDownTausH, i));
+>>>>>>> 67f34d0e4985886c580839cfa6fcaf810664d67a
 //   }
   evt.put(output);
 }

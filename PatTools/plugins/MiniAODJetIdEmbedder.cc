@@ -16,6 +16,7 @@
 #include "FinalStateAnalysis/PatTools/interface/BTagSF.h"
 
 class MiniAODJetIdEmbedder : public edm::EDProducer {
+<<<<<<< HEAD
   public:
     MiniAODJetIdEmbedder(const edm::ParameterSet& pset);
     virtual ~MiniAODJetIdEmbedder(){}
@@ -28,6 +29,20 @@ class MiniAODJetIdEmbedder : public edm::EDProducer {
     int isMC_;
 
     BtagSFV* btsf_; 
+=======
+public:
+  MiniAODJetIdEmbedder(const edm::ParameterSet& pset);
+  virtual ~MiniAODJetIdEmbedder(){}
+  void produce(edm::Event& evt, const edm::EventSetup& es);
+  void setBTSF(BtagSFV * btsf) {btsf_=  btsf;}
+
+private:
+  edm::InputTag src_;
+  bool isData_;
+  int isMC_;
+
+  BtagSFV* btsf_; 
+>>>>>>> 67f34d0e4985886c580839cfa6fcaf810664d67a
 
 };
 
@@ -46,6 +61,16 @@ void MiniAODJetIdEmbedder::produce(edm::Event& evt, const edm::EventSetup& es) {
   evt.getByLabel(src_, input);
 
   output->reserve(input->size());
+<<<<<<< HEAD
+=======
+  bool btaggedL = false;
+  bool btaggedL_bTagSysUp = false;
+  bool btaggedL_bTagSysDown = false;
+  bool btaggedL_bTagMisUp = false;
+  bool btaggedL_bTagMisDown = false;
+  bool btaggedL_bTagUp = false;
+  bool btaggedL_bTagDown = false;
+>>>>>>> 67f34d0e4985886c580839cfa6fcaf810664d67a
 
   for (size_t i = 0; i < input->size(); ++i) {
     pat::Jet jet = input->at(i);
@@ -65,13 +90,13 @@ void MiniAODJetIdEmbedder::produce(edm::Event& evt, const edm::EventSetup& es) {
     double CHM = jet.chargedMultiplicity();
     double eta = jet.eta();
     if (std::abs(eta) <= 3.0){
-        loose = (NHF<0.99 && NEMF<0.99 && NumConst>1) && ((abs(eta)<=2.4 && CHF>0 && CHM>0 && CEMF<0.99) || std::abs(eta)>2.4) && std::abs(eta)<=3.0;
-        tight = (NHF<0.90 && NEMF<0.90 && NumConst>1) && ((std::abs(eta)<=2.4 && CHF>0 && CHM>0 && CEMF<0.99) || std::abs(eta)>2.4) && std::abs(eta)<=3.0;
-        tightLepVeto = (NHF<0.90 && NEMF<0.90 && NumConst>1 && MUF<0.8) && ((std::abs(eta)<=2.4 && CHF>0 && CHM>0 && CEMF<0.90) || std::abs(eta)>2.4) && std::abs(eta)<=3.0;
+      loose = (NHF<0.99 && NEMF<0.99 && NumConst>1) && ((abs(eta)<=2.4 && CHF>0 && CHM>0 && CEMF<0.99) || std::abs(eta)>2.4) && std::abs(eta)<=3.0;
+      tight = (NHF<0.90 && NEMF<0.90 && NumConst>1) && ((std::abs(eta)<=2.4 && CHF>0 && CHM>0 && CEMF<0.99) || std::abs(eta)>2.4) && std::abs(eta)<=3.0;
+      tightLepVeto = (NHF<0.90 && NEMF<0.90 && NumConst>1 && MUF<0.8) && ((std::abs(eta)<=2.4 && CHF>0 && CHM>0 && CEMF<0.90) || std::abs(eta)>2.4) && std::abs(eta)<=3.0;
     }
     else{
-        loose = (NEMF<0.90 && NumNeutralParticles>10 && std::abs(eta)>3.0 );
-        tight = (NEMF<0.90 && NumNeutralParticles>10 && std::abs(eta)>3.0 );
+      loose = (NEMF<0.90 && NumNeutralParticles>10 && std::abs(eta)>3.0 );
+      tight = (NEMF<0.90 && NumNeutralParticles>10 && std::abs(eta)>3.0 );
     }
     jet.addUserFloat("idLoose", loose);
     jet.addUserFloat("idTight", tight);
@@ -117,9 +142,27 @@ void MiniAODJetIdEmbedder::produce(edm::Event& evt, const edm::EventSetup& es) {
 
 
     if(jet.pt() > 30 && fabs(jet.eta())<2.4){
+<<<<<<< HEAD
         btaggedL = btsf_->isbtagged(jet.pt(), jet.eta(), jet.phi(),jet.bDiscriminator("pfCombinedInclusiveSecondaryVertexV2BJetTags"),jet.partonFlavour(), isData_, 0, 0, 0.605);
      }
     jet.addUserFloat("CSVL", float(btaggedL));
+=======
+      btaggedL = btsf_->isbtagged(jet.pt(), jet.eta(), jet.phi(),jet.bDiscriminator("pfCombinedInclusiveSecondaryVertexV2BJetTags"),jet.partonFlavour(), isData_, 0, 0, 0.605);
+      btaggedL_bTagSysUp = btsf_->isbtagged(jet.pt(), jet.eta(), jet.phi(), jet.bDiscriminator("pfCombinedInclusiveSecondaryVertexV2BJetTags"),jet.partonFlavour(), isData_, 2, 0, 0.605);
+      btaggedL_bTagSysDown = btsf_->isbtagged(jet.pt(), jet.eta(), jet.phi(),jet.bDiscriminator("pfCombinedInclusiveSecondaryVertexV2BJetTags"),jet.partonFlavour(), isData_, 1, 0, 0.605);
+      btaggedL_bTagMisUp = btsf_->isbtagged(jet.pt(), jet.eta(), jet.phi(),jet.bDiscriminator("pfCombinedInclusiveSecondaryVertexV2BJetTags"),jet.partonFlavour(), isData_, 0, 2, 0.605);
+      btaggedL_bTagMisDown = btsf_->isbtagged(jet.pt(), jet.eta(), jet.phi(),jet.bDiscriminator("pfCombinedInclusiveSecondaryVertexV2BJetTags"),jet.partonFlavour(), isData_, 0, 1, 0.605);
+      btaggedL_bTagUp = btsf_->isbtagged(jet.pt(), jet.eta(), jet.phi(),jet.bDiscriminator("pfCombinedInclusiveSecondaryVertexV2BJetTags"),jet.partonFlavour(), isData_, 2, 2, 0.605);
+      btaggedL_bTagDown = btsf_->isbtagged(jet.pt(), jet.eta(), jet.phi(),jet.bDiscriminator("pfCombinedInclusiveSecondaryVertexV2BJetTags"),jet.partonFlavour(), isData_, 1, 1, 0.605);
+    }
+    jet.addUserFloat("CSVL", float(btaggedL));
+    jet.addUserFloat("CSVL_sysUp", float(btaggedL_bTagSysUp));
+    jet.addUserFloat("CSVL_sysDown", float(btaggedL_bTagSysDown));
+    jet.addUserFloat("CSVL_misUp", float(btaggedL_bTagMisUp));
+    jet.addUserFloat("CSVL_misDown", float(btaggedL_bTagMisDown));
+    jet.addUserFloat("CSVL_up", float(btaggedL_bTagUp));
+    jet.addUserFloat("CSVL_down", float(btaggedL_bTagDown));
+>>>>>>> 67f34d0e4985886c580839cfa6fcaf810664d67a
 
     output->push_back(jet);
   }

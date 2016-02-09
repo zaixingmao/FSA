@@ -493,6 +493,7 @@ process.schedule.append(process.jetInfoEmbedding)
 
 
 #systematcs embedding
+<<<<<<< HEAD
 if options.sys == 'tauEC':
     process.sysEmbedTau = cms.EDProducer(
         "PATTauSystematicsEmbedder",
@@ -529,6 +530,33 @@ elif options.sys == 'jetEC':
     fs_daughter_inputs['jets'] = 'sysEmbedJets'
     process.sysEmbedding = cms.Path(process.sysEmbedJets)
     process.schedule.append(process.sysEmbedding)
+=======
+process.sysEmbedTau = cms.EDProducer(
+    "PATTauSystematicsEmbedder",
+    src = cms.InputTag(fs_daughter_inputs['taus']),
+    tauEnergyScale = cms.PSet(
+        applyCorrection = cms.bool(False),
+        uncLabelUp = cms.string("AK5PF"),
+        uncLabelDown = cms.string("AK5PF"),
+        uncTag = cms.string("Uncertainty"),
+        flavorUncertainty = cms.double(0),
+    ),
+)
+fs_daughter_inputs['taus'] = 'sysEmbedTau'
+
+process.sysEmbedJets = cms.EDProducer(
+"PATJetSystematicsEmbedder",
+    src = cms.InputTag(fs_daughter_inputs['jets']),
+    corrLabel = cms.string("AK5PF"),
+    unclusteredEnergyScale = cms.double(0.1),
+)
+fs_daughter_inputs['jets'] = 'sysEmbedJets'
+process.sysEmbedding = cms.Path(
+    process.sysEmbedTau +
+    process.sysEmbedJets
+)
+process.schedule.append(process.sysEmbedding)
+>>>>>>> 67f34d0e4985886c580839cfa6fcaf810664d67a
 
 
 # mvamet
