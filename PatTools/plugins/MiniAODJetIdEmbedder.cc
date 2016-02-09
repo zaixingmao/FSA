@@ -123,9 +123,7 @@ void MiniAODJetIdEmbedder::produce(edm::Event& evt, const edm::EventSetup& es) {
 
 
     if(jet.pt() > 30 && fabs(jet.eta())<2.4){
-        btaggedL = btsf_->isbtagged(jet.pt(), jet.eta(), jet.phi(),jet.bDiscriminator("pfCombinedInclusiveSecondaryVertexV2BJetTags"),jet.partonFlavour(), isData_, 0, 0, 0.605);
-     }
-    jet.addUserFloat("CSVL", float(btaggedL));
+      jet.addUserFloat("CSVL", float(btaggedL));
       btaggedL = btsf_->isbtagged(jet.pt(), jet.eta(), jet.phi(),jet.bDiscriminator("pfCombinedInclusiveSecondaryVertexV2BJetTags"),jet.partonFlavour(), isData_, 0, 0, 0.605);
       btaggedL_bTagSysUp = btsf_->isbtagged(jet.pt(), jet.eta(), jet.phi(), jet.bDiscriminator("pfCombinedInclusiveSecondaryVertexV2BJetTags"),jet.partonFlavour(), isData_, 2, 0, 0.605);
       btaggedL_bTagSysDown = btsf_->isbtagged(jet.pt(), jet.eta(), jet.phi(),jet.bDiscriminator("pfCombinedInclusiveSecondaryVertexV2BJetTags"),jet.partonFlavour(), isData_, 1, 0, 0.605);
