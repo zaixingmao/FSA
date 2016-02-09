@@ -10,7 +10,7 @@ parameters = {
     'ptCuts' : {
         'm': '5',
         'e': '7',
-        't': '20',
+        't': '15',
         'g': '10',
         'j': '20'
     },
@@ -30,7 +30,7 @@ parameters = {
     'finalSelection' : {
         'e': 'abs(eta) < 3 & pt > 7',
         'm': 'abs(eta) < 2.5 & pt > 5',
-        't': 'abs(eta) < 2.5 & pt > 20',
+        't': 'abs(eta) < 2.5 & pt > 15',
         'g': 'abs(superCluster().eta()) < 3.0 & pt > 10',
         # remove jets that are close to leptons
         'j' : {
