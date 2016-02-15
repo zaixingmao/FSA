@@ -24,6 +24,7 @@
 #include "DataFormats/PatCandidates/interface/Electron.h"
 #include "DataFormats/Common/interface/ValueMap.h"
 #include "DataFormats/Common/interface/View.h"
+#include "DataFormats/VertexReco/interface/Vertex.h"
 #include "FWCore/ServiceRegistry/interface/Service.h"
 #include "CommonTools/UtilAlgos/interface/TFileService.h"
 #include "TrackingTools/Records/interface/TransientTrackRecord.h"
@@ -47,6 +48,7 @@ private:
   bool isGoodVertex(const reco::Vertex& vtxx);
   // Data
   edm::EDGetTokenT<edm::View<pat::Electron> > electronCollectionToken_;
+  edm::EDGetTokenT<edm::View<reco::Vertex> > vtxSrc_;  
   std::vector<edm::EDGetTokenT<edm::ValueMap<bool> > > idMapTokens_; // store all ID tokens
   std::vector<std::string> idLabels_; // labels for the userInts holding results
   std::vector<std::string> valueLabels_;
@@ -55,7 +57,7 @@ private:
   std::vector<edm::EDGetTokenT<edm::ValueMap<int> > > categoryTokens_;
   std::auto_ptr<std::vector<pat::Electron> > out; // Collection we'll output at the end
 
-  edm::InputTag vtxSrc_;
+  //  edm::InputTag vtxSrc_;
   edm::InputTag beamSrc_;
 
   int patElectron_vtx_ndof_min_;
@@ -71,6 +73,10 @@ MiniAODElectronIDEmbedder::MiniAODElectronIDEmbedder(const edm::ParameterSet& iC
   electronCollectionToken_(consumes<edm::View<pat::Electron> >(iConfig.exists("src") ? 
 							       iConfig.getParameter<edm::InputTag>("src") :
 							       edm::InputTag("slimmedElectrons"))),
+  //added by JB
+  vtxSrc_( consumes<edm::View<reco::Vertex> >( iConfig.getParameter<edm::InputTag> ( "VertexTag" ) ) ),
+  //added by JB
+
   idLabels_(iConfig.exists("idLabels") ?
 	    iConfig.getParameter<std::vector<std::string> >("idLabels") :
 	    std::vector<std::string>()),
@@ -83,7 +89,7 @@ MiniAODElectronIDEmbedder::MiniAODElectronIDEmbedder(const edm::ParameterSet& iC
 {
   std::vector<edm::InputTag> idTags = iConfig.getParameter<std::vector<edm::InputTag> >("ids");
 
-  vtxSrc_ = iConfig.getParameter<edm::InputTag>("vtxSrc");
+  //  vtxSrc_ = iConfig.getParameter<edm::InputTag>("vtxSrc");
   beamSrc_ = iConfig.getParameter<edm::InputTag>("beamSrc");
   patElectron_vtx_ndof_min_         = iConfig.getParameter<int>("patElectron_vtx_ndof_min");
   patElectron_vtx_rho_max_          = iConfig.getParameter<int>("patElectron_vtx_rho_max");
@@ -127,9 +133,10 @@ void MiniAODElectronIDEmbedder::produce(edm::Event& iEvent, const edm::EventSetu
   std::vector<edm::Handle<edm::ValueMap<int> > > categories(categoryTokens_.size(), edm::Handle<edm::ValueMap<int> >() );
 
   iEvent.getByToken(electronCollectionToken_, electronsIn);
-
-  edm::Handle<reco::VertexCollection> vertices;
-  iEvent.getByLabel(vtxSrc_, vertices);
+  edm::Handle<edm::View<reco::Vertex> > vertices;
+  //  edm::Handle<reco::VertexCollection> vertices;
+  //  iEvent.getByLabel(vtxSrc_, vertices);
+  iEvent.getByToken(vtxSrc_, vertices);
   reco::VertexCollection::const_iterator firstGoodVertex = vertices->end();
   for (reco::VertexCollection::const_iterator it = vertices->begin(); it != firstGoodVertex; it++)
   {
