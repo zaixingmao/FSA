@@ -137,8 +137,8 @@ void MiniAODElectronIDEmbedder::produce(edm::Event& iEvent, const edm::EventSetu
   //  edm::Handle<reco::VertexCollection> vertices;
   //  iEvent.getByLabel(vtxSrc_, vertices);
   iEvent.getByToken(vtxSrc_, vertices);
-  reco::VertexCollection::const_iterator firstGoodVertex = vertices->end();
-  for (reco::VertexCollection::const_iterator it = vertices->begin(); it != firstGoodVertex; it++)
+  edm::View<reco::Vertex>::const_iterator firstGoodVertex = vertices->end();
+  for (edm::View<reco::Vertex>::const_iterator it = vertices->begin(); it != firstGoodVertex; it++)
   {
         if(isGoodVertex(*it)){
             firstGoodVertex = it;
