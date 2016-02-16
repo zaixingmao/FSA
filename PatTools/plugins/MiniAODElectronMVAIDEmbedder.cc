@@ -74,7 +74,7 @@ MiniAODElectronIDEmbedder::MiniAODElectronIDEmbedder(const edm::ParameterSet& iC
 							       iConfig.getParameter<edm::InputTag>("src") :
 							       edm::InputTag("slimmedElectrons"))),
   //added by JB
-  vtxSrc_( consumes<edm::View<reco::Vertex> >( iConfig.getParameter<edm::InputTag> ( "VertexTag" ) ) ),
+  vtxSrc_( consumes<edm::View<reco::Vertex> >( iConfig.getParameter<edm::InputTag> ( "vtxSrc" ) ) ),
   //added by JB
 
   idLabels_(iConfig.exists("idLabels") ?

@@ -23,7 +23,9 @@ class MiniAODJetIdEmbedder : public edm::EDProducer {
     void setBTSF(BtagSFV * btsf) {btsf_=  btsf;}
 
   private:
-    edm::InputTag src_;
+  //added by jangbae
+  edm::EDGetTokenT<edm::View <pat::Jet> > src_;
+  //    edm::InputTag src_;
     bool isData_;
     int isMC_;
 
@@ -32,7 +34,9 @@ class MiniAODJetIdEmbedder : public edm::EDProducer {
 };
 
 MiniAODJetIdEmbedder::MiniAODJetIdEmbedder(const edm::ParameterSet& pset) {
-  src_ = pset.getParameter<edm::InputTag>("src");
+  //by Jangbae
+  //src_ = pset.getParameter<edm::InputTag>("src");
+  src_ = consumes<edm::View<pat::Jet> >( pset.getParameter<edm::InputTag> ( "src" ) ) ;
   isMC_ = pset.getParameter<int>("isMC");
   if(isMC_) isData_ = false;
   else isData_ = true;
@@ -43,10 +47,12 @@ void MiniAODJetIdEmbedder::produce(edm::Event& evt, const edm::EventSetup& es) {
   std::auto_ptr<pat::JetCollection> output(new pat::JetCollection);
 
   edm::Handle<edm::View<pat::Jet> > input;
-  evt.getByLabel(src_, input);
+  // by Jangbae
+  //  evt.getByLabel(src_, input);
+  evt.getByToken(src_, input);
 
   output->reserve(input->size());
-  bool btaggedL = false;
+  //  bool btaggedL = false;
   bool btaggedL_bTagSysUp = false;
   bool btaggedL_bTagSysDown = false;
   bool btaggedL_bTagMisUp = false;
