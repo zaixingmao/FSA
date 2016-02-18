@@ -38,7 +38,7 @@ class MiniAODTauIpEmbedder : public edm::EDProducer {
   private:
   edm::EDGetTokenT<edm::View <pat::Tau> > src_;
 //    edm::InputTag src_;
-  edm::EDGetTokenT<edm::View<reco::VertexCollection> > vtxSrc_;
+  edm::EDGetTokenT<reco::VertexCollection> vtxSrc_;
     bool isGoodVertex(const reco::Vertex& vtxxx);
     int tau_vtx_ndof_min_, tau_vtx_rho_max_;
     double tau_vtx_position_z_max_;
@@ -49,7 +49,7 @@ class MiniAODTauIpEmbedder : public edm::EDProducer {
 MiniAODTauIpEmbedder::MiniAODTauIpEmbedder(const edm::ParameterSet& pset) {
   //edited by Jangbae
   src_ = consumes<edm::View<pat::Tau> >(pset.getParameter<edm::InputTag>("src"));
-  vtxSrc_ = consumes<edm::View<reco::VertexCollection> >(pset.getParameter<edm::InputTag>("vtxSrc"));
+  vtxSrc_ = consumes<reco::VertexCollection>(pset.getParameter<edm::InputTag>("vtxSrc"));
 
   beamSpot_                = pset.getParameter<edm::InputTag>("beamSpot");
   tau_vtx_ndof_min_       = pset.getParameter<int>("Tau_vtx_ndof_min");
