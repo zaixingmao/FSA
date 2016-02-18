@@ -29,15 +29,19 @@ class MiniAODLeptonIpEmbedder : public edm::EDProducer {
     virtual ~MiniAODLeptonIpEmbedder(){}
     void produce(edm::Event& evt, const edm::EventSetup& es);
   private:
-    edm::InputTag src_;
-    edm::InputTag vtxSrc_;
+  //
+  //  edm::InputTag src_;
+  edm::EDGetToken src_;
+  //  
+  //  edm::InputTag vtxSrc_;
+  edm::EDGetToken vtxSrc_;
     ek::PATLeptonTrackVectorExtractor<T> trackExtractor_;
 };
 
 template<typename T>
 MiniAODLeptonIpEmbedder<T>::MiniAODLeptonIpEmbedder(const edm::ParameterSet& pset) {
-  src_ = pset.getParameter<edm::InputTag>("src");
-  vtxSrc_ = pset.getParameter<edm::InputTag>("vtxSrc");
+  src_ = consumes<edm::View<T>>(pset.getParameter<edm::InputTag>("src"));
+  vtxSrc_ = consumes<reco::VertexCollection>(pset.getParameter<edm::InputTag>("vtxSrc"));
   produces<std::vector<T> >();
 }
 
@@ -47,10 +51,12 @@ void MiniAODLeptonIpEmbedder<T>::produce(edm::Event& evt, const edm::EventSetup&
   std::auto_ptr<std::vector<T> > output(new std::vector<T>());
 
   edm::Handle<edm::View<T> > handle;
-  evt.getByLabel(src_, handle);
+  //  evt.getByLabel(src_, handle);
+  evt.getByToken(src_, handle);
 
   edm::Handle<reco::VertexCollection> vertices;
-  evt.getByLabel(vtxSrc_, vertices);
+  //  evt.getByLabel(vtxSrc_, vertices);
+  evt.getByToken(vtxSrc_, vertices);
 
   const reco::Vertex& thePV = *vertices->begin();
 

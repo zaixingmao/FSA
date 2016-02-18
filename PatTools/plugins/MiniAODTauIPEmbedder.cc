@@ -36,8 +36,9 @@ class MiniAODTauIpEmbedder : public edm::EDProducer {
     virtual ~MiniAODTauIpEmbedder(){}
     void produce(edm::Event& evt, const edm::EventSetup& es);
   private:
-    edm::InputTag src_;
-    edm::InputTag vtxSrc_;
+  edm::EDGetTokenT<edm::View <pat::Tau> > src_;
+//    edm::InputTag src_;
+  edm::EDGetTokenT<edm::View<reco::VertexCollection> > vtxSrc_;
     bool isGoodVertex(const reco::Vertex& vtxxx);
     int tau_vtx_ndof_min_, tau_vtx_rho_max_;
     double tau_vtx_position_z_max_;
@@ -46,8 +47,10 @@ class MiniAODTauIpEmbedder : public edm::EDProducer {
 };
 
 MiniAODTauIpEmbedder::MiniAODTauIpEmbedder(const edm::ParameterSet& pset) {
-  src_ = pset.getParameter<edm::InputTag>("src");
-  vtxSrc_ = pset.getParameter<edm::InputTag>("vtxSrc");
+  //edited by Jangbae
+  src_ = consumes<edm::View<pat::Tau> >(pset.getParameter<edm::InputTag>("src"));
+  vtxSrc_ = consumes<edm::View<reco::VertexCollection> >(pset.getParameter<edm::InputTag>("vtxSrc"));
+
   beamSpot_                = pset.getParameter<edm::InputTag>("beamSpot");
   tau_vtx_ndof_min_       = pset.getParameter<int>("Tau_vtx_ndof_min");
   tau_vtx_rho_max_        = pset.getParameter<int>("Tau_vtx_rho_max");
@@ -61,10 +64,13 @@ void MiniAODTauIpEmbedder::produce(edm::Event& evt, const edm::EventSetup& es) {
   std::auto_ptr<std::vector<pat::Tau> > output(new std::vector<pat::Tau>());
 
   edm::Handle<edm::View<pat::Tau> > handle;
-  evt.getByLabel(src_, handle);
+  //added by Jangbae
+  evt.getByToken(src_, handle);
+  //  evt.getByLabel(src_, handle);
 
   edm::Handle<reco::VertexCollection> vertices;
-  evt.getByLabel(vtxSrc_, vertices);
+  evt.getByToken(vtxSrc_, vertices);
+  //  evt.getByLabel(vtxSrc_, vertices);
 
 
   reco::VertexCollection::const_iterator firstGoodVertex = vertices->end();
@@ -91,8 +97,8 @@ void MiniAODTauIpEmbedder::produce(edm::Event& evt, const edm::EventSetup& es) {
       math::XYZPoint point(beamSpot.x0(),beamSpot.y0(), beamSpot.z0());
       GlobalPoint thebs(beamSpot.x0(),beamSpot.y0(),beamSpot.z0());
   }
-
-  const reco::Vertex& thePV = *vertices->begin();
+  //commented by Jangbae
+  //  const reco::Vertex& thePV = *vertices->begin();
 
   const float pionMass = 0.139570;
   float pionSigma = pionMass*1e-6;
