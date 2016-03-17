@@ -313,6 +313,21 @@ void PATFinalStateEventProducer::produce(edm::Event& evt,
     // event weight
     double weightevt=genEvt->weight();
     theEvent->addWeight("genEventWeight", weightevt);
+
+    edm::Handle<LHEEventProduct> EvtHandle;
+    edm::InputTag theSrc("externalLHEProducer");
+    std::vector<double> LHEweights;
+    std::vector<int> LHEid;
+    if(evt.getByLabel(theSrc,EvtHandle)){  	    
+        if(EvtHandle->weights().size() > 0){	
+            for(unsigned int i = 0; i < EvtHandle->weights().size(); i++){
+                LHEid.push_back(std::stoi(EvtHandle->weights()[i].id));  
+                LHEweights.push_back(EvtHandle->weights()[i].wgt/EvtHandle->originalXWGTUP());
+            }
+         }
+    }
+    theEvent->addPDFWeight(LHEweights);
+    theEvent->addPDFID(LHEid);
   }
 
 

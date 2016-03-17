@@ -152,7 +152,7 @@ bool PATFinalStateSelection::operator()(const PATFinalStatePtrs& input,
     if(doSVFit_) svfit_results += passingLocal[i]->SVfit(0, 1);
 
     if (!eventView_ && finalPlots_.get()) 
-      finalPlots_->fill(*passingLocal[i], weight, i, "SVfit", svfit_results);
+      finalPlots_->fill(*passingLocal[i], weight, i, "SVfit", svfit_results, passingLocal[i]->getPDFWeight(), passingLocal[i]->getPDFID());
   }
   // if event view fill fill variable-sized branches
   if ( eventView_ ) finalPlotsEventView_->fill(passingLocal, weight);

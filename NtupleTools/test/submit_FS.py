@@ -44,7 +44,7 @@ def opts():
     parser.add_option("--notFromDAS", dest="notFromDAS", default=False, action="store_true", help="submit files defined in data13TeV.py")
 
     parser.add_option("--newXROOTD", dest="newXROOTD", default="", help="run over data")
-    parser.add_option("--sys", dest="sys", default="jetEC", help="jetEC, jetBTag, tauEC")
+    parser.add_option("--sys", dest="sys", default="", help="jetEC, jetBTag, tauEC")
 
     options, args = parser.parse_args()
 
@@ -106,15 +106,15 @@ TNT = 1 if options.TNT else 0
 #useLumiMask =  '/afs/cern.ch/cms/CAF/CMSCOMM/COMM_DQM/certification/Collisions15/13TeV/Cert_246908-254349_13TeV_PromptReco_Collisions15_JSON.txt' if options.isData else ''
 #useLumiMask =  '/afs/cern.ch/cms/CAF/CMSCOMM/COMM_DQM/certification/Collisions15/13TeV/Cert_246908-258159_13TeV_PromptReco_Collisions15_25ns_JSON_v3.txt' if options.isData else ''
 # useLumiMask = '/afs/cern.ch/cms/CAF/CMSCOMM/COMM_DQM/certification/Collisions15/13TeV/Cert_246908-258750_13TeV_PromptReco_Collisions15_25ns_JSON.txt' if options.isData else ''
-useLumiMask = '/afs/cern.ch/cms/CAF/CMSCOMM/COMM_DQM/certification/Collisions15/13TeV/Cert_246908-260627_13TeV_PromptReco_Collisions15_25ns_JSON.txt' if options.isData else '' #1546.44
+useLumiMask = '/afs/cern.ch/cms/CAF/CMSCOMM/COMM_DQM/certification/Collisions15/13TeV/Cert_246908-260627_13TeV_PromptReco_Collisions15_25ns_JSON_v2.txt' if options.isData else '' #1546.44
 localJobInfo = localJob_cfg.localJobInfo
 
-samples = getSamples(options.sample)
+inputFiles = 'local'
 
 if ":" in localJobInfo['eventsToProcess']:
-    cmd = "./make_ntuples_cfg.py eventsToProcess=%s outputFile=myTestFile.root inputFiles=%s channels=%s isMC=%i TNT=%i lumiMask=%s nExtraJets=8 sys=%s runMVAMET=%i runTauTauMVAMET=%i svFit=%i " %(localJobInfo['eventsToProcess'], localJobInfo['inputFile'], options.FS, isMC, TNT, useLumiMask, options.sys, MVAMET, TauTauMVAMET, SVFit)
+    cmd = './make_ntuples_cfg.py eventsToProcess=%s outputFile=myTestFile.root inputFiles=%s channels=%s isMC=%i TNT=%i lumiMask=%s nExtraJets=8 sys=%s runMVAMET=%i runTauTauMVAMET=%i svFit=%i ' %(localJobInfo['eventsToProcess'], inputFiles, options.FS, isMC, TNT, useLumiMask, options.sys, MVAMET, TauTauMVAMET, SVFit)
 else:
-    cmd = "./make_ntuples_cfg.py maxEvents=%i outputFile=myTestFile.root inputFiles=%s channels=%s isMC=%i TNT=%i lumiMask=%s nExtraJets=8 sys=%s runMVAMET=%i runTauTauMVAMET=%i svFit=%i " %(localJobInfo['maxEvents'], localJobInfo['inputFile'], options.FS, isMC, TNT, useLumiMask, options.sys, MVAMET, TauTauMVAMET, SVFit)
+    cmd = './make_ntuples_cfg.py maxEvents=%i outputFile=myTestFile.root inputFiles=%s channels=%s isMC=%i TNT=%i lumiMask=%s nExtraJets=8 sys=%s runMVAMET=%i runTauTauMVAMET=%i svFit=%i ' %(localJobInfo['maxEvents'], inputFiles, options.FS, isMC, TNT, useLumiMask, options.sys, MVAMET, TauTauMVAMET, SVFit)
 
 if options.memory:
     checkCmd = 'igprof -d -mp -z -o igprof.mp.gz  cmsRun '#"valgrind --tool=memcheck `cmsvgsupp` --leak-check=yes --show-reachable=yes --num-callers=20 --track-fds=yes cmsRun "
@@ -142,9 +142,13 @@ for iFS in fs:
 cmd += cuts
 
 if not options.runLocal:
+    samples = getSamples(options.sample)
     tempFile = "do_test.sh"
     outFile = "do.sh"
-    cmd = "submit_job.py %s make_ntuples_cfg.py channels=\"%s\" isMC=%i  TNT=%i lumiMask=%s nExtraJets=8 sys=%s runMVAMET=%i runTauTauMVAMET=%i svFit=%i" %(options.name, options.FS, isMC, TNT, useLumiMask, options.sys, MVAMET, TauTauMVAMET, SVFit)
+    sys = "sys=%s" %options.sys
+    if options.sys == '':
+        sys = ""
+    cmd = "submit_job.py %s make_ntuples_cfg.py channels=\"%s\" isMC=%i  TNT=%i lumiMask=%s nExtraJets=8 %s runMVAMET=%i runTauTauMVAMET=%i svFit=%i" %(options.name, options.FS, isMC, TNT, useLumiMask, sys, MVAMET, TauTauMVAMET, SVFit)
     if options.is50ns:
         cmd += ' use25ns=0'
     else:
@@ -157,13 +161,16 @@ if not options.runLocal:
                 cmd += " --campaign-tag=\"RunIISpring15DR74-Asympt50ns*\" "
             else:
 #                cmd += " --campaign-tag=\"RunIISpring15DR74-Asympt25ns*\" "
-                cmd += " --campaign-tag=\"RunIISpring15MiniAODv2-74X_mcRun2_asymptotic_v2-v1\" "
+                if "DYJetsToLL_M-1000to1500" in options.sample:
+                    cmd += " --campaign-tag=\"RunIISpring15MiniAODv2-Asympt25ns_74X_mcRun2_asymptotic_v2-v1\" "
+                else:
+                    cmd += " --campaign-tag=\"RunIISpring15MiniAODv2-74X_mcRun2_asymptotic_v2_ext3-v*\" "
         else:
             cmd += " --input-dir=/nfs_scratch/zmao/"
     else:
         cmd += " --data --das-replace-tuple=$fsa/MetaData/tuples/MiniAOD-13TeV_Data.json --samples %s -o %s" %(samples, tempFile)
 
-
+print cmd
 if options.memory:
 #     cmd += ">& vglog.out &"
     cmd += " >& igtest.mp.log &"
@@ -185,7 +192,7 @@ if not options.runLocal:
             newLine += "farmoutAnalysisJobs "
             if nJobs != 9999:
                 newLine += "--job-count=%s " %nJobs
-            newLine += "--assume-input-files-exist --vsize-limit=8000 --memory-requirements=5000 "
+            newLine += "--assume-input-files-exist --vsize-limit=8000 --memory-requirements=8000 "
             newLine += currentLine[currentLine.find("farmoutAnalysisJobs") + 19:currentLine.find("\"--output-dag-file")]
             if resubmitDir != '':
                 newLine += "--resubmit-failed-jobs "

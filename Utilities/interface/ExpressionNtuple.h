@@ -32,7 +32,7 @@ class ExpressionNtuple : private boost::noncopyable {
     // If do_commit is true, the held TTree is filled at the end
     // of the fill() function
     void fill(const T& element, int idx = -1, bool do_commit=true);
-    void fill(const T& element, std::string name, TLorentzVector tlv, int idx = -1, bool do_commit=true);
+    void fill(const T& element, std::string name, TLorentzVector tlv, std::vector<double> pdfWeights, std::vector<int> pdfIDs, int idx = -1, bool do_commit=true);
 
     // Fill the held TTree based on the current branches
     void commit() { tree_->Fill(); }
@@ -89,13 +89,16 @@ template<class T> void ExpressionNtuple<T>::fill(const T& element,
     commit();
 }
  
-template<class T> void ExpressionNtuple<T>::fill(const T& element, std::string name, TLorentzVector tlv, 
+template<class T> void ExpressionNtuple<T>::fill(const T& element, std::string name, TLorentzVector tlv,
+                         std::vector<double> pdfWeights, std::vector<int> pdfIDs, 
 						 int idx,
 						 bool do_commit) {
   for (size_t i = 0; i < columns_.size(); ++i) {
     // Compute the function and load the value into the column.
-    if(columnNames_[i].find(name) == std::string::npos) columns_[i].compute(element);
-    else columns_[i].setValue(tlv);
+    if(columnNames_[i].find(name) != std::string::npos) columns_[i].setValue(tlv);
+    else if(columnNames_[i].find("pdfWeights") != std::string::npos) columns_[i].setValue(pdfWeights);
+    else if(columnNames_[i].find("pdfIDs") != std::string::npos) columns_[i].setValue(pdfIDs);
+    else columns_[i].compute(element);
   }
   *idxBranch_ = idx;
   if( do_commit )

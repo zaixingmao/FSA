@@ -152,6 +152,7 @@ class PATFinalStateEvent {
 
     //Finds a decay in MC
     const bool findDecay(const int pdgIdMother, const int pdgIdDaughter) const;
+    const double findGenMotherMass(const int pdgId, const int motherPdgId) const;
     int findPromptDecay(const int pdgId, const int status = 1) const;
     int nDirectPromptTauDecayProductFinalState(const int pdgId) const;
 
@@ -178,6 +179,13 @@ class PATFinalStateEvent {
     /// Get a named event weight
     float weight(const std::string& name) const;
     void addWeight(const std::string& name, float weight);
+
+    //pdf weight
+    void addPDFWeight(std::vector<double> pdfWeight);
+    std::vector<double> getPDFWeight() const;
+    void addPDFID(std::vector<int> pdfID);
+    std::vector<int> getPDFID() const;
+
 
     /// Get a named event flag
     int flag(const std::string& flag) const;
@@ -220,6 +228,8 @@ class PATFinalStateEvent {
     edm::TriggerResults triggerResults_;
     edm::Ptr<reco::Vertex> pv_;
     std::vector<edm::Ptr<reco::Vertex> > recoVertices_;
+    std::vector<double> pdfWeights_;
+    std::vector<int> pdfIDs_;
     edm::Ptr<pat::MET> met_;
     TMatrixD metCovariance_;
     std::vector<PileupSummaryInfo> puInfo_;

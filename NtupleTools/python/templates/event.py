@@ -125,6 +125,10 @@ gen = PSet(
     isWtaunu='evt.findDecay(24,15)',
     isWmunu='evt.findDecay(24,13)',
     isWenu='evt.findDecay(24,11)',
+    X_to_ee='evt.findGenMotherMass(11, 23)',
+    X_to_mumu='evt.findGenMotherMass(13, 23)',
+    X_to_tautau='evt.findGenMotherMass(15, 23)',
+    X_to_ll='evt.findGenMotherMass(11, 23)+evt.findGenMotherMass(13, 23)+evt.findGenMotherMass(15, 23)',
     
     binningValue = '? evt.genEventInfo.binningValues().size()>0 ? evt.genEventInfo.binningValues()[0]: -9999',
     binningValue2 = '? evt.genEventInfo.binningValues().size()>1 ? evt.genEventInfo.binningValues()[1]: -9999',
@@ -146,6 +150,8 @@ gen = PSet(
     genNuMass       = '? getGenNu().pt() > 0 ? getGenNu().mass()  : -999',
     genMetEt = 'evt.getGenMET().et',
     genMetPhi = 'evt.getGenMET().phi',
+    pdfWeights = 'evt.getPDFWeight()',
+    pdfIDs = 'evt.getPDFID()',
 )
 
 tauSpinner = PSet(

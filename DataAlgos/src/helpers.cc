@@ -420,6 +420,35 @@ const bool findDecay(const reco::GenParticleRefProd genCollectionRef, int pdgIdM
   return nDecays;
 }
 
+const double findGenMotherMass(const reco::GenParticleRefProd genCollectionRef, int pdgId, int motherPdgId)
+{
+  //if no genPaticle no matching
+  if(!genCollectionRef){
+    return 0;
+  }
+  reco::GenParticleCollection genParticles = *genCollectionRef;
+  reco::GenParticleRefVector allParticles, allMotherParticles;  
+  GenParticlesHelper::findParticles(*genCollectionRef, allParticles, std::abs(pdgId), 23);
+  GenParticlesHelper::findParticles(*genCollectionRef, allMotherParticles, std::abs(motherPdgId), 62);
+  reco::Candidate::LorentzVector motherP4(0,0,0,0);
+  if(allMotherParticles.size() == 0){
+    for ( GenParticlesHelper::IGR iPar = allParticles.begin(); iPar != allParticles.end(); ++iPar ) {
+        motherP4 += (*iPar)->p4();
+    }
+    return motherP4.mass();
+  }
+  else{
+    for ( GenParticlesHelper::IGR iPar = allMotherParticles.begin(); iPar != allMotherParticles.end(); ++iPar ) {
+        int n = (*iPar)->numberOfDaughters();
+        for(int i = 0; i < n; i++){
+            if(abs((*iPar)->daughter(i)->pdgId()) == abs(pdgId)) return (*iPar)->mass();
+        }
+    }
+  }
+  return 0;
+}
+
+
 int findPromptDecay(const reco::GenParticleRefProd genCollectionRef, int pdgId, int status)
 {
   int nPromptParticles = 0;

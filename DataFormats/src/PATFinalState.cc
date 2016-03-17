@@ -337,6 +337,14 @@ PATFinalState::smallestDeltaPhi() const {
   return smallestDeltaPhi;
 }
 
+std::vector<double> PATFinalState::getPDFWeight() const{
+    return evt()->getPDFWeight();
+}
+
+std::vector<int> PATFinalState::getPDFID() const{
+    return evt()->getPDFID();
+}
+
 TLorentzVector
 PATFinalState::SVfit(int i, int j) const {
 

@@ -51,7 +51,7 @@ from FinalStateAnalysis.NtupleTools.ntuple_builder import \
 from FinalStateAnalysis.Utilities.version import cmssw_major_version, \
     cmssw_minor_version
 import PhysicsTools.PatAlgos.tools.helpers as helpers
-
+#import localJob_cfg
 process = cms.Process("Ntuples")
 
 process.options = cms.untracked.PSet(
@@ -149,7 +149,9 @@ options.runMVAMET = options.runMVAMET
 
 process.source = cms.Source(
     "PoolSource",
+#    fileNames=cms.untracked.vstring(localJob_cfg.localJobInfo['inputFiles']),
     fileNames=cms.untracked.vstring(options.inputFiles),
+#    duplicateCheckMode=cms.untracked.string("noDuplicateCheck"),
     skipEvents=cms.untracked.uint32(options.skipEvents),
 )
 
@@ -184,14 +186,14 @@ process.TFileService = cms.Service(
 process.maxEvents = cms.untracked.PSet(
     input=cms.untracked.int32(options.maxEvents))
 
-# process.load("SimGeneral.HepPDTESSource.pythiapdt_cfi")
-# process.printTree = cms.EDAnalyzer("ParticleListDrawer",
-#   maxEventsToPrint = cms.untracked.int32(100),
-#   printVertex = cms.untracked.bool(False),
-#   printOnlyHardInteraction = cms.untracked.bool(False), # Print only status=3 particles. This will not work for Pythia8, which does not have any such particles.
-#   src = cms.InputTag("prunedGenParticles")
-# )
-# process.printGen = cms.Path(process.printTree)
+#process.load("SimGeneral.HepPDTESSource.pythiapdt_cfi")
+#process.printTree = cms.EDAnalyzer("ParticleListDrawer",
+#                                   maxEventsToPrint = cms.untracked.int32(100),
+#                                   printVertex = cms.untracked.bool(False),
+#                                   printOnlyHardInteraction = cms.untracked.bool(False), # Print only status=3 particles. This will not work for Pythia8, which does not have any such particles.
+#                                   src = cms.InputTag("prunedGenParticles")
+#                                   )
+#process.printGen = cms.Path(process.printTree)
 process.schedule = cms.Schedule()
 
 if options.TNT:
@@ -204,6 +206,7 @@ process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_condD
 # Need the global tag for geometry etc.
 envvar = 'mcgt' if options.isMC else 'datagt'
 GT = {'mcgt': '74X_mcRun2_asymptotic_v2', 
+#      'datagt': '74X_dataRun2_reMiniAOD_v0'}
       'datagt': '74X_dataRun2_Prompt_v4'}
 
 if options.GlobalTag:
@@ -529,7 +532,7 @@ elif options.sys == 'jetEC':
     fs_daughter_inputs['jets'] = 'sysEmbedJets'
     process.sysEmbedding = cms.Path(process.sysEmbedJets)
     process.schedule.append(process.sysEmbedding)
-process.schedule.append(process.sysEmbedding)
+    
 
 
 

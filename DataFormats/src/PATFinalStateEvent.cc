@@ -363,6 +363,20 @@ void PATFinalStateEvent::addWeight(const std::string& name, float weight) {
   weights_[name] = weight;
 }
 
+
+std::vector<double> PATFinalStateEvent::getPDFWeight() const {
+    return pdfWeights_;
+}
+std::vector<int> PATFinalStateEvent::getPDFID() const {
+    return pdfIDs_;
+}
+void PATFinalStateEvent::addPDFWeight(std::vector<double> pdfWeights) {
+  pdfWeights_ = pdfWeights;
+}
+void PATFinalStateEvent::addPDFID(std::vector<int> pdfIDs) {
+  pdfIDs_ = pdfIDs;
+}
+
 int PATFinalStateEvent::flag(const std::string& name) const {
   typedef std::map<std::string, int> FlagMap;
   FlagMap::const_iterator findit = flags_.find(name);
@@ -426,6 +440,10 @@ const pat::PackedCandidateCollection& PATFinalStateEvent::packedPflow() const {
 
 const bool PATFinalStateEvent::findDecay(const int pdgIdMother, const int pdgIdDaughter) const{
   return fshelpers::findDecay(genParticles_, pdgIdMother, pdgIdDaughter);
+}
+
+const double PATFinalStateEvent::findGenMotherMass(const int pdgId, const int motherPdgId) const{
+  return fshelpers::findGenMotherMass(genParticles_, pdgId, motherPdgId);
 }
 
 int PATFinalStateEvent::findPromptDecay(const int pdgId, const int status) const{

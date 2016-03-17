@@ -50,6 +50,7 @@ const int getGenMatchCategory(const reco::Candidate* daughter, const reco::GenPa
 
 ///Helper function to find a gen particle given pdgid and status
 const bool findDecay(const reco::GenParticleRefProd genCollectionRef, int pdgIdMother, int pdgIdDaughter);
+const double findGenMotherMass(const reco::GenParticleRefProd genCollectionRef, int pdgId, int motherPdgId);
 int findPromptDecay(const reco::GenParticleRefProd genCollectionRef, int pdgId, int status);
 int nDirectPromptTauDecayProductFinalState(const reco::GenParticleRefProd genCollectionRef, int pdgId);
 
