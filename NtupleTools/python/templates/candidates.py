@@ -34,7 +34,6 @@ vertex_info = PSet(
 
 # The info about the associated pat::Jet
 base_jet = PSet(
-    objectJetPt = '{object}.userFloat("jetPt")',
     objectJetBtag = '? {object}.userCand("patJet").isNonnull ? '
         '{object}.userCand("patJet").bDiscriminator("") : -5',
     objectJetPFCISVBtag = '? {object}.userCand("patJet").isNonnull ? '
