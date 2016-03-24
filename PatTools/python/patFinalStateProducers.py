@@ -68,7 +68,7 @@ def produce_final_states(process, collections, output_commands,
         process.patFinalStateEventProducer.genParticleSrc = cms.InputTag("prunedGenParticles")
         process.patFinalStateEventProducer.mets = cms.PSet(
             pfmet = cms.InputTag(src['pfmet']),
-            pfmetNoHF = cms.InputTag(src['pfmetNoHF']),
+#            pfmetNoHF = cms.InputTag(src['pfmetNoHF']),
             pfmetPuppi = cms.InputTag(src['pfmetPuppi']),
         )
         if runMVAMET:
