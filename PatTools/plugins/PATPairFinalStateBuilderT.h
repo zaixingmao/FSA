@@ -30,9 +30,13 @@ PATPairFinalStateBuilderT<FinalStatePair>::PATPairFinalStateBuilderT(
     const edm::ParameterSet& pset):
   cut_(pset.getParameter<std::string>("cut"), true) {
   leg1Src_ = pset.getParameter<edm::InputTag>("leg1Src");
+  consumes<edm::View<typename FinalStatePair::daughter1_type> >(leg1Src_);
   leg2Src_ = pset.getParameter<edm::InputTag>("leg2Src");
+  consumes<edm::View<typename FinalStatePair::daughter2_type> >(leg2Src_);
   evtSrc_ = pset.getParameter<edm::InputTag>("evtSrc");
+  consumes<edm::View<PATFinalStateEvent> >(evtSrc_);
   tautauMVAMetSrc_ = pset.getParameter<edm::InputTag>("tautauMVAMETSrc");
+  consumes<edm::View<pat::MET> >(evtSrc_);
 
   produces<FinalStatePairCollection>();
 }
