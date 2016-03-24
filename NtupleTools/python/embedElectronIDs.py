@@ -75,7 +75,7 @@ def embedElectronIDs(process, use25ns, eSrc, vtxSrc, beamSrc, TNT):
     eSrc = "miniAODElectronID"
     
     process.miniAODElectrons = cms.Path(
-        process.egmGsfElectronIDSequence+
+#         process.egmGsfElectronIDSequence+
         process.miniAODElectronID
         )
     process.schedule.append(process.miniAODElectrons)
