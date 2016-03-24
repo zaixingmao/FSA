@@ -37,7 +37,10 @@ class MiniAODLeptonIpEmbedder : public edm::EDProducer {
 template<typename T>
 MiniAODLeptonIpEmbedder<T>::MiniAODLeptonIpEmbedder(const edm::ParameterSet& pset) {
   src_ = pset.getParameter<edm::InputTag>("src");
+  consumes<edm::View<T> >(src_);
   vtxSrc_ = pset.getParameter<edm::InputTag>("vtxSrc");
+  consumes<reco::VertexCollection>(vtxSrc_);
+
   produces<std::vector<T> >();
 }
 

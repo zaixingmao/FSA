@@ -9,7 +9,7 @@
 #include "FWCore/ParameterSet/interface/ProcessDesc.h"
 #include "PhysicsTools/FWLite/interface/TFileService.h"
 #include "FWCore/PythonParameterSet/interface/PythonProcessDesc.h"
-
+#include "FWCore/Framework/interface/ConsumesCollector.h"
 #include <TFile.h>
 #include <TSystem.h>
 
@@ -54,7 +54,7 @@ int main(int argc, char* argv[]) {
     TFileDirectory subdir = fileService.mkdir(toAnalyze[i].c_str());
     edm::ParameterSet anaCfg = cfg.getParameterSet(toAnalyze[i]);
     anaCfg.addParameter<std::string>("@module_label", toAnalyze[i]);
-    analyzers.push_back(new PATFinalStateAnalysis(anaCfg, subdir));
+    analyzers.push_back(new PATFinalStateAnalysis(anaCfg, subdir, consumesCollector()));
   }
 
   /// Last run processed

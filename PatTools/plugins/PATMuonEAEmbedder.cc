@@ -50,6 +50,8 @@ PATMuonEAEmbedder::PATMuonEAEmbedder(const
   :_eacalc(PATMuonEACalculator(pset.getParameterSetVector("effective_areas"))){
   _eas_to_get = pset.getParameter<vstring>("applied_effective_areas");
   _src = pset.getParameter<InputTag>("src");  
+  consumes<MuonCollection>(_src);
+
   produces<MuonCollection>();
 }
 

@@ -4,6 +4,7 @@
 #include "FinalStateAnalysis/DataFormats/interface/PATFinalStateFwd.h"
 #include "FinalStateAnalysis/NtupleTools/interface/PATFinalStateSelection.h"
 #include "FinalStateAnalysis/Utilities/interface/CutFlow.h"
+#include "FWCore/Framework/interface/EDProducer.h"
 
 #include "FinalStateAnalysis/DataFormats/interface/PATFinalStateEvent.h"
 #include "FinalStateAnalysis/DataFormats/interface/PATFinalStateLS.h"
@@ -16,10 +17,11 @@
 
 #include <sstream>
 
-PATFinalStateAnalysis::PATFinalStateAnalysis(
-    const edm::ParameterSet& pset, TFileDirectory& fs):
+PATFinalStateAnalysis::PATFinalStateAnalysis(const edm::ParameterSet& pset, TFileDirectory& fs, edm::ConsumesCollector&& iC):
   BasicAnalyzer(pset, fs),fs_(fs) {
   src_ = pset.getParameter<edm::InputTag>("src");
+  iC.consumes<PATFinalStateCollection>(src_);
+
   name_ = pset.getParameter<std::string>("@module_label");
 
   // Setup the code to apply event level weights
@@ -29,6 +31,7 @@ PATFinalStateAnalysis::PATFinalStateAnalysis(
     evtWeights_.push_back(EventFunction(weights[i]));
   }
   evtSrc_ = pset.getParameter<edm::InputTag>("evtSrc");
+  iC.consumes<PATFinalStateEventCollection>(evtSrc_);
 
   analysisCfg_ = pset.getParameterSet("analysis");
   filter_ = pset.exists("filter") ? pset.getParameter<bool>("filter") : false;
@@ -41,9 +44,17 @@ PATFinalStateAnalysis::PATFinalStateAnalysis(
     runDir_.reset(new TFileDirectory(fs.mkdir("runs")));
 
   skimCounter_ = pset.getParameter<edm::InputTag>("skimCounter");
+  iC.consumes<edm::MergeableCounter>(skimCounter_);
+
   lumiProducer_ = pset.exists("lumiProducer") ?
     pset.getParameter<edm::InputTag>("lumiProducer") :
     edm::InputTag("finalStateLS");
+  iC.consumes<PATFinalStateLS>(lumiProducer_);
+
+  generator_ = edm::InputTag("generator");
+  iC.consumes<GenEventInfoProduct>(generator_);
+
+
   // Build the event counter histos.
   eventCounter_ = fs_.make<TH1F>("eventCount", "Events Processed", 1, -0.5, 0.5);
   eventCounterWeighted_ = fs_.make<TH1F>(
@@ -98,7 +109,7 @@ bool PATFinalStateAnalysis::filter(const edm::EventBase& evt) {
   //get gen event weight
   if (!evt.isRealData()){ 
     edm::Handle<GenEventInfoProduct> genEvt;
-    evt.getByLabel(edm::InputTag("generator"),genEvt);
+    evt.getByLabel(generator_,genEvt);
 
     // event weight
     genEventWeight = genEvt->weight();

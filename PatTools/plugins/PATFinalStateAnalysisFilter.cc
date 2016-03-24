@@ -37,7 +37,7 @@ PATFinalStateAnalysisFilter::PATFinalStateAnalysisFilter(
     const edm::ParameterSet& pset) {
   edm::Service<TFileService> fs;
   TFileDirectory &fd =  fs->tFileDirectory();
-  analysis_.reset(new PATFinalStateAnalysis(pset, fd));
+  analysis_.reset(new PATFinalStateAnalysis(pset, fd, consumesCollector()));
 }
 
 bool PATFinalStateAnalysisFilter::filter(

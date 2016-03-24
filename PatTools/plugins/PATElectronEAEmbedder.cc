@@ -50,6 +50,8 @@ PATElectronEAEmbedder::PATElectronEAEmbedder(const
   :_eacalc(PATElectronEACalculator(pset.getParameterSetVector("effective_areas"))){
   _eas_to_get = pset.getParameter<vstring>("applied_effective_areas");
   _src = pset.getParameter<InputTag>("src");  
+  consumes<ElectronCollection>(_src);
+
   produces<ElectronCollection>();
 }
 

@@ -19,6 +19,7 @@
 #include "FinalStateAnalysis/DataFormats/interface/PATFinalStateEventFwd.h"
 #include "CommonTools/Utils/interface/StringObjectFunction.h"
 #include "PhysicsTools/UtilAlgos/interface/BasicAnalyzer.h"
+#include "FWCore/Framework/interface/ConsumesCollector.h"
 
 class TH1;
 class TTree;
@@ -30,7 +31,8 @@ namespace edm {
 
 class PATFinalStateAnalysis : public edm::BasicAnalyzer {
   public:
-    PATFinalStateAnalysis(const edm::ParameterSet& pset, TFileDirectory& fs);
+    PATFinalStateAnalysis(const edm::ParameterSet& pset, TFileDirectory& fs, edm::ConsumesCollector&& iC);
+
     virtual ~PATFinalStateAnalysis();
     void beginJob() {}
     void endJob();
@@ -43,6 +45,7 @@ class PATFinalStateAnalysis : public edm::BasicAnalyzer {
 
   private:
     edm::InputTag src_;
+    edm::InputTag generator_;
     std::string name_;
     TFileDirectory& fs_;
     edm::ParameterSet analysisCfg_;

@@ -90,6 +90,10 @@ private:
 
   edm::InputTag jetAK8Src_;
 
+  edm::InputTag generatorFilter_;
+  edm::InputTag generator_;
+  edm::InputTag externalLHE_;
+
   typedef std::pair<std::string, edm::EDGetTokenT<edm::View<pat::MET> > > METTokenMap;
   std::vector<METTokenMap> metCfg_;
 
@@ -104,20 +108,30 @@ private:
 PATFinalStateEventProducer::PATFinalStateEventProducer(
                                                        const edm::ParameterSet& pset) {
   rhoSrc_ = pset.getParameter<edm::InputTag>("rhoSrc");
+  consumes<double>(rhoSrc_);
+
   pvSrc_ = consumes<edm::View<reco::Vertex> >(pset.getParameter<edm::InputTag>("pvSrc"));
   pvBackSrc_ = consumes<edm::View<reco::Vertex> >(pset.getParameter<edm::InputTag>("pvSrcBackup"));
   verticesSrc_ = consumes<edm::View<reco::Vertex> >(pset.getParameter<edm::InputTag>("verticesSrc"));
 
   electronSrc_ = pset.getParameter<edm::InputTag>("electronSrc");
+  consumes<pat::ElectronCollection>(electronSrc_);
   muonSrc_ = pset.getParameter<edm::InputTag>("muonSrc");
+  consumes<pat::MuonCollection>(muonSrc_);
   tauSrc_ = pset.getParameter<edm::InputTag>("tauSrc");
+  consumes<pat::TauCollection>(tauSrc_);
   jetSrc_ = pset.getParameter<edm::InputTag>("jetSrc");
+  consumes<pat::JetCollection>(jetSrc_);
   phoSrc_ = pset.getParameter<edm::InputTag>("phoSrc");
+  consumes<pat::PhotonCollection>(phoSrc_);
 
   metSrc_ = consumes<edm::View<pat::MET> >(pset.getParameter<edm::InputTag>("metSrc"));
   trgSrc_ = pset.getParameter<edm::InputTag>("trgSrc");
+  consumes<std::vector<pat::TriggerObjectStandAlone> >(trgSrc_);
   puInfoSrc_ = pset.getParameter<edm::InputTag>("puInfoSrc");
+  consumes<std::vector<PileupSummaryInfo> >(puInfoSrc_);
   truthSrc_ = pset.getParameter<edm::InputTag>("genParticleSrc");
+  consumes<reco::GenParticleCollection>(truthSrc_);
   extraWeights_ = pset.getParameterSet("extraWeights");
   puScenario_ = pset.getParameter<std::string>("puTag");
 
@@ -125,16 +139,27 @@ PATFinalStateEventProducer::PATFinalStateEventProducer(
     pset.getParameter<bool>("forbidMissing") : true;
 
   trgResultsSrc_ = pset.getParameter<edm::InputTag>("trgResultsSrc");
+  consumes<edm::TriggerResults>(trgResultsSrc_);
 
   photonCoreSrc_ = pset.getParameter<edm::InputTag>("photonCoreSrc");
   gsfCoreSrc_ = pset.getParameter<edm::InputTag>("gsfCoreSrc");
 
   packedPFSrc_ = pset.getParameter<edm::InputTag>("packedPFSrc");
+  consumes<pat::PackedCandidateCollection>(packedPFSrc_);
   packedGenSrc_ = pset.getParameter<edm::InputTag>("packedGenSrc");
 
   trgPrescaleSrc_ = pset.getParameter<edm::InputTag>("trgPrescaleSrc");
+  consumes<pat::PackedTriggerPrescales>(trgPrescaleSrc_);
 
   jetAK8Src_ = pset.getParameter<edm::InputTag>("jetAK8Src");
+
+  generatorFilter_ = edm::InputTag("generator","minVisPtFilter");
+  generator_ = edm::InputTag("generator");
+  externalLHE_ = edm::InputTag("externalLHEProducer");
+
+  consumes<GenFilterInfo>(generatorFilter_);
+  consumes<GenEventInfoProduct>(generator_);
+  consumes<LHEEventProduct>(externalLHE_);
 
   // Get different type of METs
   edm::ParameterSet mets = pset.getParameterSet("mets");
@@ -286,7 +311,7 @@ void PATFinalStateEventProducer::produce(edm::Event& evt,
 
   // Try and get the GenFilterInfo information
   edm::Handle<GenFilterInfo> generatorFilterH;
-  evt.getByLabel("generator","minVisPtFilter",generatorFilterH);
+  evt.getByLabel(generatorFilter_,generatorFilterH);
   GenFilterInfo generatorFilter;
   if (generatorFilterH.isValid())
     generatorFilter = *generatorFilterH;
@@ -308,17 +333,15 @@ void PATFinalStateEventProducer::produce(edm::Event& evt,
 
   if (!evt.isRealData()){ //get gen event weight
     edm::Handle<GenEventInfoProduct> genEvt;
-    evt.getByLabel("generator",genEvt);
-
+    evt.getByLabel(generator_,genEvt);
     // event weight
     double weightevt=genEvt->weight();
     theEvent->addWeight("genEventWeight", weightevt);
 
     edm::Handle<LHEEventProduct> EvtHandle;
-    edm::InputTag theSrc("externalLHEProducer");
     std::vector<double> LHEweights;
     std::vector<int> LHEid;
-    if(evt.getByLabel(theSrc,EvtHandle)){  	    
+    if(evt.getByLabel(externalLHE_, EvtHandle)){  	    
         if(EvtHandle->weights().size() > 0){	
             for(unsigned int i = 0; i < EvtHandle->weights().size(); i++){
                 LHEid.push_back(std::stoi(EvtHandle->weights()[i].id));  
@@ -331,19 +354,19 @@ void PATFinalStateEventProducer::produce(edm::Event& evt,
   }
 
 
-  std::vector<std::string> extras = extraWeights_.getParameterNames();
-  for (size_t i = 0; i < extras.size(); ++i) {
-    if (extraWeights_.existsAs<double>(extras[i])) {
-      theEvent->addWeight(extras[i],
-                          extraWeights_.getParameter<double>(extras[i]));
-    } else {
-      edm::InputTag weightSrc = extraWeights_.getParameter<edm::InputTag>(
-                                                                          extras[i]);
-      edm::Handle<double> weightH;
-      evt.getByLabel(weightSrc, weightH);
-      theEvent->addWeight(extras[i], *weightH);
-    }
-  }
+//   std::vector<std::string> extras = extraWeights_.getParameterNames();
+//   for (size_t i = 0; i < extras.size(); ++i) {
+//     if (extraWeights_.existsAs<double>(extras[i])) {
+//       theEvent->addWeight(extras[i],
+//                           extraWeights_.getParameter<double>(extras[i]));
+//     } else {
+//       edm::InputTag weightSrc = extraWeights_.getParameter<edm::InputTag>(
+//                                                                           extras[i]);
+//       edm::Handle<double> weightH;
+//       evt.getByLabel(weightSrc, weightH);
+//       theEvent->addWeight(extras[i], *weightH);
+//     }
+//   }
   output->push_back(*theEvent);
   evt.put(output);
 }

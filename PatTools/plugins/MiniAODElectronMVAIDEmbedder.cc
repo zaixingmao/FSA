@@ -84,7 +84,10 @@ MiniAODElectronIDEmbedder::MiniAODElectronIDEmbedder(const edm::ParameterSet& iC
   std::vector<edm::InputTag> idTags = iConfig.getParameter<std::vector<edm::InputTag> >("ids");
 
   vtxSrc_ = iConfig.getParameter<edm::InputTag>("vtxSrc");
+  consumes<reco::VertexCollection>(vtxSrc_);
   beamSrc_ = iConfig.getParameter<edm::InputTag>("beamSrc");
+  consumes<reco::BeamSpot>(beamSrc_);
+
   patElectron_vtx_ndof_min_         = iConfig.getParameter<int>("patElectron_vtx_ndof_min");
   patElectron_vtx_rho_max_          = iConfig.getParameter<int>("patElectron_vtx_rho_max");
   patElectron_vtx_position_z_max_   = iConfig.getParameter<double>("patElectron_vtx_position_z_max");
@@ -120,16 +123,15 @@ MiniAODElectronIDEmbedder::MiniAODElectronIDEmbedder(const edm::ParameterSet& iC
 void MiniAODElectronIDEmbedder::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 {
   out = std::auto_ptr<std::vector<pat::Electron> >(new std::vector<pat::Electron>);
-
   edm::Handle<edm::View<pat::Electron> > electronsIn;
   std::vector<edm::Handle<edm::ValueMap<bool> > > ids(idMapTokens_.size(), edm::Handle<edm::ValueMap<bool> >() );
   std::vector<edm::Handle<edm::ValueMap<float> > > values(valueTokens_.size(), edm::Handle<edm::ValueMap<float> >() );
   std::vector<edm::Handle<edm::ValueMap<int> > > categories(categoryTokens_.size(), edm::Handle<edm::ValueMap<int> >() );
 
   iEvent.getByToken(electronCollectionToken_, electronsIn);
-
   edm::Handle<reco::VertexCollection> vertices;
   iEvent.getByLabel(vtxSrc_, vertices);
+
   reco::VertexCollection::const_iterator firstGoodVertex = vertices->end();
   for (reco::VertexCollection::const_iterator it = vertices->begin(); it != firstGoodVertex; it++)
   {

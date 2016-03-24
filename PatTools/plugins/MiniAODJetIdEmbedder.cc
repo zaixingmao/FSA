@@ -33,6 +33,7 @@ class MiniAODJetIdEmbedder : public edm::EDProducer {
 
 MiniAODJetIdEmbedder::MiniAODJetIdEmbedder(const edm::ParameterSet& pset) {
   src_ = pset.getParameter<edm::InputTag>("src");
+  consumes<edm::View<pat::Jet>>(src_);
   isMC_ = pset.getParameter<int>("isMC");
   if(isMC_) isData_ = false;
   else isData_ = true;

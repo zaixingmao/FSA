@@ -32,6 +32,7 @@ class PATFinalStateCopier : public edm::EDProducer {
 PATFinalStateCopier::PATFinalStateCopier(
     const edm::ParameterSet& pset) {
   src_ = pset.getParameter<edm::InputTag>("src");
+  consumes<edm::View<PATFinalState> >(src_);
   produces<PATFinalStateCollection>();
 }
 void PATFinalStateCopier::produce(edm::Event& evt, const edm::EventSetup& es) {

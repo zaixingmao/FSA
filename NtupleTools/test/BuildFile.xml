@@ -9,7 +9,6 @@
 <use   name="FinalStateAnalysis/NtupleTools"/>
 
 <environment>
-  <bin   file="analyzeFinalStates.cc"></bin>
 </environment>
 
 <bin name="slimAndMergeNtuple" file="slimAndMergeNtuple.cc">

@@ -28,6 +28,8 @@ class MiniAODLeptonRelIsoEmbedder : public edm::EDProducer {
 template<typename T>
 MiniAODLeptonRelIsoEmbedder<T>::MiniAODLeptonRelIsoEmbedder(const edm::ParameterSet& pset) {
   src_ = pset.getParameter<edm::InputTag>("src");
+  consumes<edm::View<T> >(src_);
+
   produces<std::vector<T> >();
 }
 

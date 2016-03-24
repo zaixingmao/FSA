@@ -53,6 +53,9 @@ MiniAODObjectJetInfoEmbedder<T>::MiniAODObjectJetInfoEmbedder(
     const edm::ParameterSet& pset) {
   src_ = pset.getParameter<edm::InputTag>("src");
   jetSrc_ = pset.getParameter<edm::InputTag>("jetSrc");
+  consumes<edm::View<T> >(src_);
+  consumes<std::vector<pat::Electron> >(src_);
+  consumes<edm::View<pat::Jet> >(jetSrc_);
   suffix_ = pset.getParameter<std::string>("suffix");
   embedBtags_ = pset.getParameter<bool>("embedBtags");
   maxDeltaR_ = pset.getParameter<double>("maxDeltaR");
@@ -66,7 +69,7 @@ void MiniAODObjectJetInfoEmbedder<T>::produce(
 
   edm::Handle<edm::View<T> > objects;
   evt.getByLabel(src_, objects);
-  output->reserve(objects->size());
+ output->reserve(objects->size());
 
   edm::Handle<edm::View<pat::Jet> > jets;
   evt.getByLabel(jetSrc_, jets);

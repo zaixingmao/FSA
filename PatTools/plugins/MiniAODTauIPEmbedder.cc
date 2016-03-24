@@ -49,6 +49,10 @@ MiniAODTauIpEmbedder::MiniAODTauIpEmbedder(const edm::ParameterSet& pset) {
   src_ = pset.getParameter<edm::InputTag>("src");
   vtxSrc_ = pset.getParameter<edm::InputTag>("vtxSrc");
   beamSpot_                = pset.getParameter<edm::InputTag>("beamSpot");
+  consumes<edm::View<pat::Tau> >(src_);
+  consumes<reco::VertexCollection>(vtxSrc_);
+  consumes<reco::BeamSpot>(beamSpot_);
+
   tau_vtx_ndof_min_       = pset.getParameter<int>("Tau_vtx_ndof_min");
   tau_vtx_rho_max_        = pset.getParameter<int>("Tau_vtx_rho_max");
   tau_vtx_position_z_max_ = pset.getParameter<double>("Tau_vtx_position_z_max");

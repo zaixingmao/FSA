@@ -54,6 +54,7 @@ class PATFinalStateVertexFitter : public edm::EDProducer {
 
 PATFinalStateVertexFitter::PATFinalStateVertexFitter(const edm::ParameterSet& pset) {
   src_ = pset.getParameter<edm::InputTag>("src");
+  consumes<edm::View<PATFinalState> >(src_);
   enable_ = pset.getParameter<bool>("enable");
   produces<PATFinalStateCollection>();
 }
