@@ -65,11 +65,11 @@ finalstate = PSet(
     Phi = 'phi',
     Mass = 'mass',
     Mt = 'mt',
-    MassError = 'userFloat("cand_dM")',
-    MassErrord1 = 'userFloat("cand_dM_0")',
-    MassErrord2 = 'userFloat("cand_dM_1")',
-    MassErrord3 = 'userFloat("cand_dM_2")',
-    MassErrord4 = 'userFloat("cand_dM_3")'
+#    MassError = 'userFloat("cand_dM")',
+#    MassErrord1 = 'userFloat("cand_dM_0")',
+#    MassErrord2 = 'userFloat("cand_dM_1")',
+#    MassErrord3 = 'userFloat("cand_dM_2")',
+#    MassErrord4 = 'userFloat("cand_dM_3")'
 )
 
 # FSR, jets, and KD/MELA stuff for ZZ
@@ -133,14 +133,14 @@ extraJet = PSet(
     objectPUMVA = '? evt.jets.size()>{object_idx} ? {object}.userFloat("pileupJetId:fullDiscriminant") : -999',
     objectCSVBtag = '? evt.jets.size()>{object_idx} ? {object}.bDiscriminator("pfCombinedInclusiveSecondaryVertexV2BJetTags") : -999',
     objectPFJetIDLoose = '? evt.jets.size()>{object_idx} ? {object}.userFloat("idLoose") : -999',
-    objectEC_up = '? evt.jets.size()>{object_idx} ? {object}.userFloat("jes+") : -999',
-    objectEC_down = '? evt.jets.size()>{object_idx} ? {object}.userFloat("jes-") : -999',
-    objectCSVL =  '? evt.jets.size()>{object_idx} ? {object}.userFloat("CSVL") : -999',
-    objectCSVL_sysUp =  '? evt.jets.size()>{object_idx} ? {object}.userFloat("CSVL_sysUp") : -999',
-    objectCSVL_sysDown =  '? evt.jets.size()>{object_idx} ? {object}.userFloat("CSVL_sysDown") : -999',
-    objectCSVL_misUp =  '? evt.jets.size()>{object_idx} ? {object}.userFloat("CSVL_misUp") : -999',
-    objectCSVL_misDown =  '? evt.jets.size()>{object_idx} ? {object}.userFloat("CSVL_misDown") : -999',
-    objectCSVL_up =  '? evt.jets.size()>{object_idx} ? {object}.userFloat("CSVL_up") : -999',
-    objectCSVL_down =  '? evt.jets.size()>{object_idx} ? {object}.userFloat("CSVL_down") : -999',
+    objectEC_up = '? evt.jets.size()>{object_idx} && {object}.hasUserFloat("jes+")? {object}.userFloat("jes+") : -999',
+    objectEC_down = '? evt.jets.size()>{object_idx} && {object}.hasUserFloat("jes-")? {object}.userFloat("jes-") : -999',
+    objectCSVL =  '? evt.jets.size()>{object_idx} && {object}.hasUserFloat("CSVL")? {object}.userFloat("CSVL") : -999',
+    objectCSVL_sysUp =  '? evt.jets.size()>{object_idx} && {object}.hasUserFloat("CSVL_sysUp")? {object}.userFloat("CSVL_sysUp") : -999',
+    objectCSVL_sysDown =  '? evt.jets.size()>{object_idx} && {object}.hasUserFloat("CSVL_sysDown")? {object}.userFloat("CSVL_sysDown") : -999',
+    objectCSVL_misUp =  '? evt.jets.size()>{object_idx} && {object}.hasUserFloat("CSVL_misUp")? {object}.userFloat("CSVL_misUp") : -999',
+    objectCSVL_misDown =  '? evt.jets.size()>{object_idx} && {object}.hasUserFloat("CSVL_misDown")? {object}.userFloat("CSVL_misDown") : -999',
+    objectCSVL_up =  '? evt.jets.size()>{object_idx} && {object}.hasUserFloat("CSVL_up")? {object}.userFloat("CSVL_up") : -999',
+    objectCSVL_down =  '? evt.jets.size()>{object_idx} && {object}.hasUserFloat("CSVL_down")? {object}.userFloat("CSVL_down") : -999',
 
 )
