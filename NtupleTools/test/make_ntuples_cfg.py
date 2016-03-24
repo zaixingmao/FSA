@@ -51,7 +51,7 @@ from FinalStateAnalysis.NtupleTools.ntuple_builder import \
 from FinalStateAnalysis.Utilities.version import cmssw_major_version, \
     cmssw_minor_version
 import PhysicsTools.PatAlgos.tools.helpers as helpers
-#import localJob_cfg
+import localJob_cfg
 process = cms.Process("Ntuples")
 
 process.options = cms.untracked.PSet(
@@ -149,8 +149,8 @@ options.runMVAMET = options.runMVAMET
 
 process.source = cms.Source(
     "PoolSource",
-#    fileNames=cms.untracked.vstring(localJob_cfg.localJobInfo['inputFiles']),
-    fileNames=cms.untracked.vstring(options.inputFiles),
+    fileNames=cms.untracked.vstring(localJob_cfg.localJobInfo['inputFiles']),
+#    fileNames=cms.untracked.vstring(options.inputFiles),
 #    duplicateCheckMode=cms.untracked.string("noDuplicateCheck"),
     skipEvents=cms.untracked.uint32(options.skipEvents),
 )
@@ -205,7 +205,7 @@ process.load('Configuration.StandardSequences.MagneticField_38T_PostLS1_cff')
 process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_condDBv2_cff')
 # Need the global tag for geometry etc.
 envvar = 'mcgt' if options.isMC else 'datagt'
-GT = {'mcgt': '74X_mcRun2_asymptotic_v2', 
+GT = {'mcgt': '76X_mcRun2_asymptotic_RunIIFall15DR76_v1', 
 #      'datagt': '74X_dataRun2_reMiniAOD_v0'}
       'datagt': '74X_dataRun2_Prompt_v4'}
 
@@ -362,21 +362,21 @@ process.load("FinalStateAnalysis.PatTools.electrons.patElectronEAEmbedding_cfi")
 process.patElectronEAEmbedder.src = cms.InputTag(fs_daughter_inputs['electrons'])
 process.load("FinalStateAnalysis.PatTools.muons.patMuonEAEmbedding_cfi")
 process.patMuonEAEmbedder.src = cms.InputTag(fs_daughter_inputs['muons'])
-fs_daughter_inputs['electrons'] = 'patElectronEAEmbedder'
-fs_daughter_inputs['muons'] = 'patMuonEAEmbedder'
+#fs_daughter_inputs['electrons'] = 'patElectronEAEmbedder'
+#fs_daughter_inputs['muons'] = 'patMuonEAEmbedder'
 # And for electrons, the new HZZ4l EAs as well
 process.miniAODElectronEAEmbedding = cms.EDProducer(
     "MiniAODElectronEffectiveArea2015Embedder",
     src = cms.InputTag(fs_daughter_inputs['electrons']),
     label = cms.string("EffectiveArea_HZZ4l2015"), # embeds a user float with this name
     )
-fs_daughter_inputs['electrons'] = 'miniAODElectronEAEmbedding'
+#fs_daughter_inputs['electrons'] = 'miniAODElectronEAEmbedding'
 process.EAEmbedding = cms.Path(
     process.patElectronEAEmbedder +
     process.patMuonEAEmbedder +
     process.miniAODElectronEAEmbedding
     )
-process.schedule.append(process.EAEmbedding)
+#process.schedule.append(process.EAEmbedding)
 
 # Embed rhos in electrons
 process.miniAODElectronRhoEmbedding = cms.EDProducer(
@@ -385,7 +385,7 @@ process.miniAODElectronRhoEmbedding = cms.EDProducer(
     srcRho = cms.InputTag("fixedGridRhoFastjetAll"), # not sure this is right
     userLabel = cms.string("rhoCSA14")
     )
-fs_daughter_inputs['electrons'] = 'miniAODElectronRhoEmbedding'
+#fs_daughter_inputs['electrons'] = 'miniAODElectronRhoEmbedding'
 
 # ... and muons
 process.miniAODMuonRhoEmbedding = cms.EDProducer(
@@ -394,12 +394,12 @@ process.miniAODMuonRhoEmbedding = cms.EDProducer(
     srcRho = cms.InputTag("fixedGridRhoFastjetCentralNeutral"), # not sure this is right
     userLabel = cms.string("rhoCSA14")
     )
-fs_daughter_inputs['muons'] = 'miniAODMuonRhoEmbedding'
+#fs_daughter_inputs['muons'] = 'miniAODMuonRhoEmbedding'
 process.rhoEmbedding = cms.Path(
     process.miniAODElectronRhoEmbedding +
     process.miniAODMuonRhoEmbedding
     )
-process.schedule.append(process.rhoEmbedding)
+#process.schedule.append(process.rhoEmbedding)
 
 if options.hzz:
     # Make FSR photon collection, give them isolation
@@ -467,7 +467,7 @@ process.miniAODElectronJetInfoEmbedding = cms.EDProducer(
     jetSrc = cms.InputTag(fs_daughter_inputs['jets']),
     maxDeltaR = cms.double(0.1),
 )
-fs_daughter_inputs['electrons'] = 'miniAODElectronJetInfoEmbedding'
+#fs_daughter_inputs['electrons'] = 'miniAODElectronJetInfoEmbedding'
 process.miniAODMuonJetInfoEmbedding = cms.EDProducer(
     "MiniAODMuonJetInfoEmbedder",
     src = cms.InputTag(fs_daughter_inputs['muons']),
@@ -476,7 +476,7 @@ process.miniAODMuonJetInfoEmbedding = cms.EDProducer(
     jetSrc = cms.InputTag(fs_daughter_inputs['jets']),
     maxDeltaR = cms.double(0.1),
 )
-fs_daughter_inputs['muons'] = 'miniAODMuonJetInfoEmbedding'
+#fs_daughter_inputs['muons'] = 'miniAODMuonJetInfoEmbedding'
 process.miniAODTauJetInfoEmbedding = cms.EDProducer(
     "MiniAODTauJetInfoEmbedder",
     src = cms.InputTag(fs_daughter_inputs['taus']),
@@ -485,14 +485,14 @@ process.miniAODTauJetInfoEmbedding = cms.EDProducer(
     jetSrc = cms.InputTag(fs_daughter_inputs['jets']),
     maxDeltaR = cms.double(0.1),
 )
-fs_daughter_inputs['taus'] = 'miniAODTauJetInfoEmbedding'
+#fs_daughter_inputs['taus'] = 'miniAODTauJetInfoEmbedding'
 
-process.jetInfoEmbedding = cms.Path(
-    process.miniAODElectronJetInfoEmbedding +
-    process.miniAODMuonJetInfoEmbedding +
-    process.miniAODTauJetInfoEmbedding
-)
-process.schedule.append(process.jetInfoEmbedding)
+#process.jetInfoEmbedding = cms.Path(
+#    process.miniAODElectronJetInfoEmbedding +
+#    process.miniAODMuonJetInfoEmbedding +
+#    process.miniAODTauJetInfoEmbedding
+#)
+#process.schedule.append(process.jetInfoEmbedding)
 
 
 #systematcs embedding
