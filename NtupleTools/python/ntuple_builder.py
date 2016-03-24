@@ -84,7 +84,7 @@ _electron_template = PSet(
     templates.candidates.vertex_info,
     templates.electrons.id,
     templates.electrons.TNT_request,
-    templates.electrons.energyCorrections,
+#    templates.electrons.energyCorrections,
     templates.electrons.tracking,
     templates.electrons.supercluster,
     templates.electrons.trigger,
