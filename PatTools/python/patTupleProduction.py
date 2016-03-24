@@ -221,12 +221,12 @@ def configurePatTuple(process, isMC=True, **kwargs):
     process.patElectrons.embedSuperCluster = True
 
     # Produce the electron collections
-    process.load("FinalStateAnalysis.PatTools.patElectronProduction_cff")
+#    process.load("FinalStateAnalysis.PatTools.patElectronProduction_cff")
 
     # Electron Energy Regression and Calibrations
-    process.load(
-        "EgammaAnalysis.ElectronTools.electronRegressionEnergyProducer_cfi")
-    process.load("EgammaAnalysis.ElectronTools.calibratedPatElectrons_cfi")
+#    process.load(
+#        "EgammaAnalysis.ElectronTools.electronRegressionEnergyProducer_cfi")
+#    process.load("EgammaAnalysis.ElectronTools.calibratedPatElectrons_cfi")
 
     #setup the energy regression for the specific dataset
     if kwargs['eleReg']:
