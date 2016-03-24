@@ -15,13 +15,13 @@ Author: Evan K. Friis
 from FinalStateAnalysis.Utilities.cfgtools import PSet
 
 info = PSet(
-    objectGenDecayMode = '{object}.userInt("genDecayMode")',
-    objectLeadTrackPt = '{object}.userFloat("ps_ldTrkPt")',
+    objectGenDecayMode = '? {object}.hasUserInt("genDecayMode")? {object}.userInt("genDecayMode"): -999',
+#     objectLeadTrackPt = '{object}.userFloat("ps_ldTrkPt")',
     objectDecayMode = '{object}.decayMode',
-    objectTNPId = '{object}.userInt("ps_sel_nom")',
+#     objectTNPId = '{object}.userInt("ps_sel_nom")',
 
-    objectEC_up = '{object}.userFloat("tes+")',
-    objectEC_down = '{object}.userFloat("tes-")',
+    objectEC_up = '? {object}.hasUserFloat("tes+")? {object}.userFloat("tes+"): -999',
+    objectEC_down = '? {object}.hasUserFloat("tes-")? {object}.userFloat("tes-"): -999',
 
     # gen matching
     objectPdgId = '? ({object}.genParticleRef().isNonnull && {object}.genParticleRef().isAvailable) ? {object}.genParticleRef().pdgId() : -999',
@@ -141,9 +141,6 @@ id = PSet(
     objectNeutralIsoPtSum = '{object}.tauID("neutralIsoPtSum")',
     objectChargedIsoPtSum = '{object}.tauID("chargedIsoPtSum")',
     objectPuCorrPtSum     = '{object}.tauID("puCorrPtSum")',
-
-    objectES_up = '{object}.userFloat("tes+")',
-    objectES_down = '{object}.userFloat("tes-")',
 
 )
 

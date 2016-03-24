@@ -49,10 +49,10 @@ id = PSet(
     
     objectPassNumberOfHits = cms.string('{object}.userInt("passNumberOfHits")'),
 
-    objectEffectiveArea2012Data = cms.string('{object}.userFloat("ea_comb_Data2012_iso04_kt6PFJ")'),
-    objectEffectiveAreaPHYS14 = cms.string('{object}.userFloat("EffectiveArea_HZZ4l2015")'),
+#    objectEffectiveArea2012Data = cms.string('{object}.userFloat("ea_comb_Data2012_iso04_kt6PFJ")'),
+#    objectEffectiveAreaPHYS14 = cms.string('{object}.userFloat("EffectiveArea_HZZ4l2015")'),
 
-    objectRho = cms.string('{object}.userFloat("rhoCSA14")'),
+#    objectRho = cms.string('{object}.userFloat("rhoCSA14")'),
     objectRelIso = '{object}.userFloat("relIso")',
     objectTrkIsoDR03 = cms.string("{object}.dr03TkSumPt()"),
     objectEcalIsoDR03 = cms.string("{object}.dr03EcalRecHitSumEt()"),
@@ -70,7 +70,7 @@ id = PSet(
     objecteSuperClusterOverP = '{object}.eSuperClusterOverP',
     objectecalEnergy = '{object}.ecalEnergy',
     objecttrackMomentumAtVtxP = '{object}.trackMomentumAtVtx.r',
-    objectHasMatchedConversion = cms.vstring('{object}.userInt("HasMatchedConversion")','I'),    
+    objectHasMatchedConversion = cms.vstring('? {object}.hasUserInt("HasMatchedConversion") ? {object}.userInt("HasMatchedConversion"): -999','I'),    
     objectE1x5 = '{object}.scE1x5',
     objectE2x5Max = '{object}.scE2x5Max',
     objectE5x5 = '{object}.scE5x5',
@@ -159,7 +159,7 @@ energyCorrections = PSet(
 )
 
 tracking = PSet(
-    objectHasConversion = '{object}.userFloat("hasConversion")',
+    objectHasConversion = '? {object}.hasUserFloat("hasConversion")? {object}.userFloat("hasConversion"): -999',
     objectMissingHits = 'getElectronMissingHits({object_idx})',
 )
 

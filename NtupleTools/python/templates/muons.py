@@ -21,9 +21,9 @@ id = PSet(
     objectRelIso = '{object}.userFloat("relIso")',
 
     # For charged, we use ALL charged particles
-    objectEffectiveArea2012 = '{object}.userFloat("ea_comb_iso04_kt6PFJCNth05")',
-    objectEffectiveArea2011 = '{object}.userFloat("ea_comb_iso04_kt6PFJCth05")',
-    objectRho = cms.string('{object}.userFloat("rhoCSA14")'),
+#    objectEffectiveArea2012 = '{object}.userFloat("ea_comb_iso04_kt6PFJCNth05")',
+#    objectEffectiveArea2011 = '{object}.userFloat("ea_comb_iso04_kt6PFJCth05")',
+#    objectRho = cms.string('{object}.userFloat("rhoCSA14")'),
 #     objectPFChargedIso = cms.string('{object}.userIsolation("PfChargedHadronIso")'),
 #     objectPFNeutralIso = cms.string('{object}.userIsolation("PfNeutralHadronIso")'),
 #     objectPFPhotonIso  = cms.string('{object}.userIsolation("PfGammaIso")'),
@@ -132,9 +132,9 @@ veto = PSet(
 
 TNT_request = PSet(
     object_tight = '{object}.userInt("_tight")',
-    object_loose = '{object}.userInt("_loose")',
+#    object_loose = '{object}.userInt("_loose")',
     object_soft = '{object}.userInt("_soft")',
-    object_isHighPt = '{object}.userInt("_isHighPt")',
+#    object_isHighPt = '{object}.userInt("_isHighPt")',
     object_isoCharged = '{object}.pfIsolationR04().sumChargedHadronPt',
     object_isoSum = '{object}.trackIso() + {object}.ecalIso() + {object}.hcalIso()',
     object_isoCharParPt = '{object}.pfIsolationR04().sumChargedParticlePt',

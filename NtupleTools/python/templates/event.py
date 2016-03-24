@@ -67,8 +67,8 @@ tautauMVAMET = PSet(
 met = PSet(
     pfMetEt        = 'evt.met4vector("pfmet","",1).Et',
     pfMetPhi       = 'evt.met4vector("pfmet","",1).Phi',
-    pfMetNoHFEt        = 'evt.met4vector("pfmetNoHF","",1).Et',
-    pfMetNoHFPhi       = 'evt.met4vector("pfmetNoHF","",1).Phi',
+#     pfMetNoHFEt        = 'evt.met4vector("pfmetNoHF","",1).Et',
+#     pfMetNoHFPhi       = 'evt.met4vector("pfmetNoHF","",1).Phi',
     metPuppiEt        = 'evt.met4vector("pfmetPuppi","",1).Et',
     metPuppiPhi       = 'evt.met4vector("pfmetPuppi","",1).Phi',
 
