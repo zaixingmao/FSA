@@ -51,7 +51,7 @@ from FinalStateAnalysis.NtupleTools.ntuple_builder import \
 from FinalStateAnalysis.Utilities.version import cmssw_major_version, \
     cmssw_minor_version
 import PhysicsTools.PatAlgos.tools.helpers as helpers
-import localJob_cfg
+#import localJob_cfg
 process = cms.Process("Ntuples")
 
 process.options = cms.untracked.PSet(
@@ -149,8 +149,8 @@ options.runMVAMET = options.runMVAMET
 
 process.source = cms.Source(
     "PoolSource",
-    fileNames=cms.untracked.vstring(localJob_cfg.localJobInfo['inputFiles']),
-#    fileNames=cms.untracked.vstring(options.inputFiles),
+#    fileNames=cms.untracked.vstring(localJob_cfg.localJobInfo['inputFiles']),
+    fileNames=cms.untracked.vstring(options.inputFiles),
 #    duplicateCheckMode=cms.untracked.string("noDuplicateCheck"),
     skipEvents=cms.untracked.uint32(options.skipEvents),
 )

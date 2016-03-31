@@ -9,8 +9,11 @@ dirName = '/nfs_scratch/zmao/1250v2/'
 #for iFile in os.listdir(dirName):                                                                                                                                                   
     #fName = 'file://%s%s' %(dirName, iFile)                                                                                                                                             
 #    files.append(fName)
+currentlocation = os.getcwd()
+files = "file://%s/testFile_76X.root" %currentlocation
+files = "root://cmsxrootd.fnal.gov//store/mc/RunIIFall15MiniAODv2/VBFHToTauTau_M125_13TeV_powheg_pythia8/MINIAODSIM/PU25nsData2015v1_76X_mcRun2_asymptotic_v12-v1/70000/0AF323E8-EBB9-E511-961D-002590D0AF6C.root"
+files = "root://cmsxrootd.fnal.gov//store/mc/RunIIFall15MiniAODv2/ST_tW_antitop_5f_inclusiveDecays_13TeV-powheg-pythia8_TuneCUETP8M1/MINIAODSIM/PU25nsData2015v1_76X_mcRun2_asymptotic_v12-v1/00000/00D0925F-56B9-E511-8A71-0025907FD2B2.root"
 
-files = "file:///hdfs/store/mc/RunIISpring15MiniAODv2/ZprimeToTauTau_M_4500_TuneCUETP8M1_tauola_13TeV_pythia8/MINIAODSIM/74X_mcRun2_asymptotic_v2-v1/80000/6E976434-FA75-E511-B577-001E6739CFA9.root"
 #files = "file:///hdfs/store/mc/RunIISpring15MiniAODv2/DYJetsToLL_M-1000to1500_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/MINIAODSIM/Asympt50ns_74X_mcRun2_asymptotic50ns_v0-v1/30000/7064F70B-417D-E511-AB57-AC162DACC3F0.root"
 #files = "file:///hdfs/store/mc/RunIISpring15MiniAODv2/ZprimeToTT_M-500_W-5_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/Asympt50ns_74X_mcRun2_asymptotic50ns_v0-v1/60000/22944E0D-3374-E511-9D35-003048C7B950.root"
 #files = [#'file:///hdfs/store/mc/RunIISpring15MiniAODv2/DYJetsToLL_M-500to700_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/MINIAODSIM/74X_mcRun2_asymptotic_v2-v3/50000/323F5423-A26F-E511-A847-02163E00EA7B.root']

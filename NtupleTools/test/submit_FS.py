@@ -42,6 +42,7 @@ def opts():
     parser.add_option("--is50ns", dest="is50ns", default=False, action="store_true", help="run over 50ns sample")
     parser.add_option("--TNT", dest="TNT", default=False, action="store_true", help="store TNT stuff")
     parser.add_option("--notFromDAS", dest="notFromDAS", default=False, action="store_true", help="submit files defined in data13TeV.py")
+    parser.add_option("--atFNAL", dest="atFNAL", default=False, action="store_true", help="at fnal")
 
     parser.add_option("--newXROOTD", dest="newXROOTD", default="", help="run over data")
     parser.add_option("--sys", dest="sys", default="", help="jetEC, jetBTag, tauEC")
@@ -110,11 +111,12 @@ useLumiMask = '/afs/cern.ch/cms/CAF/CMSCOMM/COMM_DQM/certification/Collisions15/
 localJobInfo = localJob_cfg.localJobInfo
 
 inputFiles = 'local'
+outputFile = "file:///eos/uscms/store/user/zmao/myTestFile.root"
 
 if ":" in localJobInfo['eventsToProcess']:
-    cmd = './make_ntuples_cfg.py eventsToProcess=%s outputFile=myTestFile.root inputFiles=%s channels=%s isMC=%i TNT=%i lumiMask=%s nExtraJets=8 sys=%s runMVAMET=%i runTauTauMVAMET=%i svFit=%i ' %(localJobInfo['eventsToProcess'], inputFiles, options.FS, isMC, TNT, useLumiMask, options.sys, MVAMET, TauTauMVAMET, SVFit)
+    cmd = './make_ntuples_cfg.py eventsToProcess=%s outputFile=%s inputFiles=%s channels=%s isMC=%i TNT=%i lumiMask=%s nExtraJets=8 sys=%s runMVAMET=%i runTauTauMVAMET=%i svFit=%i ' %(localJobInfo['eventsToProcess'], outputFile, inputFiles, options.FS, isMC, TNT, useLumiMask, options.sys, MVAMET, TauTauMVAMET, SVFit)
 else:
-    cmd = './make_ntuples_cfg.py maxEvents=%i outputFile=myTestFile.root inputFiles=%s channels=%s isMC=%i TNT=%i lumiMask=%s nExtraJets=8 sys=%s runMVAMET=%i runTauTauMVAMET=%i svFit=%i ' %(localJobInfo['maxEvents'], inputFiles, options.FS, isMC, TNT, useLumiMask, options.sys, MVAMET, TauTauMVAMET, SVFit)
+    cmd = './make_ntuples_cfg.py maxEvents=%i outputFile=%s inputFiles=%s channels=%s isMC=%i TNT=%i lumiMask=%s nExtraJets=8 sys=%s runMVAMET=%i runTauTauMVAMET=%i svFit=%i ' %(localJobInfo['maxEvents'], outputFile, inputFiles, options.FS, isMC, TNT, useLumiMask, options.sys, MVAMET, TauTauMVAMET, SVFit)
 
 if options.memory:
     checkCmd = 'igprof -d -mp -z -o igprof.mp.gz  cmsRun '#"valgrind --tool=memcheck `cmsvgsupp` --leak-check=yes --show-reachable=yes --num-callers=20 --track-fds=yes cmsRun "
@@ -141,6 +143,16 @@ for iFS in fs:
     cuts = cuts[0: len(cuts)-1] + "\" "
 cmd += cuts
 
+if options.atFNAL:
+    submit_script = "submit_job_fnal.py"
+else:
+    submit_script = "submit_job.py"
+
+template_location = "%s/template.submit" %(os.path.dirname(os.path.realpath(__file__)))
+f_tmp = open(template_location,'w')
+f_tmp.write(cmd)
+f_tmp.close()
+
 if not options.runLocal:
     samples = getSamples(options.sample)
     tempFile = "do_test.sh"
@@ -148,14 +160,17 @@ if not options.runLocal:
     sys = "sys=%s" %options.sys
     if options.sys == '':
         sys = ""
-    cmd = "submit_job.py %s make_ntuples_cfg.py channels=\"%s\" isMC=%i  TNT=%i lumiMask=%s nExtraJets=8 %s runMVAMET=%i runTauTauMVAMET=%i svFit=%i" %(options.name, options.FS, isMC, TNT, useLumiMask, sys, MVAMET, TauTauMVAMET, SVFit)
+    cmd = "%s %s make_ntuples_cfg.py channels=\"%s\" isMC=%i  TNT=%i lumiMask=%s nExtraJets=8 %s runMVAMET=%i runTauTauMVAMET=%i svFit=%i" %(submit_script, options.name, options.FS, isMC, TNT, useLumiMask, sys, MVAMET, TauTauMVAMET, SVFit)
     if options.is50ns:
         cmd += ' use25ns=0'
     else:
         cmd += ' use25ns=1'
 
+    cmd += " --comand-template=%s" %template_location
     if isMC:
-        cmd += " --das-replace-tuple=$fsa/MetaData/tuples/MiniAOD-13TeV_RunIISpring15DR74.json --samples %s -o %s" %(samples, tempFile)
+        cmd += " --das-replace-tuple=$fsa/MetaData/tuples/MiniAOD-13TeV_RunIIFall15.json --samples %s -o %s" %(samples, tempFile)
+#        cmd += " --das-replace-tuple=$fsa/MetaData/tuples/MiniAOD-13TeV_RunIISpring15DR74.json --samples %s -o %s" %(samples, tempFile)
+
         if not options.notFromDAS:
             if options.is50ns:
                 cmd += " --campaign-tag=\"RunIISpring15DR74-Asympt50ns*\" "
@@ -164,13 +179,14 @@ if not options.runLocal:
                 if "DYJetsToLL_M-1000to1500" in options.sample:
                     cmd += " --campaign-tag=\"RunIISpring15MiniAODv2-Asympt25ns_74X_mcRun2_asymptotic_v2-v1\" "
                 else:
-                    cmd += " --campaign-tag=\"RunIISpring15MiniAODv2-74X_mcRun2_asymptotic_v2_ext3-v*\" "
+ #                   cmd += " --campaign-tag=\"RunIISpring15MiniAODv2-74X_mcRun2_asymptotic_v2-v*\" "
+                    cmd += " --campaign-tag=\"RunIIFall15MiniAODv2*\" "
+
         else:
             cmd += " --input-dir=/nfs_scratch/zmao/"
     else:
         cmd += " --data --das-replace-tuple=$fsa/MetaData/tuples/MiniAOD-13TeV_Data.json --samples %s -o %s" %(samples, tempFile)
 
-print cmd
 if options.memory:
 #     cmd += ">& vglog.out &"
     cmd += " >& igtest.mp.log &"
@@ -181,7 +197,7 @@ elif options.cpu:
 else:
     os.system(cmd)
 
-if not options.runLocal:
+if (not options.runLocal) and (not options.atFNAL):
     lines = open(tempFile, "r").readlines()
     output = open(outFile, "w")
 
@@ -209,6 +225,10 @@ if not options.runLocal:
         output.writelines(currentLine)
     output.close()
     print 'bash < do.sh'
+
+if options.atFNAL:
+    print 'python submit_FNAL_condor.py'
+
 
 if resubmitDir != '':
     print 'restoring previous log file from %s_old  to %s' %(resubmitDir, resubmitDir)
