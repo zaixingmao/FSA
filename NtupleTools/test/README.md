@@ -1,17 +1,24 @@
 FinalState Production
 =====================
 
-submit_FS.py commands:
-----------------------
+MINIAOD -> ntuple
+-----------------
+Read information from MINIAOD and store pairs of any combiniation of [e:electron, m:muon, t:tau]. 
+For example, if an event had an electron and two muons while you requested to store em, there will 
+be two entries in the final root file with the two possible electron-muon pairs.
 
-  --local          run local jobs
-  --doSVFit        do SVFit (currently not supported)
-  --singleJob      submit 1 job
-  -o NAME          name of output dir
-  --sample=SAMPLE  sample name VBF, SUSY
-  --memory         profile memory usage (igprof mp)
-  --cpu            profile CPU usage (igprof pp)
-  --FS=FS          final state: tt, et, mt, em
+Currently, the supported final states are: 
+- et (electron-tau pair)
+- mt (muon-tau pair)
+- em (electron-muon pair)
+- tt (tau-tau pair)
+
+
+Branches
+-----------------
+Basic kinimatic variables of the leptons are stored as 'lepton name' + 'variable name'.
+For example, the electron pt is stored as 'ePt' and the tau eta is stored as 'tEta'.
+For the case of tau-tau pair, the pt leading tau takes the name 't1' and the pt trailing tau takes the name 't2'.
 
 
 Local Runs
