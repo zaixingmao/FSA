@@ -21,9 +21,13 @@ For example, the electron pt is stored as 'ePt' and the tau eta is stored as 'tE
 For the case of tau-tau pair, the pt leading tau takes the name 't1' and the pt trailing tau takes the name 't2'.
 
 
-Configurations
+Configurations (Optional)
 -----------------
 Specify the desired selections in submit_FS.py
+
+Specify the desired global tag in make_ntuples_cfg.py
+
+Specify the desired campaign tag in submit_FS.py for MC
 
 Specify the desired json file in submit_FS.py for data
 
@@ -52,7 +56,7 @@ submit_FS.py Options
 
 --resubmit      #when submitting condor jobs, resubmits failed jobs
 
---maxEvents     #when submitting condor jobs, specify the maximum number of events to run over. 
+--maxEvents X   #when submitting condor jobs, specify the maximum number of events to run over. 
                 #Used mainly for debugging.
 ```
 
@@ -60,25 +64,36 @@ submit_FS.py Options
 
 Local Runs
 ----------
-Edit the local file information in localJob_cfg.py
+1) Edit the local file information in localJob_cfg.py
 
+2) Example:
 ```bash
-    python submit_FS.py --local --FS tt
+#Do:
+    python submit_FS.py --local --FS tt --atFNAL
+#Or:
+    python submit_FS.py --local --FS tt,em,mt,et --atFNAL
 ```
+3) The output file should be in your current directory with default name "myTestFile.root"
 
 
-Submit Jobs
+Submit Jobs (MC)
 ---------------
+Make sure the samples you plan to run over are defined in MetaData/tuples/MiniAOD-13TeV_RunIIFall15.json
 
+Example:
 ```bash
-    python submit_FS.py --FS tt -o test
-    bash < do.sh
+#Do
+    python submit_FS.py --FS tt,em,mt,et --atFNAL -o testProduction --sample ST*
+    python submit_FNAL_condor.py
 ```
+By default, this will submit condor jobs with the error and log files stored at: 
+/uscms/home/${USERNAME}/nobackup/testProduction/ST_tW_antitop_5f_inclusiveDecays_13TeV-powheg-pythia8_TuneCUETP8M1/
 
-Submit Multiple Final States
-----------------------------
+In the end, the final output root files will be transfered to:
+/eos/uscms/store/user/${USERNAME}/testProduction/ST_tW_antitop_5f_inclusiveDecays_13TeV-powheg-pythia8_TuneCUETP8M1/
 
-```bash
-    python submit_FS.py --FS tt,et,mt,em -o test
-    bash < do.sh
+If some jobs failed, one can resubmit the failed jobs automatically by:
+#Do
+    python submit_FS.py --FS tt,em,mt,et --atFNAL -o testProduction --sample ST* --resubmit
+    python submit_FNAL_condor.py
 ```
