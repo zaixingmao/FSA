@@ -43,6 +43,8 @@ def opts():
     parser.add_option("--TNT", dest="TNT", default=False, action="store_true", help="store TNT stuff")
     parser.add_option("--notFromDAS", dest="notFromDAS", default=False, action="store_true", help="submit files defined in data13TeV.py")
     parser.add_option("--atFNAL", dest="atFNAL", default=False, action="store_true", help="at fnal")
+    parser.add_option("--resubmit", dest="resubmit", default=False, action="store_true", help="at fnal")
+    parser.add_option("--maxEvents", dest="maxEvents", default=-1, help="max events to run over")
 
     parser.add_option("--newXROOTD", dest="newXROOTD", default="", help="run over data")
     parser.add_option("--sys", dest="sys", default="", help="jetEC, jetBTag, tauEC")
@@ -52,6 +54,17 @@ def opts():
     return options
 
 options = opts()
+
+
+def writeSubmitTemplate(command, options):
+    template_location = "%s/template.submit" %(os.path.dirname(os.path.realpath(__file__)))
+    f_tmp = open(template_location,'w')
+    command = command[command.find('channels'): ]
+    if options.maxEvents != -1:
+        command = ('maxEvents=%s %s' %(options.maxEvents, command))
+    f_tmp.write(command)
+    f_tmp.close()
+    return template_location
 
 if options.singleJob:
     nJobs = "1"
@@ -148,10 +161,8 @@ if options.atFNAL:
 else:
     submit_script = "submit_job.py"
 
-template_location = "%s/template.submit" %(os.path.dirname(os.path.realpath(__file__)))
-f_tmp = open(template_location,'w')
-f_tmp.write(cmd)
-f_tmp.close()
+
+template_location = writeSubmitTemplate(cmd, options)
 
 if not options.runLocal:
     samples = getSamples(options.sample)
@@ -165,6 +176,12 @@ if not options.runLocal:
         cmd += ' use25ns=0'
     else:
         cmd += ' use25ns=1'
+
+    if options.atFNAL:
+        if options.resubmit:
+            cmd += " --resubmit-failed-jobs "
+        if nJobs != 9999:
+            cmd += " --nJobs %s " %nJobs
 
     cmd += " --comand-template=%s" %template_location
     if isMC:

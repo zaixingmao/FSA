@@ -40,6 +40,14 @@ from FinalStateAnalysis.Utilities.dbsinterface import get_das_info
 log = logging.getLogger("submit_job")
 logging.basicConfig(level=logging.INFO, stream=sys.stderr)
 
+class bcolors:
+    HEADER = '\033[95m'
+    OKBLUE = '\033[94m'
+    OKGREEN = '\033[92m'
+    WARNING = '\033[93m'
+    FAIL = '\033[91m'
+    ENDC = '\033[0m'
+
 def getFromDataDefs(dataset_name):
     if dataset_name in datadefs.keys():
         return 'root://cmsxrootd.hep.wisc.edu//store/user/zmao/%s' %datadefs[dataset_name]['datasetpath']
@@ -47,14 +55,43 @@ def getFromDataDefs(dataset_name):
         print "dataset: %s not found!!" %dataset_name
         return ''
 
+
+def checkJobsCompletion(list):
+    failedList = []
+    for iDir in list:
+        if not checkJobCompletion(iDir):
+            failedList.append(iDir)
+    return failedList
+
+def checkJobCompletion(dir):
+    failed_criteria = ["End Fatal Exception"]
+    passed_criteria = ["Successfully opened file", "Closed file"]
+    err_location = dir+"/condor.err"
+    if os.path.exists(err_location):
+        err_file = open(err_location).read()
+        for iC in failed_criteria:
+            if iC in err_file:
+                return False
+        for iC in passed_criteria:
+            if iC not in err_file:
+                return False
+        return True
+    else:
+        return False
+
 def createJobFiles(dir, fileList, script_content):
     f = open(fileList,'r')
     f_template = open(script_content,'r')
     template = f_template.readline()
     relBase = os.environ.get('CMSSW_BASE')
     cmsrel = relBase[relBase.rfind('CMSSW'):]
+    sub_area = dir[:dir.find("dag")]
     for line in f.readlines():
-        currentDir = dir[:dir.find("dag")]+line[line.rfind('/')+1:line.rfind('.')]        
+        currentDir = sub_area + line[line.rfind('/')+1:line.rfind('.')]        
+        if os.path.exists(currentDir):
+            print '%s[WARNING]\033[0m Submittion Area "%s" Already Exists!!!' %(bcolors.WARNING, sub_area)
+            print '%s[WARNING]\033[0m Will Not Update Submittion Configs!!!' %(bcolors.WARNING)
+            return 1
         mkdir_cmd = 'mkdir ' + currentDir
         os.system(mkdir_cmd)
         f_submit = open(currentDir + '/submit','w')
@@ -69,7 +106,7 @@ def createJobFiles(dir, fileList, script_content):
         f_submit.write("cd FinalStateAnalysis\n")
         f_submit.write("source environment.sh \n")
         f_submit.write("cd NtupleTools/test/\n")
-        command = "./make_ntuples_cfg.py maxEvents=100 outputFile=make_ntuples_cfg-%s inputFiles=${INPUTFILE} %s" %(line[line.rfind("/")+1:line.find('root') + 4], template[template.find("channels"):])
+        command = "./make_ntuples_cfg.py outputFile=make_ntuples_cfg-%s inputFiles=${INPUTFILE} %s" %(line[line.rfind("/")+1:line.find('root') + 4], template)
         f_submit.write(command + '\n')
         f_submit.write("# copy output to eos\n")
         f_submit.write('echo "xrdcp .root output for condor"\n')
@@ -240,6 +277,9 @@ def datasets_from_das(args):
             if passes_filter:
                 tmp_content, tmp_file_list= getFarmoutCommand(args, dataset_name, dataset)
                 script_content += tmp_content
+                if args.resubmit:
+                    tmp_file_list = checkJobsCompletion(tmp_file_list)
+                print "%s[COMPLETE]\033[0m Generated %i Jobs" %(bcolors.OKGREEN, len(tmp_file_list))
                 fileList += tmp_file_list
     # special handling for data
     if args.isData:
@@ -266,14 +306,28 @@ def datasets_from_das(args):
             if passes_filter:
                 tmp_content, tmp_file_list= getFarmoutCommand(args, name_to_use, dataset)
                 script_content += tmp_content
+                if args.resubmit:
+                    tmp_file_list = checkJobsCompletion(tmp_file_list)
+                print "%s[COMPLETE]\033[0m Generated %i Jobs" %(bcolors.OKGREEN, len(tmp_file_list))
                 fileList += tmp_file_list
     if "Submit file" not in script_content:
         log.warning("No datasets found matching %s", args.samples)
 
+
+    #trim
+    if args.nJobs != '-1':
+        trimmedFileList = []
+        nJobs = int(args.nJobs)
+        if nJobs < len(fileList):
+            for i in range(nJobs):
+                trimmedFileList.append(fileList[i])
+            fileList = trimmedFileList
+
+    print "%s[COMPLETE]\033[0m Total Jobs To Be Submitted %i" %(bcolors.OKGREEN, len(fileList))
     input_txt_path = "%s/submit_files.txt" %os.getcwd()
+
     with open(input_txt_path, 'w') as txt:
         txt.write('\n'.join(fileList))
-
     return script_content
 
 def datasets_from_datadefs(args):
@@ -375,18 +429,23 @@ def get_com_line_args():
     parser.add_argument('--comand-template', '-t', type=str, default="",
                         dest='command_template', help="commands")
 
+    parser.add_argument('--nJobs', type=str, default="-1",
+                        dest='nJobs', help="commands")
+
+    parser.add_argument('--resubmit-failed-jobs', default=False, action='store_true',
+                        dest='resubmit', help="commands")
+
     args = parser.parse_args()
     return args
 
 if __name__ == "__main__":
     script_content = '# Condor submission script\n'
-    script_content += '# Generated with submit_job.py at %s\n' % datetime.datetime.now()
+    script_content += '# Generated with submit_job_fnal.py at %s\n' % datetime.datetime.now()
     script_content += '# The command was: %s\n\n' % ' '.join(sys.argv)
     args = get_com_line_args()
     # first, make DAS query for dataset if not using local dataset or hdfs/dbs tuple list
     if args.campaignstring or args.isData:
         script_content += datasets_from_das(args)
-        print script_content
     else:
         # this is the old version that uses datadefs
         script_content += datasets_from_datadefs(args)
@@ -406,11 +465,4 @@ if __name__ == "__main__":
     os.system('tar -cf '+tarfile+' '+relBase.split('/')[-1])
     os.chdir(thisDir)
 
-#     if args.output_file == "":
-#         sys.stdout.write(script_content)
-#     else:
-#         with open(args.output_file, "w") as file:
-#             file.write("#!/bin/bash\n")
-#             file.write(script_content)
-#         sys.stdout.write("\nWrote submit script %s\n\n" % args.output_file)
 
