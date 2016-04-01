@@ -32,7 +32,7 @@ Add the sample you'd like to run over at MetaData/tuples/MiniAOD-13TeV_RunIIFall
 
 submit_FS.py Options
 -----------------
---local #run interactively 
+--local <font color='green'>run interactively</font>
 
 --nJobs X #when submitting condor jobs, specify the number of jobs to run. Used mainly for debugging.
 
