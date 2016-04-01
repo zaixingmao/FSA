@@ -123,8 +123,8 @@ TNT = 1 if options.TNT else 0
 useLumiMask = '/afs/cern.ch/cms/CAF/CMSCOMM/COMM_DQM/certification/Collisions15/13TeV/Cert_246908-260627_13TeV_PromptReco_Collisions15_25ns_JSON_v2.txt' if options.isData else '' #1546.44
 localJobInfo = localJob_cfg.localJobInfo
 
-inputFiles = 'local'
-outputFile = "file:///eos/uscms/store/user/zmao/myTestFile.root"
+inputFiles = localJobInfo['inputFile']
+outputFile = localJobInfo['outputFile']
 
 if ":" in localJobInfo['eventsToProcess']:
     cmd = './make_ntuples_cfg.py eventsToProcess=%s outputFile=%s inputFiles=%s channels=%s isMC=%i TNT=%i lumiMask=%s nExtraJets=8 sys=%s runMVAMET=%i runTauTauMVAMET=%i svFit=%i ' %(localJobInfo['eventsToProcess'], outputFile, inputFiles, options.FS, isMC, TNT, useLumiMask, options.sys, MVAMET, TauTauMVAMET, SVFit)
@@ -243,7 +243,7 @@ if (not options.runLocal) and (not options.atFNAL):
     output.close()
     print 'bash < do.sh'
 
-if options.atFNAL:
+if options.atFNAL and (not options.runLocal):
     print 'python submit_FNAL_condor.py'
 
 
