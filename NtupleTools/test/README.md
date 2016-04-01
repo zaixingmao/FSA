@@ -34,25 +34,26 @@ submit_FS.py Options
 -----------------
 ```bash
 
---local #run interactively
+--local         #run interactively
 
---nJobs X #when submitting condor jobs, specify the number of jobs to run. Used mainly for debugging.
+--nJobs X       #when submitting condor jobs, specify the number of jobs to run. Used mainly for debugging.
 
--o XXX #when submitting condor jobs, XXX specifies your desired directory name
+-o XXX          #when submitting condor jobs, XXX specifies your desired directory name
 
---sample XXX #when submitting condor jobs, specify the samples you'd like to run over. 
-             #Defined in MetaData/tuples/MiniAOD-13TeV_RunIIFall15.json or MetaData/tuples/MiniAOD-13TeV_Data.json
+--sample XXX    #when submitting condor jobs, specify the samples you'd like to run over. 
+                #Defined in MetaData/tuples/MiniAOD-13TeV_RunIIFall15.json 
+                #or MetaData/tuples/MiniAOD-13TeV_Data.json
 
---FS XX #specify the desired final states to be saved. Currently supports et, mt, tt, em, ee, mm.
+--FS XX         #specify the desired final states to be saved. Currently supports et, mt, tt, em, ee, mm.
 
---isData #please use if you're running over data samples
+--isData        #please use if you're running over data samples
 
---atFNAL #please use if you're running at FNAL
+--atFNAL        #please use if you're running at FNAL
 
---resubmit #when submitting condor jobs, resubmits failed jobs
+--resubmit      #when submitting condor jobs, resubmits failed jobs
 
---maxEvents #when submitting condor jobs, specify the maximum number of events to run over. 
-            #Used mainly for debugging.
+--maxEvents     #when submitting condor jobs, specify the maximum number of events to run over. 
+                #Used mainly for debugging.
 ```
 
 
