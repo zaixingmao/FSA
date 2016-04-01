@@ -5,27 +5,26 @@ The Final State Analysis (FSA) package is a CMSSW analysis framework.
 The package contains a complete implementatation to build a POG-approved 
 PAT tuple, and utilities for generating plain ROOT ntuples from the PAT tuple.
 
-**Documentation:** https://github.com/uwcms/FinalStateAnalysis/wiki
-
-
 Installation
 ------------
 
-Current CMSSW version: ``7_4_14``.
+Current CMSSW version: ``7_6_3``.
 
 Get a supported CMSSW release area:
 
 ```bash
-  cmsrel CMSSW_7_4_14
-  cd CMSSW_7_4_14/src
+  cmsrel CMSSW_7_6_3
+  cd CMSSW_7_6_3/src
   # Setup your CMSSW environment
   cmsenv
+  # Run this before doing ANYTHING else in src
+  git cms-init
 ```
 
 Checkout the FinalStateAnalysis repository:
 
 ```bash
-  git clone -b miniAOD_dev_7_4_14 https://github.com/zaixingmao/FSA.git FinalStateAnalysis
+  git clone -b miniAOD_7_6_3_FNAL https://github.com/zaixingmao/FSA.git FinalStateAnalysis
   cd FinalStateAnalysis
   cd recipe/
   ./recipe.sh
@@ -42,15 +41,18 @@ git cms-addpkg RecoMET/METProducers/
 git cms-addpkg RecoMET/METPUSubtraction/
 ```
 
-New ElectronID:
-```bash
-git cms-merge-topic ikrav:egm_id_7.4.12_v1
-```
-
 
 Build:
 
 ```bash
 export USER_CXXFLAGS=" -Wno-delete-non-virtual-dtor -Wno-error=unused-but-set-variable -Wno-error=unused-variable -Wno-error=sign-compare -Wno-error=reorder"
 scram b -j 8
+```
+
+
+Running:
+
+```bash
+cd NtupleTools/test/
+#Read documentation at https://github.com/zaixingmao/FSA/tree/miniAOD_7_6_3_FNAL/NtupleTools/test
 ```
