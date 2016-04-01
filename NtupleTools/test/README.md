@@ -81,6 +81,7 @@ Example:
 Submit Jobs
 ---------------
 For MC samples, make sure the samples you plan to run over are defined in MetaData/tuples/MiniAOD-13TeV_RunIIFall15.json
+
 For data samples, make sure the samples you plan to run over are defined in MetaData/tuples/MiniAOD-13TeV_Data.json
 
 Example:
