@@ -142,18 +142,19 @@ fs = expandFinalStates(options.FS)
 
 cuts = " "
 for iFS in fs:
-    cuts += "skimCuts-%s=\"" %iFS
-    if iFS == 'tt' or iFS == 'ee':
-        for ikey in skimCuts[iFS].keys():
-            cuts+= "%s," %(skimCuts[iFS][ikey].replace("object", "daughter(0)"))
-            cuts+= "%s," %(skimCuts[iFS][ikey].replace("object", "daughter(1)"))
-    else:
-        for ikey in skimCuts[iFS].keys():
-            if '_%s' %iFS[0] in ikey:
+    if iFS in skimCuts.keys():
+        cuts += "skimCuts-%s=\"" %iFS
+        if iFS == 'tt' or iFS == 'ee':
+            for ikey in skimCuts[iFS].keys():
                 cuts+= "%s," %(skimCuts[iFS][ikey].replace("object", "daughter(0)"))
-            if '_%s' %iFS[1] in ikey:
                 cuts+= "%s," %(skimCuts[iFS][ikey].replace("object", "daughter(1)"))
-    cuts = cuts[0: len(cuts)-1] + "\" "
+        else:
+            for ikey in skimCuts[iFS].keys():
+                if '_%s' %iFS[0] in ikey:
+                    cuts+= "%s," %(skimCuts[iFS][ikey].replace("object", "daughter(0)"))
+                if '_%s' %iFS[1] in ikey:
+                    cuts+= "%s," %(skimCuts[iFS][ikey].replace("object", "daughter(1)"))
+        cuts = cuts[0: len(cuts)-1] + "\" "
 cmd += cuts
 
 if options.atFNAL:
