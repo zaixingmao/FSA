@@ -157,12 +157,10 @@ void MiniAODMuonIDEmbedder::produce(edm::Event& evt, const edm::EventSetup& es) 
         muon.addUserInt("_tight", -9999);
         muon.addUserInt("_soft", -9999);
         muon.addUserInt("_isHightPt", -9999);
-        if(muon.innerTrack().isNonnull()){
-            muon.addUserFloat("_dxy", -9999);
-            muon.addUserFloat("_dxy_bs", -9999);
-            muon.addUserFloat("_dxy_bs_dz", -9999);
-            muon.addUserFloat("_dz", -9999);
-        }
+	muon.addUserFloat("_dxy", -9999);
+	muon.addUserFloat("_dxy_bs", -9999);
+	muon.addUserFloat("_dxy_bs_dz", -9999);
+	muon.addUserFloat("_dz", -9999);
     }
     else{
         muon.addUserInt("_tight",muon.isTightMuon(*firstGoodVertex));
@@ -175,6 +173,12 @@ void MiniAODMuonIDEmbedder::produce(edm::Event& evt, const edm::EventSetup& es) 
             muon.addUserFloat("_dxy_bs_dz", muon.innerTrack()->dz(point));
             muon.addUserFloat("_dz", muon.innerTrack()->dz(firstGoodVertex->position()));
         }
+	else{
+	  muon.addUserFloat("_dxy", -9999);
+	  muon.addUserFloat("_dxy_bs", -9999);
+	  muon.addUserFloat("_dxy_bs_dz", -9999);
+	  muon.addUserFloat("_dz",-9999);
+	}
     }
     output->push_back(muon);
   }
