@@ -88,6 +88,8 @@ options = TauVarParsing.TauVarParsing(
 )
 
 finalStates = ['tt', 'et', 'ee', 'mm', 'mt', 'em', 
+               'ttt', 'ett', 'eet', 'mmt', 'mtt', 'emt', 
+               'eee', 'emm', 'eem', 'mmm',  
                'eett', 'emtt', 'mmtt', 'mttt', 'ettt', 'tttt',
                'eeee', 'eeem', 'eemm', 'eemt', 'eeet',
                'emmm', 'mmmm', 'mmmt', 'emmt',
