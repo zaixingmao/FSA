@@ -86,6 +86,9 @@ For data samples, make sure the samples you plan to run over are defined in Meta
 
 Example:
 ```bash
+#Setup grid proxy: https://twiki.cern.ch/twiki/bin/view/CMSPublic/WorkBookStartingGrid#ObtainingCert
+voms-proxy-init --voms=cms --valid=48:00
+
 #Do:
     python submit_FS.py --FS tt,em,mt,et --atFNAL -o testProduction --sample ST*
     python submit_FNAL_condor.py

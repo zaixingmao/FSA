@@ -1,11 +1,13 @@
 universe = vanilla
-Executable = //uscms/home//zmao/nobackup/testProduction_1/ST_tW_antitop_5f_inclusiveDecays_13TeV-powheg-pythia8_TuneCUETP8M1/06F964CD-55B9-E511-B296-002590A2CCF2/submit
+use_x509userproxy = true
+Executable = //uscms/home//zmao/nobackup/Apr6_Production/TT_TuneCUETP8M1_13TeV-powheg-pythia8/0007DBD0-2ED2-E511-AD0D-20CF3019DEF5/submit
 Requirements   =  OpSys == "LINUX" && (Arch =="INTEL" || Arch =="x86_64")
+request_memory = 8000
 Should_Transfer_Files = YES
 WhenToTransferOutput = ON_EXIT
 Transfer_Input_Files = /uscms_data/d3/zmao/CMSSW_7_6_3.tar
-Output = //uscms/home//zmao/nobackup/testProduction_1/ST_tW_antitop_5f_inclusiveDecays_13TeV-powheg-pythia8_TuneCUETP8M1/06F964CD-55B9-E511-B296-002590A2CCF2/condor.out
-Error = //uscms/home//zmao/nobackup/testProduction_1/ST_tW_antitop_5f_inclusiveDecays_13TeV-powheg-pythia8_TuneCUETP8M1/06F964CD-55B9-E511-B296-002590A2CCF2/condor.err
-Log = //uscms/home//zmao/nobackup/testProduction_1/ST_tW_antitop_5f_inclusiveDecays_13TeV-powheg-pythia8_TuneCUETP8M1/06F964CD-55B9-E511-B296-002590A2CCF2/condor.log
+Output = //uscms/home//zmao/nobackup/Apr6_Production/TT_TuneCUETP8M1_13TeV-powheg-pythia8/0007DBD0-2ED2-E511-AD0D-20CF3019DEF5/condor.out
+Error = //uscms/home//zmao/nobackup/Apr6_Production/TT_TuneCUETP8M1_13TeV-powheg-pythia8/0007DBD0-2ED2-E511-AD0D-20CF3019DEF5/condor.err
+Log = //uscms/home//zmao/nobackup/Apr6_Production/TT_TuneCUETP8M1_13TeV-powheg-pythia8/0007DBD0-2ED2-E511-AD0D-20CF3019DEF5/condor.log
 Notification = Never
-Queue 1
+Queue
