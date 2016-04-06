@@ -31,10 +31,15 @@ PATQuadFinalStateBuilderT<FinalState>::PATQuadFinalStateBuilderT(
     const edm::ParameterSet& pset):
   cut_(pset.getParameter<std::string>("cut"), true) {
   leg1Src_ = pset.getParameter<edm::InputTag>("leg1Src");
+  consumes<edm::View<typename FinalState::daughter1_type> >(leg1Src_);
   leg2Src_ = pset.getParameter<edm::InputTag>("leg2Src");
+  consumes<edm::View<typename FinalState::daughter2_type> >(leg2Src_);
   leg3Src_ = pset.getParameter<edm::InputTag>("leg3Src");
+  consumes<edm::View<typename FinalState::daughter3_type> >(leg3Src_);
   leg4Src_ = pset.getParameter<edm::InputTag>("leg4Src");
+  consumes<edm::View<typename FinalState::daughter4_type> >(leg4Src_);
   evtSrc_ = pset.getParameter<edm::InputTag>("evtSrc");
+  consumes<edm::View<PATFinalStateEvent> >(evtSrc_);
   produces<FinalStateCollection>();
 }
 
