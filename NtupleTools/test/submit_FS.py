@@ -142,19 +142,20 @@ fs = expandFinalStates(options.FS)
 
 cuts = " "
 for iFS in fs:
-    if iFS in skimCuts.keys():
-        cuts += "skimCuts-%s=\"" %iFS
-        if iFS == 'tt' or iFS == 'ee':
-            for ikey in skimCuts[iFS].keys():
-                cuts+= "%s," %(skimCuts[iFS][ikey].replace("object", "daughter(0)"))
-                cuts+= "%s," %(skimCuts[iFS][ikey].replace("object", "daughter(1)"))
-        else:
-            for ikey in skimCuts[iFS].keys():
-                if '_%s' %iFS[0] in ikey:
+    if iFS in skimCuts.keys():    
+        if iFS in skimCuts[iFS].keys():
+            cuts += "skimCuts-%s=\"" %iFS
+            if iFS == 'tt' or iFS == 'ee':
+                for ikey in skimCuts[iFS].keys():
                     cuts+= "%s," %(skimCuts[iFS][ikey].replace("object", "daughter(0)"))
-                if '_%s' %iFS[1] in ikey:
                     cuts+= "%s," %(skimCuts[iFS][ikey].replace("object", "daughter(1)"))
-        cuts = cuts[0: len(cuts)-1] + "\" "
+            else:
+                for ikey in skimCuts[iFS].keys():
+                    if '_%s' %iFS[0] in ikey:
+                        cuts+= "%s," %(skimCuts[iFS][ikey].replace("object", "daughter(0)"))
+                    if '_%s' %iFS[1] in ikey:
+                        cuts+= "%s," %(skimCuts[iFS][ikey].replace("object", "daughter(1)"))
+            cuts = cuts[0: len(cuts)-1] + "\" "
 cmd += cuts
 
 if options.atFNAL:
@@ -198,7 +199,7 @@ if not options.runLocal:
                     cmd += " --campaign-tag=\"RunIISpring15MiniAODv2-Asympt25ns_74X_mcRun2_asymptotic_v2-v1\" "
                 else:
  #                   cmd += " --campaign-tag=\"RunIISpring15MiniAODv2-74X_mcRun2_asymptotic_v2-v*\" "
-                    cmd += " --campaign-tag=\"RunIIFall15MiniAODv2*\" "
+                    cmd += " --campaign-tag=\"RunIIFall15MiniAODv2-PU25nsData2015v1_76X_mcRun2_asymptotic_v12_ext4-v1\" "
 
         else:
             cmd += " --input-dir=/nfs_scratch/zmao/"
