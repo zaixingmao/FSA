@@ -87,48 +87,21 @@ options = TauVarParsing.TauVarParsing(
     paramFile='',
 )
 
-options.register(
-    'skimCuts-tt',
-    '',
-    TauVarParsing.TauVarParsing.multiplicity.list,
-    TauVarParsing.TauVarParsing.varType.string,
-    'additional cuts to impose on the NTuple'
-)
-options.register(
-    'skimCuts-et',
-    '',
-    TauVarParsing.TauVarParsing.multiplicity.list,
-    TauVarParsing.TauVarParsing.varType.string,
-    'additional cuts to impose on the NTuple'
-)
-options.register(
-    'skimCuts-ee',
-    '',
-    TauVarParsing.TauVarParsing.multiplicity.list,
-    TauVarParsing.TauVarParsing.varType.string,
-    'additional cuts to impose on the NTuple'
-)
-options.register(
-    'skimCuts-mm',
-    '',
-    TauVarParsing.TauVarParsing.multiplicity.list,
-    TauVarParsing.TauVarParsing.varType.string,
-    'additional cuts to impose on the NTuple'
-)
-options.register(
-    'skimCuts-mt',
-    '',
-    TauVarParsing.TauVarParsing.multiplicity.list,
-    TauVarParsing.TauVarParsing.varType.string,
-    'additional cuts to impose on the NTuple'
-)
-options.register(
-    'skimCuts-em',
-    '',
-    TauVarParsing.TauVarParsing.multiplicity.list,
-    TauVarParsing.TauVarParsing.varType.string,
-    'additional cuts to impose on the NTuple'
-)
+finalStates = ['tt', 'et', 'ee', 'mm', 'mt', 'em', 
+               'eett', 'emtt', 'mmtt', 'mttt', 'ettt', 'tttt',
+               'eeee', 'eeem', 'eemm', 'eemt', 'eeet',
+               'emmm', 'mmmm', 'mmmt', 'emmt',
+              ]
+
+for ifs in finalStates:
+    options.register(
+        'skimCuts-%s' %ifs,
+        '',
+        TauVarParsing.TauVarParsing.multiplicity.list,
+        TauVarParsing.TauVarParsing.varType.string,
+        'additional cuts to impose on the NTuple'
+    )
+
 options.register(
     'nExtraJets',
     0,
