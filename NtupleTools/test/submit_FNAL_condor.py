@@ -7,6 +7,7 @@ import time
 def writeCFGFile(dir):
     f = open('tmp_submit_cfg','w')
     f.write("universe = vanilla\n")
+    f.write("use_x509userproxy = true\n")
     if '\n' in dir:
         dir = dir[:dir.find('\n')]
     f.write("Executable = %s/submit\n" %dir)
@@ -19,7 +20,7 @@ def writeCFGFile(dir):
     f.write("Error = %s/condor.err\n" %dir)
     f.write("Log = %s/condor.log\n" %dir)
     f.write("Notification = Never\n")
-    f.write("Queue 1\n")
+    f.write("Queue\n")
 
 
 
