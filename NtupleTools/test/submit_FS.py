@@ -211,6 +211,8 @@ elif options.cpu:
     cmd += " >& igtest.pp.log &"
     print cmd
 else:
+    print "Running command: 
+    print cmd
     os.system(cmd)
 
 if (not options.runLocal) and (not options.atFNAL):
