@@ -125,6 +125,7 @@ localJobInfo = localJob_cfg.localJobInfo
 
 inputFiles = localJobInfo['inputFile']
 outputFile = localJobInfo['outputFile']
+outputFile = './localRunOutputs/%s' %outputFile
 
 if ":" in localJobInfo['eventsToProcess']:
     cmd = './make_ntuples_cfg.py eventsToProcess=%s outputFile=%s inputFiles=%s channels=%s isMC=%i TNT=%i lumiMask=%s nExtraJets=8 sys=%s runMVAMET=%i runTauTauMVAMET=%i svFit=%i ' %(localJobInfo['eventsToProcess'], outputFile, inputFiles, options.FS, isMC, TNT, useLumiMask, options.sys, MVAMET, TauTauMVAMET, SVFit)
@@ -188,18 +189,14 @@ if not options.runLocal:
     cmd += " --comand-template=%s" %template_location
     if isMC:
         cmd += " --das-replace-tuple=$fsa/MetaData/tuples/MiniAOD-13TeV_RunIIFall15.json --samples %s -o %s" %(samples, tempFile)
-#        cmd += " --das-replace-tuple=$fsa/MetaData/tuples/MiniAOD-13TeV_RunIISpring15DR74.json --samples %s -o %s" %(samples, tempFile)
-
         if not options.notFromDAS:
             if options.is50ns:
                 cmd += " --campaign-tag=\"RunIISpring15DR74-Asympt50ns*\" "
             else:
-#                cmd += " --campaign-tag=\"RunIISpring15DR74-Asympt25ns*\" "
-                if "DYJetsToLL_M-1000to1500" in options.sample:
-                    cmd += " --campaign-tag=\"RunIISpring15MiniAODv2-Asympt25ns_74X_mcRun2_asymptotic_v2-v1\" "
-                else:
- #                   cmd += " --campaign-tag=\"RunIISpring15MiniAODv2-74X_mcRun2_asymptotic_v2-v*\" "
+                if ("TT" in options.sample) or ('DYJetsToLL_M-50' in options.sample):
                     cmd += " --campaign-tag=\"RunIIFall15MiniAODv2-PU25nsData2015v1_76X_mcRun2_asymptotic_v12_ext4-v1\" "
+                else:
+                    cmd += " --campaign-tag=\"RunIIFall15MiniAODv2-PU25nsData2015v1_76X_mcRun2_asymptotic_v12_ext1*\" "
 
         else:
             cmd += " --input-dir=/nfs_scratch/zmao/"
