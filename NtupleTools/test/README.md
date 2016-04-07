@@ -66,6 +66,8 @@ submit_FS.py Options
 
 Local Runs
 ----------
+Before running, remember to go to FinalStateAnalysis and source environment.sh
+
 Edit the local file information in localJob_cfg.py (Optional)
 
 Example:
@@ -75,11 +77,13 @@ Example:
 #Or:
     python submit_FS.py --local --FS tt,em,mt,et --atFNAL
 ```
-3) The output file should be in your current directory with default name "myTestFile.root"
+3) The output file should be in localRunOutputs directory with default name "myTestFile.root"
 
 
 Submit Jobs
 ---------------
+Before running, remember to go to FinalStateAnalysis and source environment.sh
+
 For MC samples, make sure the samples you plan to run over are defined in MetaData/tuples/MiniAOD-13TeV_RunIIFall15.json
 
 For data samples, make sure the samples you plan to run over are defined in MetaData/tuples/MiniAOD-13TeV_Data.json
@@ -90,7 +94,7 @@ Example:
 voms-proxy-init --voms=cms --valid=48:00
 
 #Do:
-    python submit_FS.py --FS tt,em,mt,et --atFNAL -o testProduction --sample ST*
+    python submit_FS.py --FS tt,em,mt,et --atFNAL -o testProduction --sample ST_tW_antitop
     python submit_FNAL_condor.py
 ```
 By default, this will submit condor jobs with the error and log files stored at: 
@@ -102,6 +106,6 @@ In the end, the final output root files will be transfered to:
 If some jobs fail, one can resubmit the failed jobs automatically by:
 ```bash
 #Do
-    python submit_FS.py --FS tt,em,mt,et --atFNAL -o testProduction --sample ST* --resubmit
+    python submit_FS.py --FS tt,em,mt,et --atFNAL -o testProduction --sample ST_tW_antitop --resubmit
     python submit_FNAL_condor.py
 ```
