@@ -211,7 +211,7 @@ elif options.cpu:
     cmd += " >& igtest.pp.log &"
     print cmd
 else:
-    print "Running command: 
+    print "Running command:"
     print cmd
     os.system(cmd)
 
