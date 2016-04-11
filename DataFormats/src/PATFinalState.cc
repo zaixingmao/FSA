@@ -4,7 +4,6 @@
 
 #include "FinalStateAnalysis/DataAlgos/interface/helpers.h"
 #include "FinalStateAnalysis/DataAlgos/interface/CollectionFilter.h"
-#include "FinalStateAnalysis/DataAlgos/interface/ApplySVfit.h"
 
 #include "DataFormats/PatCandidates/interface/PATObject.h"
 #include "DataFormats/PatCandidates/interface/Electron.h"
@@ -343,41 +342,6 @@ std::vector<double> PATFinalState::getPDFWeight() const{
 
 std::vector<int> PATFinalState::getPDFID() const{
     return evt()->getPDFID();
-}
-
-TLorentzVector
-PATFinalState::SVfit(int i, int j) const {
-
-  std::vector<int> decayModes;
-  std::vector<reco::CandidatePtr> toFit;
-  toFit.push_back(daughterPtr(i));
-  toFit.push_back(daughterPtr(j));
-
-  if(abs(daughter(i)->pdgId()) == 15){
-    decayModes.push_back(daughterAsTau(i)->decayMode());
-  }
-  else decayModes.push_back(-1);
-
-  if(abs(daughter(j)->pdgId()) == 15){
-    decayModes.push_back(daughterAsTau(j)->decayMode());
-  }
-  else decayModes.push_back(-1);
-
-
-//   edm::Ptr<pat::MET> mvaMet = evt()->met("mvamet");
-  edm::Ptr<pat::MET> pfMet = evt()->met("pfmet");
-
-//   if (mvaMet.isNull()) {
-//     throw cms::Exception("MissingMVAMet")
-//       << "SV fit requires the MVAMET be available via "
-//       << " met('mvamet') method in PATFinalStateEvent.  It's null."
-//       << std::endl;
-//   }
-
-
-  return ApplySVfit::getSVfitMass(toFit, decayModes, *pfMet,
-      pfMet->getSignificanceMatrix(), 0,
-      evt()->evtId());
 }
 
 double

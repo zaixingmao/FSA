@@ -318,11 +318,6 @@ def make_ntuple(*legs, **kwargs):
                 ntuple_config,
                 dicandidate_template.replace(object1=leg_a, object2=leg_b),
                 )
-        # Check if we want to enable SVfit
-        # Only do SVfit in states with 2 or 4 leptons
-        do_svfit = kwargs.get("svFit", False)
-        if not len(legs) % 2 == 0:
-            do_svfit = False
 
         leg_a_type = leg_a[0]
         leg_b_type = leg_b[0]
@@ -332,23 +327,6 @@ def make_ntuple(*legs, **kwargs):
         leg_b_index = legs.index(leg_b_type) \
             if counts[leg_b_type] == 1 else legs.index(leg_b_type) + int(leg_b[1]) - 1
 
-        # Never do SVfit on 'non-paired' leptons (eg legs 0 & 2), or legs 1&3
-        # legs either adjacent or both ends (0 and 3)
-        if leg_a_index % 2 != 0 or abs(leg_a_index - leg_b_index) % 2 != 1:
-            do_svfit = False
-        # Only do SVfit on mu + tau, e + tau, e + mu, & tau + tau combinations
-        if leg_a_type == leg_b_type and leg_a_type in ('m', 'e'):
-            do_svfit = False
-        # Always ignore photons
-        if 'g' in legs:
-            do_svfit = False
-        if do_svfit:
-            print "SV fitting legs %s and %s in final state %s" % (
-                leg_a, leg_b, ''.join(legs))
-            ntuple_config = PSet(
-                ntuple_config,
-                templates.topology.svfit.replace(object1=leg_a, object2=leg_b)
-            )
 
     analyzerSrc = "finalState" + "".join(
             _producer_translation[x] for x in legs ) + producer_suffix

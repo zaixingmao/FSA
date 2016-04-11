@@ -53,10 +53,6 @@ pairs = PSet(
     object1_object2_ToMETDPhi_Ty1 = 'twoParticleDeltaPhiToMEt({object1_idx}, {object2_idx}, "type1")',
 )
 
-svfit = PSet(
-    object1_object2_SVfit = 'SVfit({object1_idx},{object2_idx})',
-)
-
 finalstate = PSet(
     LT = 'ht',
     charge = 'charge',
