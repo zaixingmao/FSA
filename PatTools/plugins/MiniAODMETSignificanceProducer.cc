@@ -41,6 +41,11 @@ class MiniAODMETSignificanceProducer: public edm::stream::EDProducer<>
       std::auto_ptr<std::vector<pat::MET> > out; // Collection we'll output at the end
 
       metsig::METSignificance* metSigAlgo_;
+
+     edm::EDGetTokenT<double> rhoToken_;
+     std::string jetResPtType_;
+     std::string jetResPhiType_;
+     std::string jetSFType_;
 };
 
 
@@ -57,6 +62,11 @@ MiniAODMETSignificanceProducer::MiniAODMETSignificanceProducer(const edm::Parame
     patmetToken_ = consumes<edm::View<pat::MET> >(iConfig.getParameter<edm::InputTag>("srcMet"));
 
     pfCandidatesToken_ = consumes<edm::View<reco::Candidate> >(iConfig.getParameter<edm::InputTag>("srcPFCandidates"));
+
+    rhoToken_ = consumes<double>(iConfig.getParameter<edm::InputTag>("srcRho"));
+    jetSFType_ = iConfig.getParameter<std::string>("srcJetSF");
+    jetResPtType_ = iConfig.getParameter<std::string>("srcJetResPt");
+    jetResPhiType_ = iConfig.getParameter<std::string>("srcJetResPhi");
 
     metSigAlgo_ = new metsig::METSignificance(iConfig);
     produces<pat::METCollection>();
@@ -97,11 +107,22 @@ void MiniAODMETSignificanceProducer::produce(edm::Event& event, const edm::Event
    //
    edm::Handle<edm::View<reco::Jet> > jets;
    event.getByToken( pfjetsToken_, jets );
+
+    //extra stuff for since 7_6_4
+   edm::Handle<double> rho;
+   event.getByToken(rhoToken_, rho);
+ 
+   JME::JetResolution resPtObj = JME::JetResolution::get(setup, jetResPtType_);
+   JME::JetResolution resPhiObj = JME::JetResolution::get(setup, jetResPhiType_);
+   JME::JetResolutionScaleFactor resSFObj = JME::JetResolutionScaleFactor::get(setup, jetSFType_);
+
    
    //
    // compute the significance
    //
-   const reco::METCovMatrix cov = metSigAlgo_->getCovariance( *jets, leptons, *pfCandidates);
+   const reco::METCovMatrix cov = metSigAlgo_->getCovariance( *jets, leptons, *pfCandidates,
+                                                              *rho, resPtObj, resPhiObj, resSFObj, event.isRealData());
+
 
    edm::Handle<edm::View<pat::MET> > metIn;
    event.getByToken(patmetToken_, metIn);
