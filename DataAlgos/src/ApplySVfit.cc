@@ -9,7 +9,7 @@
 #include "FWCore/ParameterSet/interface/FileInPath.h"
 #include "DataFormats/Provenance/interface/EventID.h"
 #include "FinalStateAnalysis/DataAlgos/interface/ApplySVfit.h"
-#include "TauAnalysis/SVfitStandalone/interface/SVfitStandaloneAlgorithm.h"
+
 #include "TLorentzVector.h"
 #include "DataFormats/Candidate/interface/Candidate.h"
 #include "DataFormats/PatCandidates/interface/MET.h"
@@ -53,6 +53,7 @@ namespace ApplySVfit {
 //       return lookup->second;
 //     }
     // No pain no gain
+    /*
     Vector measuredMET = met.momentum();
     std::vector<MeasuredTauLepton> measuredTauLeptons;
 
@@ -99,10 +100,10 @@ namespace ApplySVfit {
 
     delete inputFile_visPtResolution;
 
-//     theCache[hash] = mass;
-
+     Thecache[hash] = mass;
+    */
     TLorentzVector SVFit_results;
-    SVFit_results.SetPtEtaPhiM(pt, eta, phi, mass);
+    //    SVFit_results.SetPtEtaPhiM(pt, eta, phi, mass);
     return SVFit_results;
 
   }
