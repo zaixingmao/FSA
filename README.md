@@ -19,6 +19,7 @@ Get a supported CMSSW release area:
   cmsenv
   # Run this before doing ANYTHING else in src
   git cms-init
+  #type N
 ```
 
 Checkout the FinalStateAnalysis repository:
