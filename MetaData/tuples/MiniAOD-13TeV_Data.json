@@ -14,5 +14,6 @@
   "data_MuonEG_Run2015D-05Oct_PromptReco_25ns" : "/MuonEG/Run2015D-05Oct2015-v2/MINIAOD",
   "data_Tau_Run2015D-05Oct_PromptReco_25ns" : "/Tau/Run2015D-05Oct2015-v1/MINIAOD",
   "data_Muon_Run2015D-05Oct_PromptReco_25ns" : "/SingleMuon/Run2015D-05Oct2015-v1/MINIAOD",
-  "data_Electron_Run2015D-05Oct_PromptReco_25ns" : "/SingleElectron/Run2015D-05Oct2015-v1/MINIAOD"
+  "data_Electron_Run2015D-05Oct_PromptReco_25ns" : "/SingleElectron/Run2015D-05Oct2015-v1/MINIAOD",
+  "data_Electron_Run2015D-16Dec" : "/SingleElectron/Run2015D-16Dec2015-v1/MINIAOD"
 }
