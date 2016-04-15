@@ -99,10 +99,12 @@ def createJobFiles(dir, fileList, script_content):
         f_submit.write("INPUTTAR=%s\n" %cmsrel)
         f_submit.write("OUTDIR=root://cmseos.fnal.gov//store/user/%s/%s\n" %(os.environ['USER'], dir[dir.find("nobackup")+9:dir.find("dags")]))
         f_submit.write("INPUTFILE=root://cmsxrootd.fnal.gov/%s\n" %line)
-        f_submit.write("tar -xf ${INPUTTAR}.tar\n")
+        f_submit.write("xrdcp root://cmseos.fnal.gov//store/user/%s/${INPUTTAR}.tgz . \n" %os.environ['USER'])
+        f_submit.write("tar -xvzf ${INPUTTAR}.tgz\n")
+        f_submit.write("rm ${INPUTTAR}.tgz\n")
         f_submit.write("cd ${INPUTTAR}/src\n")
-        f_submit.write("export SCRAM_ARCH=slc6_amd64_gcc493\n")
         f_submit.write("scramv1 b ProjectRename\n")
+        f_submit.write("eval `scramv1 runtime -sh`\n")
         f_submit.write("cd FinalStateAnalysis\n")
         f_submit.write("source environment.sh \n")
         f_submit.write("cd NtupleTools/test/\n")
@@ -122,6 +124,8 @@ def createJobFiles(dir, fileList, script_content):
         f_submit.write("  fi\n")
         f_submit.write("  rm ${FILE}\n")
         f_submit.write("done\n")
+        f_submit.write("cd ${_CONDOR_SCRATCH_DIR}\n")
+        f_submit.write("cd rm -rf ${INPUTTAR}\n")
         f_submit.close()
         sys.stdout.write(".")
     f.close()
@@ -453,16 +457,19 @@ if __name__ == "__main__":
 
     thisDir = os.getcwd()
     relBase = os.environ.get ('CMSSW_BASE')
-    print relBase
-    tarfile = ('/uscms/home/%s/nobackup/%s' %(os.environ['USER'], relBase[relBase.rfind('CMSSW'):]))+'.tar'
-
+    tarfile = ('/uscms/home/%s/nobackup/%s' %(os.environ['USER'], relBase[relBase.rfind('CMSSW'):]))+'.tgz'
     if os.path.exists(tarfile):
             os.system("rm %s" %tarfile)
 
     os.chdir(relBase)
     os.chdir('../')
-    print 'tar -cf',tarfile,' ',relBase.split('/')[-1],'/'
-    os.system('tar -cf '+tarfile+' '+relBase.split('/')[-1])
+    tarCommand = 'tar --exclude="src/.git" --exclude="src/FinalStateAnalysis/.git" --exclude="src/TauAnalysis/SVfitStandalone/.git" --exclude="python/.git" --exclude="python/FinalStateAnalysis/.git"  -zcf '+tarfile+' '+relBase.split('/')[-1]
+
+    print "packing: %s" %tarCommand
+
+    os.system(tarCommand)
+    os.system('xrdcp -f %s root://cmseos.fnal.gov//store/user/%s/%s' %(tarfile, os.environ['USER'], tarfile[tarfile.rfind('/'):]))
+
     os.chdir(thisDir)
 
 

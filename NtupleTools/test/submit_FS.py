@@ -120,7 +120,7 @@ TNT = 1 if options.TNT else 0
 #useLumiMask =  '/afs/cern.ch/cms/CAF/CMSCOMM/COMM_DQM/certification/Collisions15/13TeV/Cert_246908-254349_13TeV_PromptReco_Collisions15_JSON.txt' if options.isData else ''
 #useLumiMask =  '/afs/cern.ch/cms/CAF/CMSCOMM/COMM_DQM/certification/Collisions15/13TeV/Cert_246908-258159_13TeV_PromptReco_Collisions15_25ns_JSON_v3.txt' if options.isData else ''
 # useLumiMask = '/afs/cern.ch/cms/CAF/CMSCOMM/COMM_DQM/certification/Collisions15/13TeV/Cert_246908-258750_13TeV_PromptReco_Collisions15_25ns_JSON.txt' if options.isData else ''
-useLumiMask = '/afs/cern.ch/cms/CAF/CMSCOMM/COMM_DQM/certification/Collisions15/13TeV/Cert_246908-260627_13TeV_PromptReco_Collisions15_25ns_JSON_v2.txt' if options.isData else '' #1546.44
+useLumiMask = 'Cert_13TeV_16Dec2015ReReco_Collisions15_25ns_JSON_v2.txt' if options.isData else '' #1546.44
 localJobInfo = localJob_cfg.localJobInfo
 
 inputFiles = localJobInfo['inputFile']
@@ -193,10 +193,10 @@ if not options.runLocal:
             if options.is50ns:
                 cmd += " --campaign-tag=\"RunIISpring15DR74-Asympt50ns*\" "
             else:
-                if ("TT" in options.sample) or ('DYJetsToLL_M-50' in options.sample):
+                if ("TT" in options.sample) or ('DYJetsToLL_M-50 ' in options.sample):
                     cmd += " --campaign-tag=\"RunIIFall15MiniAODv2-PU25nsData2015v1_76X_mcRun2_asymptotic_v12_ext4-v1\" "
                 else:
-                    cmd += " --campaign-tag=\"RunIIFall15MiniAODv2-PU25nsData2015v1_76X_mcRun2_asymptotic_v12_ext1*\" "
+                    cmd += " --campaign-tag=\"RunIIFall15MiniAODv2-PU25nsData2015v1_76X_mcRun2_asymptotic_v12-v*\" "
 
         else:
             cmd += " --input-dir=/nfs_scratch/zmao/"

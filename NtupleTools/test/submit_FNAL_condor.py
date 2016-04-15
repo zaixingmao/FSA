@@ -15,7 +15,6 @@ def writeCFGFile(dir):
     f.write("request_memory = 8000\n")
     f.write("Should_Transfer_Files = YES\n")
     f.write("WhenToTransferOutput = ON_EXIT\n")
-    f.write("Transfer_Input_Files = %s.tar\n" %os.environ.get ('CMSSW_BASE'))
     f.write("Output = %s/condor.out\n" %dir)
     f.write("Error = %s/condor.err\n" %dir)
     f.write("Log = %s/condor.log\n" %dir)
