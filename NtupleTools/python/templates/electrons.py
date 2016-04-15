@@ -17,15 +17,15 @@ from FinalStateAnalysis.Utilities.cfgtools import PSet
 # ID and isolation
 id = PSet(
     # PHYS14 IDs (some of which are still CSA14 IDs...)
-    objectCBIDVeto = '{object}.userFloat("CBIDVeto")',
-    objectCBIDLoose = '{object}.userFloat("CBIDLoose")',
-    objectCBIDMedium = '{object}.userFloat("CBIDMedium")',
-    objectCBIDTight = '{object}.userFloat("CBIDTight")',
-    objectMVANonTrigWP80 = '{object}.userFloat("MVANonTrigWP80")',
-    objectMVANonTrigWP90 = '{object}.userFloat("MVANonTrigWP90")',
-    objectMVATrigWP80 = '{object}.userFloat("MVATrigWP80")',
-    objectMVATrigWP90 = '{object}.userFloat("MVATrigWP90")',
-    objectHEEPIDD = '{object}.userFloat("heepElectronID")',
+    objectCBIDVeto = '{object}.userInt("CBIDVeto")',
+    objectCBIDLoose = '{object}.userInt("CBIDLoose")',
+    objectCBIDMedium = '{object}.userInt("CBIDMedium")',
+    objectCBIDTight = '{object}.userInt("CBIDTight")',
+    objectMVANonTrigWP80 = '{object}.userInt("MVANonTrigWP80")',
+    objectMVANonTrigWP90 = '{object}.userInt("MVANonTrigWP90")',
+    objectMVATrigWP80 = '{object}.userInt("MVATrigWP80")',
+    objectMVATrigWP90 = '{object}.userInt("MVATrigWP90")',
+    objectHEEPIDD = '{object}.userInt("heepElectronID")',
     
     # Use cms.string so we get the parentheses formatting bonus
 #     objectRelPFIsoDB = cms.string(
@@ -209,6 +209,6 @@ trigger = PSet(
 )
 
 veto = PSet(
-    objectElectronVeto = 'veto3rdLepton({object_idx}, 0.1, "pt > 10 & abs(eta) < 2.5 & userFloat(\'MVANonTrigWP90\') > 0.5 & abs(userFloat(\'dz\')) < 0.2 & abs(userFloat(\'ipDXY\')) < 0.045   & abs(userFloat(\'relIso\')) < 0.3", "electron").size()',
+    objectElectronVeto = 'veto3rdLepton({object_idx}, 0.1, "pt > 10 & abs(eta) < 2.5 & userInt(\'MVANonTrigWP90\') > 0.5 & abs(userFloat(\'dz\')) < 0.2 & abs(userFloat(\'ipDXY\')) < 0.045   & abs(userFloat(\'relIso\')) < 0.3", "electron").size()',
     objectMuonVeto = 'veto3rdLepton({object_idx}, 0.0, "pt > 10 & abs(eta) < 2.4 & isMediumMuon > 0.5 & abs(userFloat(\'dz\')) < 0.2 & abs(userFloat(\'ipDXY\')) < 0.045  & abs(userFloat(\'relIso\')) < 0.3", "muon").size()',
 )

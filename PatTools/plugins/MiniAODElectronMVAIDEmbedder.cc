@@ -240,7 +240,7 @@ void MiniAODElectronIDEmbedder::produce(edm::Event& iEvent, const edm::EventSetu
 	  i < ids.size(); ++i)
 	{
 	  bool result = (*(ids.at(i)))[eptr];
-	  out->back().addUserFloat(idLabels_.at(i), float(result)); // 1 for true, 0 for false
+	  out->back().addUserInt(idLabels_.at(i), result); // 1 for true, 0 for false
 	}
       for(unsigned int i = 0; // Loop over mva values
           i < values.size(); ++i)
