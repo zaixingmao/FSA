@@ -144,18 +144,17 @@ fs = expandFinalStates(options.FS)
 cuts = " "
 for iFS in fs:
     if iFS in skimCuts.keys():    
-        if iFS in skimCuts[iFS].keys():
-            cuts += "skimCuts-%s=\"" %iFS
-            if iFS == 'tt' or iFS == 'ee':
-                for ikey in skimCuts[iFS].keys():
+        cuts += "skimCuts-%s=\"" %iFS
+        if iFS == 'tt' or iFS == 'ee':
+            for ikey in skimCuts[iFS].keys():
+                cuts+= "%s," %(skimCuts[iFS][ikey].replace("object", "daughter(0)"))
+                cuts+= "%s," %(skimCuts[iFS][ikey].replace("object", "daughter(1)"))
+        else:
+            for ikey in skimCuts[iFS].keys():
+                if '_%s' %iFS[0] in ikey:
                     cuts+= "%s," %(skimCuts[iFS][ikey].replace("object", "daughter(0)"))
+                if '_%s' %iFS[1] in ikey:
                     cuts+= "%s," %(skimCuts[iFS][ikey].replace("object", "daughter(1)"))
-            else:
-                for ikey in skimCuts[iFS].keys():
-                    if '_%s' %iFS[0] in ikey:
-                        cuts+= "%s," %(skimCuts[iFS][ikey].replace("object", "daughter(0)"))
-                    if '_%s' %iFS[1] in ikey:
-                        cuts+= "%s," %(skimCuts[iFS][ikey].replace("object", "daughter(1)"))
             cuts = cuts[0: len(cuts)-1] + "\" "
 cmd += cuts
 
@@ -193,7 +192,7 @@ if not options.runLocal:
             if options.is50ns:
                 cmd += " --campaign-tag=\"RunIISpring15DR74-Asympt50ns*\" "
             else:
-                if ("TT" in options.sample) or ('DYJetsToLL_M-50 ' in options.sample):
+                if ("TT" in options.sample) or ('DYJetsToLL_M-50' in options.sample):
                     cmd += " --campaign-tag=\"RunIIFall15MiniAODv2-PU25nsData2015v1_76X_mcRun2_asymptotic_v12_ext4-v1\" "
                 else:
                     cmd += " --campaign-tag=\"RunIIFall15MiniAODv2-PU25nsData2015v1_76X_mcRun2_asymptotic_v12-v*\" "
