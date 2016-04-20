@@ -37,5 +37,6 @@
    "Zprime_3500": "ZprimeToTauTau_M_3500_TuneCUETP8M1_tauola_13TeV_pythia8",
    "Zprime_4000": "ZprimeToTauTau_M_4000_TuneCUETP8M1_tauola_13TeV_pythia8",
    "Zprime_4500": "ZprimeToTauTau_M_4500_TuneCUETP8M1_tauola_13TeV_pythia8",
-   "Zprime_5000": "ZprimeToTauTau_M_5000_TuneCUETP8M1_tauola_13TeV_pythia8"
+   "Zprime_5000": "ZprimeToTauTau_M_5000_TuneCUETP8M1_tauola_13TeV_pythia8",
+   "SUSYGluGluToHToTauTau_M-160": "SUSYGluGluToHToTauTau_M-160_TuneCUETP8M1_13TeV-pythia8"
 }
