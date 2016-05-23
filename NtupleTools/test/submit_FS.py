@@ -27,7 +27,6 @@ def subsitute(command, option, newSetting):
 def opts():
     parser = optparse.OptionParser()
     parser.add_option("--local", dest="runLocal", default=False, action="store_true", help="run local jobs")
-    parser.add_option("--doSVFit", dest="doSVFit", default=False, action="store_true", help="do SVFit")
     parser.add_option("--doMVAMET", dest="doMVAMET", default=False, action="store_true", help="do MVAMET")
     parser.add_option("--doTauTauMVAMET", dest="doTauTauMVAMET", default=False, action="store_true", help="do Jan's MVAMET")
     parser.add_option("--singleJob", dest="singleJob", default=False, action="store_true", help="run 1 job")
@@ -111,7 +110,6 @@ skimCuts['ee'] = {"Pt": "object.pt() > 13",
                   "Eta": "abs(object.eta()) < 2.1",
                   }
 
-SVFit = 1 if options.doSVFit else 0
 MVAMET = 1 if options.doMVAMET else 0
 TauTauMVAMET = 1 if options.doTauTauMVAMET else 0
 isMC = 0 if options.isData else 1
@@ -128,9 +126,10 @@ outputFile = localJobInfo['outputFile']
 outputFile = './localRunOutputs/%s' %outputFile
 
 if ":" in localJobInfo['eventsToProcess']:
-    cmd = './make_ntuples_cfg.py eventsToProcess=%s outputFile=%s inputFiles=%s channels=%s isMC=%i TNT=%i lumiMask=%s nExtraJets=8 sys=%s runMVAMET=%i runTauTauMVAMET=%i svFit=%i ' %(localJobInfo['eventsToProcess'], outputFile, inputFiles, options.FS, isMC, TNT, useLumiMask, options.sys, MVAMET, TauTauMVAMET, SVFit)
+    cmd = './make_ntuples_cfg.py eventsToProcess=%s outputFile=%s inputFiles=%s channels=%s isMC=%i TNT=%i lumiMask=%s nExtraJets=8 sys=%s runMVAMET=%i runTauTauMVAMET=%i ' %(localJobInfo['eventsToProcess'], outputFile, inputFiles, options.FS, isMC, TNT, useLumiMask, options.sys, MVAMET, TauTauMVAMET)
+
 else:
-    cmd = './make_ntuples_cfg.py maxEvents=%i outputFile=%s inputFiles=%s channels=%s isMC=%i TNT=%i lumiMask=%s nExtraJets=8 sys=%s runMVAMET=%i runTauTauMVAMET=%i svFit=%i ' %(localJobInfo['maxEvents'], outputFile, inputFiles, options.FS, isMC, TNT, useLumiMask, options.sys, MVAMET, TauTauMVAMET, SVFit)
+    cmd = './make_ntuples_cfg.py maxEvents=%i outputFile=%s inputFiles=%s channels=%s isMC=%i TNT=%i lumiMask=%s nExtraJets=8 sys=%s runMVAMET=%i runTauTauMVAMET=%i ' %(localJobInfo['maxEvents'], outputFile, inputFiles, options.FS, isMC, TNT, useLumiMask, options.sys, MVAMET, TauTauMVAMET)
 
 if options.memory:
     checkCmd = 'igprof -d -mp -z -o igprof.mp.gz  cmsRun '#"valgrind --tool=memcheck `cmsvgsupp` --leak-check=yes --show-reachable=yes --num-callers=20 --track-fds=yes cmsRun "
@@ -173,7 +172,7 @@ if not options.runLocal:
     sys = "sys=%s" %options.sys
     if options.sys == '':
         sys = ""
-    cmd = "%s %s make_ntuples_cfg.py channels=\"%s\" isMC=%i  TNT=%i lumiMask=%s nExtraJets=8 %s runMVAMET=%i runTauTauMVAMET=%i svFit=%i" %(submit_script, options.name, options.FS, isMC, TNT, useLumiMask, sys, MVAMET, TauTauMVAMET, SVFit)
+    cmd = "%s %s make_ntuples_cfg.py channels=\"%s\" isMC=%i  TNT=%i lumiMask=%s nExtraJets=8 %s runMVAMET=%i runTauTauMVAMET=%i" %(submit_script, options.name, options.FS, isMC, TNT, useLumiMask, sys, MVAMET, TauTauMVAMET)
     if options.is50ns:
         cmd += ' use25ns=0'
     else:
@@ -220,7 +219,7 @@ if (not options.runLocal) and (not options.atFNAL):
 
     for i in range(0, len(lines)):
         currentLine = lines[i]
-        if currentLine.find("svFit") != -1 and currentLine.find("farmoutAnalysisJobs") != -1:
+        if currentLine.find("runTauTauMVAMET") != -1 and currentLine.find("farmoutAnalysisJobs") != -1:
             newLine = currentLine[0:currentLine.find("farmoutAnalysisJobs")]
             newLine += "farmoutAnalysisJobs "
             if nJobs != 9999:
@@ -232,8 +231,8 @@ if (not options.runLocal) and (not options.atFNAL):
             else:
                 newLine += currentLine[currentLine.find("\"--output-dag-file"):currentLine.find("\"--output-dir=")]
 
-            newLine += currentLine[currentLine.find("\"--output-dir="):currentLine.find("svFit")]
-            newLine += "svFit=%i %s" %(SVFit, cuts)
+            newLine += currentLine[currentLine.find("\"--output-dir="):currentLine.find("runTauTauMVAMET")]
+            newLine += "runTauTauMVAMET=%i %s" %(TauTauMVAMET, cuts)
             newLine += " 'inputFiles=$inputFileNames' 'outputFile=$outputFileName'"
             currentLine = newLine
         currentLine += '\n'

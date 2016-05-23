@@ -32,7 +32,6 @@ dump=0     - if one, dump process python to stdout
 verbose=0 - print out timing information
 noPhotons=0 - don't build things which depend on photons.
 rerunMVAMET=0 - rerun the MVAMET algorithm
-svFit=1 - run the SVfit on appropriate pairs
 rerunQGJetID=0 - rerun the quark-gluon JetID
 rerunJets=0   - rerun with new jet energy corrections
 use25ns=1 - run on 25 ns miniAOD (default, 0 = 50ns)
@@ -69,7 +68,6 @@ options = TauVarParsing.TauVarParsing(
     dump=0,  # If one, dump process python to stdout
     verbose=0,  # If one print out the TimeReport
     noPhotons=0,  # If one, don't assume that photons are in the PAT tuples.
-    svFit=0,  # If one, SVfit appropriate lepton pairs.
     rochCor="",
     eleCor="",
     rerunQGJetID=0,  # If one reruns the quark-gluon JetID
@@ -682,7 +680,7 @@ for final_state in expanded_final_states(final_states):
     skimCuts = getattr(options, "skimCuts-%s" %final_state)
     print skimCuts
     analyzer = make_ntuple(*final_state, 
-                            svFit=options.svFit, dblhMode=options.dblhMode,
+                            dblhMode=options.dblhMode,
                             runTauSpinner=options.runTauSpinner, 
                             runMVAMET=options.runMVAMET,
                             runTauTauMVAMET=options.runTauTauMVAMET,

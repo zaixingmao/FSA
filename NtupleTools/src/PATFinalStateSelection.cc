@@ -86,7 +86,6 @@ PATFinalStateSelection::PATFinalStateSelection(
   take_ = final.getParameter<unsigned int>("take");
   TFileDirectory finaldir = fs.mkdir("final");
   eventView_ = pset.getParameter<bool>("EventView");
-  doSVFit_ = pset.getParameter<bool>("doSVFit");
 
   if( eventView_ ){
     finalPlotsEventView_.reset(
@@ -148,11 +147,9 @@ bool PATFinalStateSelection::operator()(const PATFinalStatePtrs& input,
   for (size_t i = 0; i < passingLocal.size() && i < take_; ++i) {
     passing_.push_back(passingLocal[i]);
     // only fill the ntuple if we're not doing event view
-    TLorentzVector svfit_results;
-    if(doSVFit_) svfit_results += passingLocal[i]->SVfit(0, 1);
 
     if (!eventView_ && finalPlots_.get()) 
-      finalPlots_->fill(*passingLocal[i], weight, i, "SVfit", svfit_results, passingLocal[i]->getPDFWeight(), passingLocal[i]->getPDFID());
+      finalPlots_->fill(*passingLocal[i], weight, i, passingLocal[i]->getPDFWeight(), passingLocal[i]->getPDFID());
   }
   // if event view fill fill variable-sized branches
   if ( eventView_ ) finalPlotsEventView_->fill(passingLocal, weight);
