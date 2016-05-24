@@ -375,7 +375,6 @@ def make_ntuple(*legs, **kwargs):
             selections=cms.VPSet(),
             EventView=cms.bool(False),
             tlvName=cms.string('SVfit'),
-            doSVFit=cms.bool(bool(do_svfit)),
             final=cms.PSet(
                 sort=cms.string('daughter(0).pt'),  # Doesn't really matter
                 take=cms.uint32(50),

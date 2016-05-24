@@ -61,57 +61,24 @@ id = PSet(
     # updated for what is included in PHYS14 MiniAOD
     # TODO: update when new IDs are released: https://twiki.cern.ch/twiki/bin/view/CMSPublic/SWGuidePFTauID#Tau_ID_2014_preparation_for_AN1
     # Against Electron
-#    objectAgainstElectronLoose  = '{object}.tauID("againstElectronLoose")',
-#    objectAgainstElectronMedium = '{object}.tauID("againstElectronMedium")',
-#    objectAgainstElectronTight  = '{object}.tauID("againstElectronTight")',
-    
-    objectAgainstElectronVLooseMVA5 = '{object}.tauID("againstElectronVLooseMVA5")', 
-    objectAgainstElectronLooseMVA5  = '{object}.tauID("againstElectronLooseMVA5")',
-    objectAgainstElectronMediumMVA5 = '{object}.tauID("againstElectronMediumMVA5")',
-    objectAgainstElectronTightMVA5  = '{object}.tauID("againstElectronTightMVA5")',
     
     objectAgainstElectronVLooseMVA6 = '{object}.tauID("againstElectronVLooseMVA6")', 
     objectAgainstElectronLooseMVA6  = '{object}.tauID("againstElectronLooseMVA6")',
     objectAgainstElectronMediumMVA6 = '{object}.tauID("againstElectronMediumMVA6")',
     objectAgainstElectronTightMVA6  = '{object}.tauID("againstElectronTightMVA6")',
 
-    objectAgainstElectronMVA5category = '{object}.tauID("againstElectronMVA5category")',
-    objectAgainstElectronMVA5raw      = '{object}.tauID("againstElectronMVA5raw")',
 
     # Against Muon
-#    objectAgainstMuonLoose  = '{object}.tauID("againstMuonLoose")',
-#    objectAgainstMuonMedium = '{object}.tauID("againstMuonMedium")',
-#    objectAgainstMuonTight  = '{object}.tauID("againstMuonTight")',
-    
-#    objectAgainstMuonLoose2  = '{object}.tauID("againstMuonLoose2")',
-#    objectAgainstMuonMedium2 = '{object}.tauID("againstMuonMedium2")',
-#    objectAgainstMuonTight2  = '{object}.tauID("againstMuonTight2")',
     
     objectAgainstMuonLoose3 = '{object}.tauID("againstMuonLoose3")',
     objectAgainstMuonTight3 = '{object}.tauID("againstMuonTight3")',
     
-#    objectAgainstMuonLooseMVA  = '{object}.tauID("againstMuonLooseMVA")',
-#    objectAgainstMuonMediumMVA = '{object}.tauID("againstMuonMediumMVA")',
-#    objectAgainstMuonTightMVA  = '{object}.tauID("againstMuonTightMVA")',
-    
-#    objectAgainstMuonMVAraw = '{object}.tauID("againstMuonMVAraw")',
-
     # combined isolation DB corr 3 hits
     objectByLooseCombinedIsolationDeltaBetaCorr3Hits = '{object}.tauID("byLooseCombinedIsolationDeltaBetaCorr3Hits")',
     objectByMediumCombinedIsolationDeltaBetaCorr3Hits = '{object}.tauID("byMediumCombinedIsolationDeltaBetaCorr3Hits")', 
     objectByTightCombinedIsolationDeltaBetaCorr3Hits = '{object}.tauID("byTightCombinedIsolationDeltaBetaCorr3Hits")',
     objectByCombinedIsolationDeltaBetaCorrRaw3Hits = '{object}.tauID("byCombinedIsolationDeltaBetaCorrRaw3Hits")',
     
-    # new tau isolation discriminator with dR = 0.3
-    objectByLooseCombinedIsolationDeltaBetaCorr3HitsdR03 = '{object}.tauID("byLooseCombinedIsolationDeltaBetaCorr3HitsdR03")',
-    objectByMediumCombinedIsolationDeltaBetaCorr3HitsdR03 = '{object}.tauID("byMediumCombinedIsolationDeltaBetaCorr3HitsdR03")', 
-    objectByTightCombinedIsolationDeltaBetaCorr3HitsdR03 = '{object}.tauID("byTightCombinedIsolationDeltaBetaCorr3HitsdR03")',
-
-    objectByLooseIsolationMVArun2v1DBdR03oldDMwLT = '{object}.tauID("byLooseIsolationMVArun2v1DBdR03oldDMwLT")',
-    objectByMediumIsolationMVArun2v1DBdR03oldDMwLT = '{object}.tauID("byMediumIsolationMVArun2v1DBdR03oldDMwLT")', 
-    objectByTightIsolationMVArun2v1DBdR03oldDMwLT = '{object}.tauID("byTightIsolationMVArun2v1DBdR03oldDMwLT")',
-    objectByVTightIsolationMVArun2v1DBdR03oldDMwLT = '{object}.tauID("byVTightIsolationMVArun2v1DBdR03oldDMwLT")',
-
     # BDT based tau ID discriminator based on isolation Pt sums plus tau lifetime information, trained on 1-prong, "2-prong" and 3-prong tau candidates 
     objectByVLooseIsolationMVArun2v1DBnewDMwLT = '{object}.tauID("byVLooseIsolationMVArun2v1DBnewDMwLT")',
     objectByLooseIsolationMVArun2v1DBnewDMwLT = '{object}.tauID("byLooseIsolationMVArun2v1DBnewDMwLT")',
