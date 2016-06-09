@@ -82,7 +82,7 @@ if resubmitDir != '':
 
 skimCuts = {}
 skimCuts['tt'] = {"ID": "object.tauID(\\\"decayModeFindingNewDMs\\\") > 0.5",
-                 "Pt": "object.pt() > 45",
+                 "Pt": "object.pt() > 25",
                   "Eta": "abs(object.eta()) < 2.1",
                   }
 skimCuts['et'] = {# "ID_e": "object.userFloat(\'MVANonTrigWP80\')> 0.5",
@@ -115,10 +115,9 @@ TauTauMVAMET = 1 if options.doTauTauMVAMET else 0
 isMC = 0 if options.isData else 1
 TNT = 1 if options.TNT else 0
 
-#useLumiMask =  '/afs/cern.ch/cms/CAF/CMSCOMM/COMM_DQM/certification/Collisions15/13TeV/Cert_246908-254349_13TeV_PromptReco_Collisions15_JSON.txt' if options.isData else ''
-#useLumiMask =  '/afs/cern.ch/cms/CAF/CMSCOMM/COMM_DQM/certification/Collisions15/13TeV/Cert_246908-258159_13TeV_PromptReco_Collisions15_25ns_JSON_v3.txt' if options.isData else ''
+
 # useLumiMask = '/afs/cern.ch/cms/CAF/CMSCOMM/COMM_DQM/certification/Collisions15/13TeV/Cert_246908-258750_13TeV_PromptReco_Collisions15_25ns_JSON.txt' if options.isData else ''
-useLumiMask = 'Cert_13TeV_16Dec2015ReReco_Collisions15_25ns_JSON_v2.txt' if options.isData else '' #1546.44
+useLumiMask = 'Cert_271036-274240_13TeV_PromptReco_Collisions16_JSON.txt' if options.isData else ''
 localJobInfo = localJob_cfg.localJobInfo
 
 inputFiles = localJobInfo['inputFile']
@@ -192,7 +191,10 @@ if not options.runLocal:
             if options.is50ns:
                 cmd += " --campaign-tag=\"RunIISpring15DR74-Asympt50ns*\" "
             else:
-                cmd += " --campaign-tag=\"RunIISpring16MiniAODv2-PUSpring16_80X_mcRun2_asymptotic_2016_miniAODv2_v0-v1*\" "
+                if "DY" in options.sample:
+                    cmd += " --campaign-tag=\"RunIISpring16MiniAODv2-PUSpring16_80X_mcRun2_asymptotic_2016_miniAODv2_v0_ext1-v*\" "
+                else:
+                    cmd += " --campaign-tag=\"RunIISpring16MiniAODv2-PUSpring16_80X_mcRun2_asymptotic_2016_miniAODv2_v0-v*\" "
         else:
             cmd += " --input-dir=/nfs_scratch/zmao/"
     else:
