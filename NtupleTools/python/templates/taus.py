@@ -154,16 +154,17 @@ TNT_request = PSet(
 )
 
 trigger = PSet(
-    objectTau20 = 'matchToHLTFilter({object_idx}, "hltPFTau20TrackLooseIso", 0.5)',
-    objectTauOverlapEle = 'matchToHLTFilter({object_idx}, "hltOverlapFilterIsoEle22WP75GsfLooseIsoPFTau20", 0.5)',
-    objectTauOverlapEleLoose = 'matchToHLTFilter({object_idx}, "hltOverlapFilterIsoEle22WPLooseGsfLooseIsoPFTau20", 0.5)',
-    objectTau20AgainstMuon = 'matchToHLTFilter({object_idx}, "hltPFTau20TrackLooseIsoAgainstMuon", 0.5)',
-    objectTauOverlapMu = 'matchToHLTFilter({object_idx}, "hltOverlapFilterIsoMu17LooseIsoPFTau20", 0.5)',
-    objectDiTauJet = 'matchToHLTFilter({object_idx}, "hltL1sDoubleTauJet36erORDoubleTauJet68er", 0.5)',
-    objectDiIsoTau = 'matchToHLTFilter({object_idx}, "hltDoubleL2IsoTau35eta2p1", 0.5)',
-    objectDiPFTau40 = 'matchToHLTFilter({object_idx}, "hltDoublePFTau40TrackPt1MediumIsolationDz02Reg", 0.5)',
-    objectDiPFTau35 = 'matchToHLTFilter({object_idx}, "hltDoublePFTau35TrackPt1MediumIsolationDz02Reg", 0.5)',
+    objectEle27DiTau32 = 'matchToHLTFilter({object_idx}, "hltDoublePFTau32TrackPt1MediumIsolationNoL1MatchDz02Reg", 0.5)',
+    objectEle27DiTau35 = 'matchToHLTFilter({object_idx}, "hltDoublePFTau35TrackPt1MediumIsolationNoL1MatchDz02Reg", 0.5)',
+    objectEle27DiTau40 = 'matchToHLTFilter({object_idx}, "hltDoublePFTau40TrackPt1MediumIsolationNoL1MatchDz02Reg", 0.5)',
 
+    objectDiTau32 = 'matchToHLTFilter({object_idx}, "hltDoublePFTau32TrackPt1MediumIsolationDz02Reg", 0.5)',
+    objectDiTau35 = 'matchToHLTFilter({object_idx}, "hltDoublePFTau35TrackPt1MediumIsolationDz02Reg", 0.5)',
+    objectDiTau40 = 'matchToHLTFilter({object_idx}, "hltDoublePFTau40TrackPt1MediumIsolationDz02Reg", 0.5)',
+
+    objectMuXTau32 = 'matchToHLTFilter({object_idx}, "hltPFTau32TrackPt1MediumIsolationL1HLTMatchedReg", 0.5)',
+    objectMu19Tau32Overlap = 'matchToHLTFilter({object_idx}, "hltOverlapFilterIsoMu19MediumIsoPFTau32Reg", 0.5)',
+    objectMu21Tau32Overlap = 'matchToHLTFilter({object_idx}, "hltOverlapFilterIsoMu21MediumIsoPFTau32Reg", 0.5)',
 )
 veto = PSet(
     objectElectronVeto = 'veto3rdLepton({object_idx}, 0.0, "pt > 10 & abs(eta) < 2.5 & userInt(\'MVANonTrigWP90\') > 0.5 & abs(userFloat(\'dz\')) < 0.2 & abs(userFloat(\'ipDXY\')) < 0.045   & abs(userFloat(\'relIso\')) < 0.3", "electron").size()',
