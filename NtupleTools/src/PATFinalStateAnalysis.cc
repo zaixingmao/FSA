@@ -54,6 +54,8 @@ PATFinalStateAnalysis::PATFinalStateAnalysis(const edm::ParameterSet& pset, TFil
   generator_ = edm::InputTag("generator");
   iC.consumes<GenEventInfoProduct>(generator_);
 
+  prunedGenParticles_ = edm::InputTag("prunedGenParticles");
+  iC.consumes<reco::GenParticleCollection>(prunedGenParticles_);
 
   // Build the event counter histos.
   eventCounter_ = fs_.make<TH1F>("eventCount", "Events Processed", 1, -0.5, 0.5);
@@ -61,12 +63,18 @@ PATFinalStateAnalysis::PATFinalStateAnalysis(const edm::ParameterSet& pset, TFil
       "eventCountWeighted", "Events Processed (weighted)", 1, -0.5, 0.5);
   eventWeights_ = fs_.make<TH1F>(
       "eventWeights", "Events Weights", 100, 0, 5);
+  eventCounterPtWeighted_ = fs_.make<TH1F>(
+      "eventCountPtWeighted", "Events Processed (weighted)", 1, -0.5, 0.5);
   skimEventCounter_ = fs_.make<TH1F>(
       "skimCounter", "Original Events Processed", 1, -0.5, 0.5);
   integratedLumi_ = fs_.make<TH1F>(
       "intLumi", "Integrated Lumi", 1, -0.5, 0.5);
   metaTree_ = fs_.make<TTree>(
       "metaInfo", "Information about processed runs and lumis");
+  for(int iPDF = 0; iPDF < 100; iPDF++){
+    TString name = "eventCountWeightedPDF_" + std::to_string(iPDF);
+    eventCounterWeightedPDFs_.push_back(fs_.make<TH1F>(name, " ", 1, -0.5, 0.5));
+  }
   metaTree_->Branch("run", &treeRunBranch_, "run/I");
   metaTree_->Branch("lumi", &treeLumiBranch_, "lumi/I");
   metaTree_->Branch("nevents", &treeEventsProcessedBranch_, "nevents/I");
@@ -113,6 +121,55 @@ bool PATFinalStateAnalysis::filter(const edm::EventBase& evt) {
 
     // event weight
     genEventWeight = genEvt->weight();
+
+    //get pdf weights                                                                                                                                                                                                  
+    edm::Handle<PATFinalStateEventCollection> event;
+    evt.getByLabel(evtSrc_, event);
+    std::vector<double> pdf_weights = (*event)[0].getPDFWeight();
+    std::vector<int> pdf_ids = (*event)[0].getPDFID();
+    for(int i = 1; i < 101; i++){
+      for(unsigned int j = 0; j < pdf_ids.size(); j ++){
+	if(pdf_ids[j] == 2000+i) eventCounterWeightedPDFs_[i-1]->Fill(0.0, pdf_weights[j]*genEventWeight);
+      }
+    }
+
+    //pt reweight                                                                                                                                                                                                      
+    edm::Handle<reco::GenParticleCollection> genParticles;
+    evt.getByLabel(prunedGenParticles_, genParticles);
+
+    int nLeptons = 0;
+    double topPt = 0, topBarPt = 0;
+    double SF_Top = 1.0, SF_antiTop = 1.0;
+    for(size_t i = 0; i < genParticles->size(); ++i) {
+      const reco::GenParticle & p = (*genParticles)[i];
+      int id = p.pdgId();
+      double pt = p.pt();
+      int n = p.numberOfDaughters();
+      if(abs(id) == 24 && n == 2) {
+	for (int j = 0; j < n; ++j) {
+	  const reco::Candidate * dau = p.daughter(j);
+	  if(abs(dau->pdgId()) == 11 or abs(dau->pdgId()) == 13) ++nLeptons;
+	}
+      }
+      if(abs(id) == 6 && n == 2) {
+	if(abs(p.daughter(0)->pdgId()) == 24 and abs(p.daughter(1)->pdgId()) == 5) {
+	  if(id > 0) topPt = pt; else topBarPt = pt;
+	}
+      }
+    }
+    if(topPt > 400) topPt = 400;
+    if(topBarPt > 400) topBarPt = 400;
+
+    if ( nLeptons > 0 ) {
+      if ( nLeptons == 1 ) {
+        SF_Top = TMath::Exp(0.159+((-0.00141)*topPt));
+        SF_antiTop = TMath::Exp(0.159+((-0.00141)*topBarPt));
+      } else if ( nLeptons == 2 ) {
+        SF_Top = TMath::Exp(0.148+((-0.00129)*topPt));
+        SF_antiTop = TMath::Exp(0.148+((-0.00129)*topBarPt));
+      }
+    }
+    eventCounterPtWeighted_->Fill(0.0, sqrt(SF_Top*SF_antiTop)*genEventWeight);
   }
 
   // Count this event

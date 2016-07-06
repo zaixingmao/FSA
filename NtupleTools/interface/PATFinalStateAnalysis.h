@@ -46,6 +46,7 @@ class PATFinalStateAnalysis : public edm::BasicAnalyzer {
   private:
     edm::InputTag src_;
     edm::InputTag generator_;
+    edm::InputTag prunedGenParticles_;
     std::string name_;
     TFileDirectory& fs_;
     edm::ParameterSet analysisCfg_;
@@ -66,6 +67,9 @@ class PATFinalStateAnalysis : public edm::BasicAnalyzer {
     TH1* eventCounter_;
     TH1* eventCounterWeighted_;
     TH1* eventWeights_;
+    TH1* eventCounterPtWeighted_;
+    std::vector<TH1*> eventCounterWeightedPDFs_;
+
     // For keeping track of the skimming
     edm::InputTag skimCounter_;
     TH1* skimEventCounter_;

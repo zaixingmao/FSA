@@ -338,6 +338,40 @@ void PATFinalStateEventProducer::produce(edm::Event& evt,
     double weightevt=genEvt->weight();
     theEvent->addWeight("genEventWeight", weightevt);
 
+    //pt reweight                                                                                                                                                                 
+    int nLeptons = 0;
+    double topPt = 0, topBarPt = 0;
+    double SF_Top = 1.0, SF_antiTop = 1.0;
+    for(size_t i = 0; i < genParticles->size(); ++i) {
+      const reco::GenParticle & p = (*genParticles)[i];
+      int id = p.pdgId();
+      double pt = p.pt();
+      int n = p.numberOfDaughters();
+      if(abs(id) == 24 && n == 2) {
+	for (int j = 0; j < n; ++j) {
+	  const reco::Candidate * dau = p.daughter(j);
+	  if(abs(dau->pdgId()) == 11 or abs(dau->pdgId()) == 13) ++nLeptons;
+	}
+      }
+      if(abs(id) == 6 && n == 2) {
+	if(abs(p.daughter(0)->pdgId()) == 24 and abs(p.daughter(1)->pdgId()) == 5) {
+	  if(id > 0) topPt = pt; else topBarPt = pt;
+	}
+      }
+    }
+    if(topPt > 400) topPt = 400;
+    if(topBarPt > 400) topBarPt = 400;
+    if ( nLeptons > 0 ) {
+      if ( nLeptons == 1 ) {
+        SF_Top = TMath::Exp(0.159+((-0.00141)*topPt));
+        SF_antiTop = TMath::Exp(0.159+((-0.00141)*topBarPt));
+      } else if ( nLeptons == 2 ) {
+        SF_Top = TMath::Exp(0.148+((-0.00129)*topPt));
+        SF_antiTop = TMath::Exp(0.148+((-0.00129)*topBarPt));
+      }
+    }
+    theEvent->addWeight("ptWeight", sqrt(SF_Top*SF_antiTop));
+
     edm::Handle<LHEEventProduct> EvtHandle;
     std::vector<double> LHEweights;
     std::vector<int> LHEid;
