@@ -144,6 +144,7 @@ gen = PSet(
     genHT_BSM3G = 'evt.genHT_BSM3G',
     EmbPtWeight='evt.generatorFilter.filterEfficiency',
     genEventWeight='evt.weight("genEventWeight")',
+    topPtWeight='evt.weight("ptWeight")',
     genNuPt       = '? getGenNu().pt() > 0 ? getGenNu().pt() : -999',
     genNuEta       = '? getGenNu().pt() > 0 ? getGenNu().eta()  : -999',
     genNuPhi       = '? getGenNu().pt() > 0 ? getGenNu().phi()  : -999',
