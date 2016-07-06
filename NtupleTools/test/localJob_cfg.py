@@ -3,7 +3,7 @@ import os
 
 
 #edit the location of the MINIAOD file to run interactively
-file = "/store/mc/RunIISpring16MiniAODv2/DYJetsToLL_M-5to50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/PUSpring16_80X_mcRun2_asymptotic_2016_miniAODv2_v0-v1/60000/0092BE51-8C1B-E611-8B92-5C260AFFFB63.root"
+file = "/store/mc/RunIISpring16MiniAODv2/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/PUSpring16_80X_mcRun2_asymptotic_2016_miniAODv2_v0_ext1-v1/00000/00F0B3DC-211B-E611-A6A0-001E67248A39.root"
 
 localJobInfo = {'inputFile': file,
                 
@@ -15,4 +15,4 @@ localJobInfo = {'inputFile': file,
 
                 #edit the desired number of events to run. By default, it's set to 100.
                 #Setting it to -1 will run over all the events (not recommended for interactive runs)                                       
-                'maxEvents':-1}
+                'maxEvents':1000}
