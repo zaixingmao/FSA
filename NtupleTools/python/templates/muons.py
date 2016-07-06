@@ -109,9 +109,6 @@ trigger = PSet(
     objectIsoMu22 = 'matchToHLTFilter({object_idx}, "hltL3crIsoL1sMu20L1f0L2f10QL3f22QL3trkIsoFiltered0p09", 0.5)',
     objectIsoMu24 = 'matchToHLTFilter({object_idx}, "hltL3crIsoL1sMu22L1f0L2f10QL3f24QL3trkIsoFiltered0p09", 0.5)',
     objectIsoMu27 = 'matchToHLTFilter({object_idx}, "hltL3crIsoL1sMu22Or25L1f0L2f10QL3f27QL3trkIsoFiltered0p09", 0.5)',
-    objectIsoTrkMu22 = 'matchToHLTFilter({object_idx}, "hltL3fL1sMu20L1f0Tkf22QL3trkIsoFiltered0p09", 0.5)',
-    objectIsoTrkMu24 = 'matchToHLTFilter({object_idx}, "hltL3fL1sMu22L1f0Tkf24QL3trkIsoFiltered0p09", 0.5)',
-    objectIsoTrkMu27 = 'matchToHLTFilter({object_idx}, "hltL3fL1sMu22Or25L1f0Tkf27QL3trkIsoFiltered0p09", 0.5)',
 
     objectMu19Tau32 = 'matchToHLTFilter({object_idx}, "hltL3crIsoL1sMu18erIsoTau26erL1f0L2f10QL3f19QL3trkIsoFiltered0p09", 0.5)',
     objectMu19Tau32Overlap = 'matchToHLTFilter({object_idx}, "hltOverlapFilterIsoMu19MediumIsoPFTau32Reg", 0.5)',

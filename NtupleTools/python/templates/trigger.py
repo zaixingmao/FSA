@@ -30,18 +30,6 @@ singleLepton = PSet(
         paths=r'HLT_IsoMu27_v\\d+'
         ),
     _trig_template.replace(
-        name='singleIsoTrkMu22', 
-        paths=r'HLT_IsoTrkMu22_v\\d+'
-        ),
-    _trig_template.replace(
-        name='singleIsoTrkMu24', 
-        paths=r'HLT_IsoTrkMu24_v\\d+'
-        ),
-    _trig_template.replace(
-        name='singleIsoTrkMu27', 
-        paths=r'HLT_IsoTrkMu27_v\\d+'
-        ),
-    _trig_template.replace(
         name='singleE27_2p1_WPLoose',
         paths=r'HLT_Ele27_eta2p1_WPLoose_Gsf_v\\d+'
         ),
@@ -70,11 +58,11 @@ doubleLepton = PSet(
         ),
     _trig_template.replace(
         name='mu19Tau32',
-        paths=r'HLT_IsoMu19_eta2p1_MediumIsoPFTau32_Trk1_eta2p1_Reg_v2\\d+'
+        paths=r'HLT_IsoMu19_eta2p1_MediumIsoPFTau32_Trk1_eta2p1_Reg_v\\d+'
         ),
     _trig_template.replace(
         name='mu21Tau32',
-        paths=r'HLT_IsoMu21_eta2p1_MediumIsoPFTau32_Trk1_eta2p1_Reg_v2\\d+'
+        paths=r'HLT_IsoMu21_eta2p1_MediumIsoPFTau32_Trk1_eta2p1_Reg_v\\d+'
         ),
     _trig_template.replace(
         name='doubleTau32',
