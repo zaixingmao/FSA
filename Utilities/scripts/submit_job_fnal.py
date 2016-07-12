@@ -66,7 +66,9 @@ def checkJobsCompletion(list):
 def checkJobCompletion(dir):
     failed_criteria = ["End Fatal Exception"]
     passed_criteria = ["Successfully opened file", "Closed file"]
+    out_failed_criteria = ["failure in xrdcp"]
     err_location = dir+"/condor.err"
+    out_location = dir+"/condor.out"
     if os.path.exists(err_location):
         err_file = open(err_location).read()
         for iC in failed_criteria:
@@ -75,9 +77,21 @@ def checkJobCompletion(dir):
         for iC in passed_criteria:
             if iC not in err_file:
                 return False
-        return True
     else:
         return False
+
+    if os.path.exists(out_location):
+        out_file = open(out_location).read()
+        for iC in out_failed_criteria:
+            if iC in out_file:
+                return False
+    else:
+        return False
+
+    return True
+
+
+
 
 def createJobFiles(dir, fileList, script_content):
     f = open(fileList,'r')
