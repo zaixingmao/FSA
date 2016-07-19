@@ -66,7 +66,9 @@ def checkJobsCompletion(list):
 def checkJobCompletion(dir):
     failed_criteria = ["End Fatal Exception"]
     passed_criteria = ["Successfully opened file", "Closed file"]
+    out_failed_criteria = ["failure in xrdcp"]
     err_location = dir+"/condor.err"
+    out_location = dir+"/condor.out"
     if os.path.exists(err_location):
         err_file = open(err_location).read()
         for iC in failed_criteria:
@@ -75,9 +77,21 @@ def checkJobCompletion(dir):
         for iC in passed_criteria:
             if iC not in err_file:
                 return False
-        return True
     else:
         return False
+
+    if os.path.exists(out_location):
+        out_file = open(out_location).read()
+        for iC in out_failed_criteria:
+            if iC in out_file:
+                return False
+    else:
+        return False
+
+    return True
+
+
+
 
 def createJobFiles(dir, fileList, script_content):
     f = open(fileList,'r')
@@ -259,32 +273,55 @@ def datasets_from_das(args):
     script_content = ""
     # this part searches for MC
     if args.campaignstring:
-        dbs_datasets = get_das_info('/*/%s/MINIAODSIM' % args.campaignstring)
-        # check sample wildcards
-        for dataset in dbs_datasets:
-            dataset_name = dataset.split('/')[1] 
-            passes_filter = True
-            passes_wildcard = False
+        if args.directQuery:
             for pattern in args.samples:
-                if args.dastuple: # check json for shorthand
-                    with open(args.dastuple) as tuple_file:
-                        tuple_info = json.load(tuple_file)
-                        matching_datasets = []
-                        for shorthand, fullname in tuple_info.iteritems():
-                            if fullname in dataset_name:
-                                if fnmatch.fnmatchcase(shorthand, pattern):
-                                    passes_wildcard = True
-                else: # check das directly
-                    if fnmatch.fnmatchcase(dataset_name, pattern):
-                        passes_wildcard = True
-            passes_filter = passes_wildcard and passes_filter
-            if passes_filter:
-                tmp_content, tmp_file_list= getFarmoutCommand(args, dataset_name, dataset)
-                script_content += tmp_content
-                if args.resubmit:
-                    tmp_file_list = checkJobsCompletion(tmp_file_list)
-                print "%s[COMPLETE]\033[0m Generated %i Jobs" %(bcolors.OKGREEN, len(tmp_file_list))
-                fileList += tmp_file_list
+                with open(args.dastuple) as tuple_file:
+                    tuple_info = json.load(tuple_file)
+                    matching_datasets = []
+                    for shorthand, fullname in tuple_info.iteritems():
+                        if fnmatch.fnmatchcase(shorthand, pattern):
+                            dbs_datasets = get_das_info('/%s/%s/MINIAODSIM' %(fullname, args.campaignstring))
+                            if len(dbs_datasets) > 1:
+                                print "ERROR in Query!!!"
+                                return 0 
+                            dataset = dbs_datasets[0]
+                            dataset_name = dataset.split('/')[1]
+                            passes_wildcard = True
+                if passes_wildcard:
+                    tmp_content, tmp_file_list= getFarmoutCommand(args, dataset_name, dataset)
+                    script_content += tmp_content
+                    if args.resubmit:
+                        tmp_file_list = checkJobsCompletion(tmp_file_list)
+                    print "%s[COMPLETE]\033[0m Generated %i Jobs" %(bcolors.OKGREEN, len(tmp_file_list))
+                    fileList += tmp_file_list
+
+        else:            
+            dbs_datasets = get_das_info('/*/%s/MINIAODSIM' % args.campaignstring)
+            # check sample wildcards
+            for dataset in dbs_datasets:
+                dataset_name = dataset.split('/')[1] 
+                passes_filter = True
+                passes_wildcard = False
+                for pattern in args.samples:
+                    if args.dastuple: # check json for shorthand
+                        with open(args.dastuple) as tuple_file:
+                            tuple_info = json.load(tuple_file)
+                            matching_datasets = []
+                            for shorthand, fullname in tuple_info.iteritems():
+                                if fullname in dataset_name:
+                                    if fnmatch.fnmatchcase(shorthand, pattern):
+                                        passes_wildcard = True
+                    else: # check das directly
+                        if fnmatch.fnmatchcase(dataset_name, pattern):
+                            passes_wildcard = True
+                passes_filter = passes_wildcard and passes_filter
+                if passes_filter:
+                    tmp_content, tmp_file_list= getFarmoutCommand(args, dataset_name, dataset)
+                    script_content += tmp_content
+                    if args.resubmit:
+                        tmp_file_list = checkJobsCompletion(tmp_file_list)
+                    print "%s[COMPLETE]\033[0m Generated %i Jobs" %(bcolors.OKGREEN, len(tmp_file_list))
+                    fileList += tmp_file_list
     # special handling for data
     if args.isData:
         data_patterns = [x for x in args.samples if 'data_' in x]
@@ -384,6 +421,11 @@ def get_com_line_args():
     )
     input_group.add_argument(
         '--fromDAS', dest='fromDAS', action='store_true',
+        help = 'get info from DAS',
+    )
+
+    cmsrun_group.add_argument(
+        '--directQuery', dest='directQuery', action='store_true',
         help = 'get info from DAS',
     )
 

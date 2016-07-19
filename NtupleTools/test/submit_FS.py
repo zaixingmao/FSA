@@ -44,7 +44,7 @@ def opts():
     parser.add_option("--atFNAL", dest="atFNAL", default=False, action="store_true", help="at fnal")
     parser.add_option("--resubmit", dest="resubmit", default=False, action="store_true", help="at fnal")
     parser.add_option("--maxEvents", dest="maxEvents", default=-1, help="max events to run over")
-
+    parser.add_option("--directQuery", dest="directQuery", default=False, action="store_true", help="at fnal")
     parser.add_option("--newXROOTD", dest="newXROOTD", default="", help="run over data")
     parser.add_option("--sys", dest="sys", default="", help="jetEC, jetBTag, tauEC")
 
@@ -122,7 +122,7 @@ TNT = 1 if options.TNT else 0
 
 
 # useLumiMask = '/afs/cern.ch/cms/CAF/CMSCOMM/COMM_DQM/certification/Collisions15/13TeV/Cert_246908-258750_13TeV_PromptReco_Collisions15_25ns_JSON.txt' if options.isData else ''
-useLumiMask = 'Cert_271036-275125_13TeV_PromptReco_Collisions16_JSON.txt' if options.isData else ''
+useLumiMask = 'Cert_271036-275783_13TeV_PromptReco_Collisions16_JSON.txt' if options.isData else ''
 localJobInfo = localJob_cfg.localJobInfo
 
 inputFiles = localJobInfo['inputFile']
@@ -188,6 +188,8 @@ if not options.runLocal:
             cmd += " --resubmit-failed-jobs "
         if nJobs != 9999:
             cmd += " --nJobs %s " %nJobs
+    if options.directQuery:
+        cmd += " --directQuery"
 
     cmd += " --comand-template=%s" %template_location
     if isMC:
@@ -199,10 +201,11 @@ if not options.runLocal:
                 if "DY" in options.sample:
                     cmd += " --campaign-tag=\"RunIISpring16MiniAODv2-PUSpring16_80X_mcRun2_asymptotic_2016_miniAODv2_v0_ext1-v*\" "
                 elif "TT_LO" in options.sample:
-                    cmd += " --campaign-tag=\"RunIISpring16MiniAODv2-PUSpring16_80X_mcRun2_asymptotic_2016_miniAODv2_v0_ext4-v1*\" "
+                    cmd += " --campaign-tag=\"RunIISpring16MiniAODv2-PUSpring16_80X_mcRun2_asymptotic_2016_miniAODv2_v0_ext4-v1\" "
+                elif "ZPrime" in options.sample:
+                    cmd += " --campaign-tag=\"RunIISpring16MiniAODv2-PUSpring16RAWAODSIM_reHLT_80X_mcRun2_asymptotic_v14-v1\" "
                 else:
-#                    cmd += " --campaign-tag=\"RunIISpring16MiniAODv2-PUSpring16_80X_mcRun2_asymptotic_2016_miniAODv2_v0-v*\" "
-                    cmd += " --campaign-tag=\"RunIISpring16MiniAODv2-PUSpring16_80X_mcRun2_asymptotic_2016_miniAODv2_v0_ext1-v*\" "
+                    cmd += " --campaign-tag=\"RunIISpring16MiniAODv2-PUSpring16_80X_mcRun2_asymptotic_2016_miniAODv2_v0-v1\" "
 
         else:
             cmd += " --input-dir=/nfs_scratch/zmao/"

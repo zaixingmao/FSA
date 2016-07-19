@@ -85,6 +85,7 @@ id = PSet(
     objectByMediumIsolationMVArun2v1DBnewDMwLT = '{object}.tauID("byMediumIsolationMVArun2v1DBnewDMwLT")', 
     objectByTightIsolationMVArun2v1DBnewDMwLT = '{object}.tauID("byTightIsolationMVArun2v1DBnewDMwLT")',
     objectByVTightIsolationMVArun2v1DBnewDMwLT = '{object}.tauID("byVTightIsolationMVArun2v1DBnewDMwLT")', 
+    objectByIsolationMVArun2v1DBnewDMwLTraw = '{object}.tauID("byIsolationMVArun2v1DBnewDMwLTraw")',
         
     # BDT based tau ID discriminator based on isolation Pt sums plus tau lifetime information, trained on 1-prong and 3-prong tau candidates 
     objectByVLooseIsolationMVArun2v1DBoldDMwLT = '{object}.tauID("byVLooseIsolationMVArun2v1DBoldDMwLT")', 
@@ -92,6 +93,7 @@ id = PSet(
     objectByMediumIsolationMVArun2v1DBoldDMwLT = '{object}.tauID("byMediumIsolationMVArun2v1DBoldDMwLT")', 
     objectByTightIsolationMVArun2v1DBoldDMwLT = '{object}.tauID("byTightIsolationMVArun2v1DBoldDMwLT")', 
     objectByVTightIsolationMVArun2v1DBoldDMwLT = '{object}.tauID("byVTightIsolationMVArun2v1DBoldDMwLT")', 
+    objectByIsolationMVArun2v1DBoldDMwLTraw = '{object}.tauID("byIsolationMVArun2v1DBoldDMwLTraw")',
     
     # DecayModeFinding
     objectDecayModeFinding       = '{object}.tauID("decayModeFinding")',
