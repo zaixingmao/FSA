@@ -81,9 +81,9 @@ if resubmitDir != '':
     os.system("ls %s" %(resubmitDir[:resubmitDir.rfind('/')]))
 
 skimCuts = {}
-skimCuts['tt'] = {"ID": "object.tauID(\\\"decayModeFindingNewDMs\\\") > 0.5",
-                 "Pt": "object.pt() > 25",
-                  "Eta": "abs(object.eta()) < 2.1",
+skimCuts['tt'] = {"ID_t": "object.tauID(\\\"decayModeFindingNewDMs\\\") > 0.5",
+                 "Pt_t": "object.pt() > 25",
+                  "Eta_t": "abs(object.eta()) < 2.1",
                   }
 skimCuts['et'] = {# "ID_e": "object.userFloat(\'MVANonTrigWP80\')> 0.5",
                   "Pt_e": "object.pt() > 23",
@@ -114,6 +114,22 @@ skimCuts['mt'] = {"ID_m": "object.isMediumMuon() > 0.5",
 skimCuts['ee'] = {"Pt": "object.pt() > 13",
                   "Eta": "abs(object.eta()) < 2.1",
                   }
+skimCuts['emtt'] = {
+                  "Pt_e": "object.pt() > 13",
+                  "Eta_e": "abs(object.eta()) < 2.5",
+                  "ID_m": "object.isMediumMuon() > 0.5",
+                  "Pt_m": "object.pt() > 10",
+                  "Eta_m": "abs(object.eta()) < 2.4",
+                  "ID_t": "object.tauID(\\\"decayModeFindingNewDMs\\\") > 0.5",
+                  "Pt_t": "object.pt() > 25",
+                  "Eta_t": "abs(object.eta()) < 2.1",
+                  }
+skimCuts['tttt'] = {"ID_t": "object.tauID(\\\"decayModeFindingNewDMs\\\") > 0.5",
+                    "Pt_t": "object.pt() > 25",
+                    "Eta_t": "abs(object.eta()) < 2.1",
+                    }
+
+
 
 MVAMET = 1 if options.doMVAMET else 0
 TauTauMVAMET = 1 if options.doTauTauMVAMET else 0
@@ -148,18 +164,12 @@ cuts = " "
 for iFS in fs:
     if iFS in skimCuts.keys():    
         cuts += "skimCuts-%s=\"" %iFS
-        if iFS[0] == iFS[1]:
-            for ikey in skimCuts[iFS].keys():
-                cuts+= "%s," %(skimCuts[iFS][ikey].replace("object", "daughter(0)"))
-                cuts+= "%s," %(skimCuts[iFS][ikey].replace("object", "daughter(1)"))
-            cuts = cuts[0: len(cuts)-1] + "\" "
-        else:
-            for ikey in skimCuts[iFS].keys():
-                if '_%s' %iFS[0] in ikey:
-                    cuts+= "%s," %(skimCuts[iFS][ikey].replace("object", "daughter(0)"))
-                if '_%s' %iFS[1] in ikey:
-                    cuts+= "%s," %(skimCuts[iFS][ikey].replace("object", "daughter(1)"))
-            cuts = cuts[0: len(cuts)-1] + "\" "
+        for ikey in skimCuts[iFS].keys():
+            for iLeg in range(len(iFS)):
+                if '_%s' %iFS[iLeg] in ikey:
+                    cuts+= "%s," %(skimCuts[iFS][ikey].replace("object", "daughter(%i)" %iLeg))
+        cuts = cuts[0: len(cuts)-1] + "\" "
+
 cmd += cuts
 
 if options.atFNAL:
