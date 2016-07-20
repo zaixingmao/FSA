@@ -47,7 +47,7 @@ void MiniAODJetIdEmbedder::produce(edm::Event& evt, const edm::EventSetup& es) {
   evt.getByLabel(src_, input);
 
   output->reserve(input->size());
-  bool btaggedL = false;
+  //bool btaggedL = false;
   bool btaggedL_bTagSysUp = false;
   bool btaggedL_bTagSysDown = false;
   bool btaggedL_bTagMisUp = false;

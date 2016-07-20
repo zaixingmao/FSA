@@ -171,8 +171,8 @@ void PATTauSystematicsEmbedder::produce(edm::Event& evt, const edm::EventSetup& 
 //   p4OutTESUpTaus->reserve(nTaus);
 //   p4OutTESDownTaus->reserve(nTaus);
 
-  double tauUp = 0.0;
-  double tauDown = 0.0;
+  // double tauUp = 0.0;
+  // double tauDown = 0.0;
 
 //   std::auto_ptr<ShiftedCandCollection> p4OutNomTaus(new ShiftedCandCollection);
 //   std::auto_ptr<ShiftedCandCollection> p4OutTESUpTaus(new ShiftedCandCollection);

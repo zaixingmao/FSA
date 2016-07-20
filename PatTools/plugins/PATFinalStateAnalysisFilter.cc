@@ -42,7 +42,7 @@ PATFinalStateAnalysisFilter::PATFinalStateAnalysisFilter(
 
 bool PATFinalStateAnalysisFilter::filter(
     edm::Event& evt, const edm::EventSetup& es) {
-  const edm::EventBase& evtBase = evt;
+  // const edm::EventBase& evtBase = evt;
 
   bool result = analysis_->filter(evt);
   return result;

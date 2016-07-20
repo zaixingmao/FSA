@@ -80,7 +80,7 @@ void MiniAODMETSignificanceProducer::produce(edm::Event& event, const edm::Event
    //
     edm::Handle<edm::View<reco::MET> > metHandle;
     event.getByToken(metToken_, metHandle);
-    const reco::MET& met = (*metHandle)[0];
+    //const reco::MET& met = (*metHandle)[0];
     
     //
     // candidates
