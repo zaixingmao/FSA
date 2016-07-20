@@ -8,10 +8,5 @@
 <use   name="FinalStateAnalysis/DataFormats"/>
 <use   name="FinalStateAnalysis/NtupleTools"/>
 
-<environment>
-</environment>
-
 <bin name="slimAndMergeNtuple" file="slimAndMergeNtuple.cc">
-  <use   name="root"/>
 </bin>
-  
