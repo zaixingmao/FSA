@@ -96,7 +96,7 @@ void MiniAODTauIpEmbedder::produce(edm::Event& evt, const edm::EventSetup& es) {
       GlobalPoint thebs(beamSpot.x0(),beamSpot.y0(),beamSpot.z0());
   }
 
-  const reco::Vertex& thePV = *vertices->begin();
+  //const reco::Vertex& thePV = *vertices->begin();
 
   const float pionMass = 0.139570;
   float pionSigma = pionMass*1e-6;
