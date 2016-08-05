@@ -48,18 +48,18 @@ void MiniAODJetIdEmbedder::produce(edm::Event& evt, const edm::EventSetup& es) {
 
   output->reserve(input->size());
   //bool btaggedL = false;
-  bool btaggedL_bTagSysUp = false;
-  bool btaggedL_bTagSysDown = false;
-  bool btaggedL_bTagMisUp = false;
-  bool btaggedL_bTagMisDown = false;
-  bool btaggedL_bTagUp = false;
-  bool btaggedL_bTagDown = false;
+//   bool btaggedL_bTagSysUp = false;
+//   bool btaggedL_bTagSysDown = false;
+//   bool btaggedL_bTagMisUp = false;
+//   bool btaggedL_bTagMisDown = false;
+//   bool btaggedL_bTagUp = false;
+//   bool btaggedL_bTagDown = false;
   for (size_t i = 0; i < input->size(); ++i) {
     pat::Jet jet = input->at(i);
     bool loose = true;
     bool tight = true;
     bool tightLepVeto = true;
-    bool btaggedL = false;
+//     bool btaggedL = false;
 
 
     double NHF = jet.neutralHadronEnergyFraction();
@@ -123,23 +123,23 @@ void MiniAODJetIdEmbedder::produce(edm::Event& evt, const edm::EventSetup& es) {
     jet.addUserFloat("puID", float(passPU));
 
 
-    if(jet.pt() > 30 && fabs(jet.eta())<2.4){
-      jet.addUserFloat("CSVL", float(btaggedL));
-      btaggedL = btsf_->isbtagged(jet.pt(), jet.eta(), jet.phi(),jet.bDiscriminator("pfCombinedInclusiveSecondaryVertexV2BJetTags"),jet.partonFlavour(), isData_, 0, 0, 0.605);
-      btaggedL_bTagSysUp = btsf_->isbtagged(jet.pt(), jet.eta(), jet.phi(), jet.bDiscriminator("pfCombinedInclusiveSecondaryVertexV2BJetTags"),jet.partonFlavour(), isData_, 2, 0, 0.605);
-      btaggedL_bTagSysDown = btsf_->isbtagged(jet.pt(), jet.eta(), jet.phi(),jet.bDiscriminator("pfCombinedInclusiveSecondaryVertexV2BJetTags"),jet.partonFlavour(), isData_, 1, 0, 0.605);
-      btaggedL_bTagMisUp = btsf_->isbtagged(jet.pt(), jet.eta(), jet.phi(),jet.bDiscriminator("pfCombinedInclusiveSecondaryVertexV2BJetTags"),jet.partonFlavour(), isData_, 0, 2, 0.605);
-      btaggedL_bTagMisDown = btsf_->isbtagged(jet.pt(), jet.eta(), jet.phi(),jet.bDiscriminator("pfCombinedInclusiveSecondaryVertexV2BJetTags"),jet.partonFlavour(), isData_, 0, 1, 0.605);
-      btaggedL_bTagUp = btsf_->isbtagged(jet.pt(), jet.eta(), jet.phi(),jet.bDiscriminator("pfCombinedInclusiveSecondaryVertexV2BJetTags"),jet.partonFlavour(), isData_, 2, 2, 0.605);
-      btaggedL_bTagDown = btsf_->isbtagged(jet.pt(), jet.eta(), jet.phi(),jet.bDiscriminator("pfCombinedInclusiveSecondaryVertexV2BJetTags"),jet.partonFlavour(), isData_, 1, 1, 0.605);
-    }
-    jet.addUserFloat("CSVL", float(btaggedL));
-    jet.addUserFloat("CSVL_sysUp", float(btaggedL_bTagSysUp));
-    jet.addUserFloat("CSVL_sysDown", float(btaggedL_bTagSysDown));
-    jet.addUserFloat("CSVL_misUp", float(btaggedL_bTagMisUp));
-    jet.addUserFloat("CSVL_misDown", float(btaggedL_bTagMisDown));
-    jet.addUserFloat("CSVL_up", float(btaggedL_bTagUp));
-    jet.addUserFloat("CSVL_down", float(btaggedL_bTagDown));
+//     if(jet.pt() > 30 && fabs(jet.eta())<2.4){
+//       jet.addUserFloat("CSVL", float(btaggedL));
+//       btaggedL = btsf_->isbtagged(jet.pt(), jet.eta(), jet.phi(),jet.bDiscriminator("pfCombinedInclusiveSecondaryVertexV2BJetTags"),jet.partonFlavour(), isData_, 0, 0, 0.605);
+//       btaggedL_bTagSysUp = btsf_->isbtagged(jet.pt(), jet.eta(), jet.phi(), jet.bDiscriminator("pfCombinedInclusiveSecondaryVertexV2BJetTags"),jet.partonFlavour(), isData_, 2, 0, 0.605);
+//       btaggedL_bTagSysDown = btsf_->isbtagged(jet.pt(), jet.eta(), jet.phi(),jet.bDiscriminator("pfCombinedInclusiveSecondaryVertexV2BJetTags"),jet.partonFlavour(), isData_, 1, 0, 0.605);
+//       btaggedL_bTagMisUp = btsf_->isbtagged(jet.pt(), jet.eta(), jet.phi(),jet.bDiscriminator("pfCombinedInclusiveSecondaryVertexV2BJetTags"),jet.partonFlavour(), isData_, 0, 2, 0.605);
+//       btaggedL_bTagMisDown = btsf_->isbtagged(jet.pt(), jet.eta(), jet.phi(),jet.bDiscriminator("pfCombinedInclusiveSecondaryVertexV2BJetTags"),jet.partonFlavour(), isData_, 0, 1, 0.605);
+//       btaggedL_bTagUp = btsf_->isbtagged(jet.pt(), jet.eta(), jet.phi(),jet.bDiscriminator("pfCombinedInclusiveSecondaryVertexV2BJetTags"),jet.partonFlavour(), isData_, 2, 2, 0.605);
+//       btaggedL_bTagDown = btsf_->isbtagged(jet.pt(), jet.eta(), jet.phi(),jet.bDiscriminator("pfCombinedInclusiveSecondaryVertexV2BJetTags"),jet.partonFlavour(), isData_, 1, 1, 0.605);
+//     }
+//     jet.addUserFloat("CSVL", float(btaggedL));
+//     jet.addUserFloat("CSVL_sysUp", float(btaggedL_bTagSysUp));
+//     jet.addUserFloat("CSVL_sysDown", float(btaggedL_bTagSysDown));
+//     jet.addUserFloat("CSVL_misUp", float(btaggedL_bTagMisUp));
+//     jet.addUserFloat("CSVL_misDown", float(btaggedL_bTagMisDown));
+//     jet.addUserFloat("CSVL_up", float(btaggedL_bTagUp));
+//     jet.addUserFloat("CSVL_down", float(btaggedL_bTagDown));
     output->push_back(jet);
   }
 
