@@ -91,8 +91,6 @@ def checkJobCompletion(dir):
     return True
 
 
-
-
 def createJobFiles(dir, fileList, script_content):
     f = open(fileList,'r')
     f_template = open(script_content,'r')
@@ -123,6 +121,55 @@ def createJobFiles(dir, fileList, script_content):
         f_submit.write("source environment.sh \n")
         f_submit.write("cd NtupleTools/test/\n")
         command = "./make_ntuples_cfg.py outputFile=make_ntuples_cfg-%s inputFiles=${INPUTFILE} %s" %(line[line.rfind("/")+1:line.find('root') + 4], template)
+        f_submit.write(command + '\n')
+        f_submit.write("# copy output to eos\n")
+        f_submit.write('echo "xrdcp .root output for condor"\n')
+        f_submit.write("for FILE in *.root\n")
+        f_submit.write("do\n")
+        f_submit.write('  echo "xrdcp -f ${FILE} ${OUTDIR}/${FILE}"\n')
+        f_submit.write("  xrdcp -f ${FILE} ${OUTDIR}/${FILE} 2>&1 \n")
+        f_submit.write("  XRDEXIT=$?\n")
+        f_submit.write("  if [[ $XRDEXIT -ne 0 ]]; then\n")
+        f_submit.write("    rm *.root\n")
+        f_submit.write('    echo "exit code $XRDEXIT, failure in xrdcp"\n')
+        f_submit.write("    exit $XRDEXIT\n")
+        f_submit.write("  fi\n")
+        f_submit.write("  rm ${FILE}\n")
+        f_submit.write("done\n")
+        f_submit.write("cd ${_CONDOR_SCRATCH_DIR}\n")
+        f_submit.write("cd rm -rf ${INPUTTAR}\n")
+        f_submit.close()
+        sys.stdout.write(".")
+    f.close()
+
+def createJobFiles2(dir, fileList, script_content):
+    f = open(fileList,'r')
+    f_template = open(script_content,'r')
+    template = f_template.readline()
+    relBase = os.environ.get('CMSSW_BASE')
+    cmsrel = relBase[relBase.rfind('CMSSW'):]
+    sub_area = dir[:dir.find("dag")]
+    for line in f.readlines():
+        currentDir = sub_area + line[line.rfind('/')+1:line.rfind('.')]        
+        if os.path.exists(currentDir):
+            print '%s[WARNING]\033[0m Submittion Area "%s" Already Exists!!!' %(bcolors.WARNING, sub_area)
+            print '%s[WARNING]\033[0m Will Not Update Submittion Configs!!!' %(bcolors.WARNING)
+            return 1
+        mkdir_cmd = 'mkdir ' + currentDir
+        os.system(mkdir_cmd)
+        f_submit = open(currentDir + '/submit','w')
+        f_submit.write("#!/bin/bash\n")
+        f_submit.write("INPUTTAR=%s\n" %cmsrel)
+        f_submit.write("OUTDIR=root://cmseos.fnal.gov//store/user/%s/%s\n" %(os.environ['USER'], dir[dir.find("nobackup")+9:dir.find("dags")]))
+        f_submit.write("INPUTFILE=root://cmsxrootd.fnal.gov/%s\n" %line)
+        f_submit.write("xrdcp root://cmseos.fnal.gov//store/user/%s/${INPUTTAR}.tgz . \n" %os.environ['USER'])
+        f_submit.write("tar -xvzf ${INPUTTAR}.tgz\n")
+        f_submit.write("rm ${INPUTTAR}.tgz\n")
+        f_submit.write("cd ${INPUTTAR}/src\n")
+        f_submit.write("scramv1 b ProjectRename\n")
+        f_submit.write("eval `scramv1 runtime -sh`\n")
+        f_submit.write("cd bTagEffMaker/DemoAnalyzer/test/\n")
+        command = "cmsRun bTaggingEffAnalyzer_cfg.py outFileName=%s inputFileName=${INPUTFILE}" %(line[line.rfind("/")+1:line.find('root') + 4])
         f_submit.write(command + '\n')
         f_submit.write("# copy output to eos\n")
         f_submit.write('echo "xrdcp .root output for condor"\n')
