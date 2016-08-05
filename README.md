@@ -20,6 +20,7 @@ Get a supported CMSSW release area:
   # Run this before doing ANYTHING else in src
   git cms-init
   #type N
+  git cms-merge-topic -u cms-met:CMSSW_8_0_X-METFilterUpdate
 ```
 
 Checkout the FinalStateAnalysis repository:
@@ -39,6 +40,7 @@ Checkout MVAMET stuff:
 ```bash
 git cms-addpkg RecoMET/METProducers/
 git cms-addpkg RecoMET/METPUSubtraction/
+git cms-addpkg RecoMET/METFilters/
 ```
 
 

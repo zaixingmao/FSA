@@ -72,6 +72,7 @@ options = TauVarParsing.TauVarParsing(
     eleCor="",
     rerunQGJetID=0,  # If one reruns the quark-gluon JetID
     runMVAMET=0,  # If one, (re)build the MVA MET
+    runMETFilters=1,  # If one, run MET filter
     runTauTauMVAMET=0,  # If one, (re)build the MVA MET
     rerunJets=0,
     dblhMode=False, # For double-charged Higgs analysis
@@ -113,6 +114,9 @@ options.register(
 
 options.outputFile = "ntuplize.root"
 options.parseArguments()
+
+# list of filters to apply
+filters = []
 
 if options.TNT:
     print 'running TNT configuration'
@@ -466,6 +470,14 @@ process.miniAODTauJetInfoEmbedding = cms.EDProducer(
 #)
 #process.schedule.append(process.jetInfoEmbedding)
 
+process.bTagSFJets = cms.EDProducer(
+    "MiniAODJetBTagSFEmbedder",
+    isMC=cms.int32(options.isMC),
+    src=cms.InputTag(fs_daughter_inputs['jets'])
+)
+fs_daughter_inputs['jets'] = 'bTagSFJets'
+process.bTagSFEmbedding = cms.Path(process.bTagSFJets)
+process.schedule.append(process.bTagSFEmbedding)
 
 #systematcs embedding
 if options.sys == 'tauEC':
@@ -548,6 +560,57 @@ if options.runMVAMET:
         process.miniAODMVAMEt
     )
     process.schedule.append(process.mvaMetSequence)
+
+# add met filters
+if options.runMETFilters:
+    # flags in miniaod
+    listOfFlags = ['Flag_HBHENoiseFilter',
+                   'Flag_HBHENoiseIsoFilter',
+                   'Flag_globalTightHalo2016Filter',
+                   'Flag_EcalDeadCellTriggerPrimitiveFilter',
+                   'Flag_goodVertices',
+                   'Flag_eeBadScFilter',
+                   ]
+    listOfLabels = ['HBHENoiseFilterResult',
+                   'HBHENoiseIsoFilterResult',
+                   'globalTightHalo2016FilterResult',
+                   'EcalDeadCellTriggerPrimitiveFilterResult',
+                   'goodVerticesResult',
+                   'eeBadScFilterResult',
+                   ]
+    process.MiniAODMETFilterProducer = cms.EDProducer('MiniAODTriggerProducer',
+        triggers = cms.vstring(*listOfFlags),
+        labels = cms.vstring(*listOfLabels),
+        bits = cms.InputTag("TriggerResults"),
+        #prescales = cms.InputTag("patTrigger"),
+        #objects = cms.InputTag("selectedPatTrigger"),
+    )
+    filters += [process.MiniAODMETFilterProducer]
+    for label in listOfLabels:
+        modName = 'Apply{0}'.format(label)
+        mod = cms.EDFilter('BooleanFlagFilter',
+            inputLabel = cms.InputTag('MiniAODMETFilterProducer',label),
+            reverseDecision = cms.bool(True)
+        )
+        setattr(process,modName,mod)
+        filters += [getattr(process,modName)]
+
+    process.load('RecoMET.METFilters.BadPFMuonFilter_cfi')
+    process.BadPFMuonFilter.muons = cms.InputTag("slimmedMuons")
+    process.BadPFMuonFilter.PFCandidates = cms.InputTag("packedPFCandidates")
+    process.BadPFMuonFilter.filter = cms.bool(True)
+
+    process.load('RecoMET.METFilters.BadChargedCandidateFilter_cfi')
+    process.BadChargedCandidateFilter.muons = cms.InputTag("slimmedMuons")
+    process.BadChargedCandidateFilter.PFCandidates = cms.InputTag("packedPFCandidates")
+    process.BadChargedCandidateFilter.filter = cms.bool(True)
+
+    process.additionalMETFilters = cms.Path(
+        process.BadPFMuonFilter +
+        process.BadChargedCandidateFilter
+        )
+    process.schedule.append(process.additionalMETFilters)
+
 
 if options.hzz:    
     # Put FSR photons into leptons as user cands
@@ -687,7 +750,7 @@ for final_state in expanded_final_states(final_states):
                             isMC=options.isMC,
                             hzz=options.hzz, nExtraJets=extraJets, **parameters)
     add_ntuple(final_state, analyzer, process,
-               process.schedule, options.eventView)
+               process.schedule, options.eventView, filters)
 
 
 process.load("FWCore.MessageLogger.MessageLogger_cfi")
