@@ -138,7 +138,7 @@ TNT = 1 if options.TNT else 0
 
 
 # useLumiMask = '/afs/cern.ch/cms/CAF/CMSCOMM/COMM_DQM/certification/Collisions15/13TeV/Cert_246908-258750_13TeV_PromptReco_Collisions15_25ns_JSON.txt' if options.isData else ''
-useLumiMask = 'Cert_271036-275783_13TeV_PromptReco_Collisions16_JSON.txt' if options.isData else ''
+useLumiMask = 'Cert_271036-277148_13TeV_PromptReco_Collisions16_JSON.txt' if options.isData else ''
 localJobInfo = localJob_cfg.localJobInfo
 
 inputFiles = localJobInfo['inputFile']
@@ -213,7 +213,7 @@ if not options.runLocal:
                 elif "TT_LO" in options.sample:
                     cmd += " --campaign-tag=\"RunIISpring16MiniAODv2-PUSpring16_80X_mcRun2_asymptotic_2016_miniAODv2_v0_ext4-v1\" "
                 elif "ZPrime" in options.sample:
-                    cmd += " --campaign-tag=\"RunIISpring16MiniAODv2-PUSpring16RAWAODSIM_reHLT_80X_mcRun2_asymptotic_v14-v1\" "
+                    cmd += " --campaign-tag=\"RunIISpring16MiniAODv2-PUSpring16RAWAODSIM_80X_mcRun2_asymptotic_2016_miniAODv2_v0-v1\" "
                 else:
                     cmd += " --campaign-tag=\"RunIISpring16MiniAODv2-PUSpring16_80X_mcRun2_asymptotic_2016_miniAODv2_v0-v1\" "
 
