@@ -100,6 +100,15 @@ id = PSet(
 
     objectGenMatchCategory = 'getGenMatchCategory({object_idx})',
 
+    objectGenTauMotherPt    = '? (getGenTauMotherMomentum({object_idx}, 11, 1, 1, 0.5, 3).isAvailable && getGenTauMotherMomentum({object_idx}, 11, 1, 1, 0.5, 3).isNonnull) ? getGenTauMotherMomentum({object_idx}, 11, 1, 1, 0.5, 3).pt() : -999',
+    objectGenTauMotherEta   = '? (getGenTauMotherMomentum({object_idx}, 11, 1, 1, 0.5, 3).isAvailable && getGenTauMotherMomentum({object_idx}, 11, 1, 1, 0.5, 3).isNonnull) ? getGenTauMotherMomentum({object_idx}, 11, 1, 1, 0.5, 3).eta() : -999',
+    objectGenTauMotherPhi   = '? (getGenTauMotherMomentum({object_idx}, 11, 1, 1, 0.5, 3).isAvailable && getGenTauMotherMomentum({object_idx}, 11, 1, 1, 0.5, 3).isNonnull) ? getGenTauMotherMomentum({object_idx}, 11, 1, 1, 0.5, 3).phi() : -999',
+
+    objectGenTauMotherNuPt   = 'getGenTauMotherNuMomentum({object_idx}, 11, 1, 1, 0.5, 3).pt()',
+    objectGenTauMotherNuEta  = 'getGenTauMotherNuMomentum({object_idx}, 11, 1, 1, 0.5, 3).eta()',
+    objectGenTauMotherNuPhi  = 'getGenTauMotherNuMomentum({object_idx}, 11, 1, 1, 0.5, 3).phi()',
+    objectGenTauMotherNuMass = 'getGenTauMotherNuMomentum({object_idx}, 11, 1, 1, 0.5, 3).mass()',
+
     # How close is the nearest muon passing some basic quality cuts?
     objectNearestMuonDR = "electronClosestMuonDR({object_idx})",
 )

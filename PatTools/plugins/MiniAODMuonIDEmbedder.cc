@@ -66,7 +66,7 @@ bool MiniAODMuonIDEmbedder::mediumMuon(const pat::Muon & recoMu)
                       recoMu.combinedQuality().chi2LocalPosition < 12 && 
                       recoMu.combinedQuality().trkKink < 20; 
       bool isMedium = muon::isLooseMuon(recoMu) && 
-                      recoMu.innerTrack()->validFraction() > 0.8 && 
+                      recoMu.innerTrack()->validFraction() > 0.49 && 
                       muon::segmentCompatibility(recoMu) > (goodGlob ? 0.303 : 0.451); 
       return isMedium; 
    }
@@ -166,7 +166,7 @@ void MiniAODMuonIDEmbedder::produce(edm::Event& evt, const edm::EventSetup& es) 
         muon.addUserInt("_tight",muon.isTightMuon(*firstGoodVertex));
         muon.addUserInt("_soft",muon.isSoftMuon(*firstGoodVertex));
         muon.addUserInt("_isHightPt",muon.isHighPtMuon(*firstGoodVertex));
-    //     muon.addUserInt("mediumID",mediumMuon(muon));
+        muon.addUserInt("ShortTermMediumID",mediumMuon(muon));
         if(muon.innerTrack().isNonnull()){
             muon.addUserFloat("_dxy", muon.innerTrack()->dxy(firstGoodVertex->position()));
             muon.addUserFloat("_dxy_bs", (-1.)*muon.innerTrack()->dxy(point));

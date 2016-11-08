@@ -319,6 +319,35 @@ const reco::Candidate::LorentzVector getGenParticleNuMomentum(const reco::Candid
   return p4Vis;
 }
 
+const reco::GenParticleRef getGenTauMotherMomentum(const reco::Candidate*   daughter, const reco::GenParticleRefProd genCollectionRef, int pdgIdToMatch, bool checkCharge, double maxDPtRel, double maxDeltaR, int statusFlag)
+{
+    reco::GenParticleRef tau2lep = getGenParticle(daughter, genCollectionRef, pdgIdToMatch, checkCharge, maxDPtRel, maxDeltaR, 8, statusFlag);
+    reco::GenParticleRef tauP4;
+    if(tau2lep.isAvailable() && tau2lep.isNonnull()){
+        size_t nMother = tau2lep->numberOfMothers();
+        for(size_t iMother = 0; iMother < nMother; iMother++){
+            if(abs((tau2lep->motherRef(iMother).get())->pdgId()) == 15){
+                return tau2lep->motherRef(iMother);
+            }
+        }
+    }
+    return tauP4;
+}
+
+
+const reco::Candidate::LorentzVector getGenTauMotherNuMomentum(const reco::Candidate*   daughter, const reco::GenParticleRefProd genCollectionRef, int pdgIdToMatch, bool checkCharge, double maxDPtRel, double maxDeltaR, int statusFlag)
+{
+    reco::GenParticleRef tauP4 = getGenTauMotherMomentum(daughter, genCollectionRef, pdgIdToMatch, checkCharge, maxDPtRel, maxDeltaR, statusFlag);
+    reco::Candidate::LorentzVector tauNuP4(0,0,0,0);
+    if(tauP4.isAvailable() && tauP4.isNonnull()){
+        GeneratorTau tau(*tauP4);
+        tau.init();
+        std::vector< const reco::Candidate * > nus = tau.getGenNu();
+        for(unsigned int iNu =0; iNu < nus.size(); iNu++) tauNuP4 += nus[iNu]->p4();
+    }
+  return tauNuP4;
+}
+
 const reco::Candidate::LorentzVector getGenNu(const reco::GenParticleRefProd genCollectionRef)
 {
   reco::Candidate::LorentzVector p4Vis(0,0,0,0);

@@ -31,7 +31,7 @@ patFinalStateEventProducer = cms.EDProducer(
     ),
     # now some miniAOD specific stuff
     trgPrescaleSrc = cms.InputTag("patTrigger"),
-    trgResultsSrc = cms.InputTag("TriggerResults","","HLT"),
+    trgResultsSrc = cms.InputTag("TriggerResults","","HLT"), #HLT2
     packedGenSrc = cms.InputTag("packedGenParticles"),
     packedPFSrc = cms.InputTag("packedPFCandidates"),
     jetAK8Src = cms.InputTag("slimmedJetsAK8"),

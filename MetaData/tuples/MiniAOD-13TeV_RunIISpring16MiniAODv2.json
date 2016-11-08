@@ -1,6 +1,11 @@
 {
    "DY1JetsToLL_M-50": "DY1JetsToLL_M-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8",
    "DYJetsToLL_M-50": "DYJetsToLL_M-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8",
+   "DYJetsToLL_M-150": "DYJetsToLL_M-150_TuneCUETP8M1_13TeV-madgraphMLM-pythia8",
+   "DYJetsToLL_M-50_HT-100to200": "DYJetsToLL_M-50_HT-100to200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8",
+   "DYJetsToLL_M-50_HT-200to400": "DYJetsToLL_M-50_HT-200to400_TuneCUETP8M1_13TeV-madgraphMLM-pythia8",
+   "DYJetsToLL_M-50_HT-400to600": "DYJetsToLL_M-50_HT-400to600_TuneCUETP8M1_13TeV-madgraphMLM-pythia8",
+   "DYJetsToLL_M-50_HT-600toInf": "DYJetsToLL_M-50_HT-600toInf_TuneCUETP8M1_13TeV-madgraphMLM-pythia8",
    "WJetsToLNu": "WJetsToLNu_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8",
    "WJetsToLNu_LO": "WJetsToLNu_TuneCUETP8M1_13TeV-madgraphMLM-pythia8",
    "WJetsToLNu_HT-100to200": "WJetsToLNu_HT-100To200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8",
@@ -26,10 +31,15 @@
    "WZTo1L3Nu": "WZTo1L3Nu_13TeV_amcatnloFXFX_madspin_pythia8",
    "WZTo1L1Nu2Q": "WZTo1L1Nu2Q_13TeV_amcatnloFXFX_madspin_pythia8",
    "WWTo1L1Nu2Q": "WWTo1L1Nu2Q_13TeV_amcatnloFXFX_madspin_pythia8",
+   "ggHToTauTau": "GluGluHToTauTau_M125_13TeV_powheg_pythia8",
+   "VBFHToTauTau": "VBFHToTauTau_M125_13TeV_powheg_pythia8",
+   "ZPrime500": "ZprimeToTauTau_M-500_TuneCUETP8M1_13TeV-pythia8-tauola",
    "ZPrime750": "ZprimeToTauTau_M-750_TuneCUETP8M1_13TeV-pythia8-tauola",
+   "ZPrime1250": "ZprimeToTauTau_M-1250_TuneCUETP8M1_13TeV-pythia8-tauola",
+   "ZPrime1500": "ZprimeToTauTau_M-1500_TuneCUETP8M1_13TeV-pythia8-tauola",
    "ZPrime1750": "ZprimeToTauTau_M-1750_TuneCUETP8M1_13TeV-pythia8-tauola",
-   "ZPrime2000": "ZprimeToTauTau_M-2000_TuneCUETP8M1_13TeV-pythia8-tauola",
    "ZPrime2500": "ZprimeToTauTau_M-2500_TuneCUETP8M1_13TeV-pythia8-tauola",
    "ZPrime3000": "ZprimeToTauTau_M-3000_TuneCUETP8M1_13TeV-pythia8-tauola",
+   "ZPrime3500": "ZprimeToTauTau_M-3500_TuneCUETP8M1_13TeV-pythia8-tauola",
    "ZPrime4000": "ZprimeToTauTau_M-4000_TuneCUETP8M1_13TeV-pythia8-tauola"
 }

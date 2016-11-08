@@ -92,10 +92,10 @@ skimCuts['et'] = {# "ID_e": "object.userFloat(\'MVANonTrigWP80\')> 0.5",
                   "Pt_t": "object.pt() > 15",
                   "Eta_t": "abs(object.eta()) < 2.1",
                   }
-skimCuts['em'] = {# "ID_e": "object.userFloat(\'MVANonTrigWP80\')> 0.5",
+skimCuts['em'] = {
                   "Pt_e": "object.pt() > 13",
                   "Eta_e": "abs(object.eta()) < 2.5",
-                  "ID_m": "object.isMediumMuon() > 0.5",
+                  "ID_m": "object.userInt(\\\"ShortTermMediumID\\\") > 0.5",
                   "Pt_m": "object.pt() > 10",
                   "Eta_m": "abs(object.eta()) < 2.4",
                   }
@@ -104,7 +104,7 @@ skimCuts['mm'] = {"Pt": "object.pt() > 10",
                   "Eta": "abs(object.eta()) < 2.4",
                   }
 
-skimCuts['mt'] = {"ID_m": "object.isMediumMuon() > 0.5",
+skimCuts['mt'] = {"ID_m": "object.userInt(\\\"ShortTermMediumID\\\") > 0.5",
                   "Pt_m": "object.pt() > 18",
                   "Eta_m": "abs(object.eta()) < 2.1",
                   "ID_t": "object.tauID(\\\"decayModeFindingNewDMs\\\") > 0.5",
@@ -139,6 +139,7 @@ TNT = 1 if options.TNT else 0
 
 # useLumiMask = '/afs/cern.ch/cms/CAF/CMSCOMM/COMM_DQM/certification/Collisions15/13TeV/Cert_246908-258750_13TeV_PromptReco_Collisions15_25ns_JSON.txt' if options.isData else ''
 useLumiMask = 'Cert_271036-277148_13TeV_PromptReco_Collisions16_JSON.txt' if options.isData else ''
+useLumiMask = 'Cert_271036-280385_13TeV_PromptReco_Collisions16_JSON.txt' if options.isData else ''
 localJobInfo = localJob_cfg.localJobInfo
 
 inputFiles = localJobInfo['inputFile']
@@ -210,12 +211,16 @@ if not options.runLocal:
             else:
                 if "DY" in options.sample:
                     cmd += " --campaign-tag=\"RunIISpring16MiniAODv2-PUSpring16_80X_mcRun2_asymptotic_2016_miniAODv2_v0_ext1-v*\" "
+                    #cmd += " --campaign-tag=\"RunIISpring16MiniAODv2-PUSpring16_80X_mcRun2_asymptotic_2016_miniAODv2_v0-v1\" "
                 elif "TT_LO" in options.sample:
                     cmd += " --campaign-tag=\"RunIISpring16MiniAODv2-PUSpring16_80X_mcRun2_asymptotic_2016_miniAODv2_v0_ext4-v1\" "
                 elif "ZPrime" in options.sample:
-                    cmd += " --campaign-tag=\"RunIISpring16MiniAODv2-PUSpring16RAWAODSIM_80X_mcRun2_asymptotic_2016_miniAODv2_v0-v1\" "
+                    cmd += " --campaign-tag=\"RunIISpring16MiniAODv2-PUSpring16RAWAODSIM_reHLT_80X_mcRun2_asymptotic_v14-v1\" "
                 else:
-                    cmd += " --campaign-tag=\"RunIISpring16MiniAODv2-PUSpring16_80X_mcRun2_asymptotic_2016_miniAODv2_v0-v1\" "
+#                    cmd += " --campaign-tag=\"RunIISpring16MiniAODv2-PUSpring16_80X_mcRun2_asymptotic_2016_miniAODv2_v0-v1\" "
+                    cmd += " --campaign-tag=\"RunIISpring16MiniAODv2-PUSpring16RAWAODSIM_80X_mcRun2_asymptotic_2016_miniAODv2_v0-v1\" "
+#cmd += " --campaign-tag=\"RunIISpring16MiniAODv2-PUSpring16_80X_mcRun2_asymptotic_2016_miniAODv2_v0_ext1-v1\" "
+                    #cmd += " --campaign-tag=\"RunIISpring16MiniAODv2-PUSpring16RAWAODSIM_reHLT_80X_mcRun2_asymptotic_v14-v1\" "
 
         else:
             cmd += " --input-dir=/nfs_scratch/zmao/"

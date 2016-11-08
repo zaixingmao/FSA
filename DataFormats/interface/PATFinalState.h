@@ -317,6 +317,9 @@ class PATFinalState : public pat::PATObject<reco::LeafCandidate> {
     const reco::GenParticleRef getDaughterGenParticle(size_t i, int pdgIdToMatch, int checkCharge, double maxDPtRel, double maxDeltaR, double minPt, int statusFlag) const;
     const reco::Candidate::LorentzVector getDaughterGenParticleVisMomentum(size_t i, int pdgIdToMatch, int checkCharge, double maxDPtRel, double maxDeltaR) const;
     const reco::Candidate::LorentzVector getGenParticleNuMomentum(size_t i, int pdgIdToMatch, int checkCharge, double maxDPtRel, double maxDeltaR) const;
+    const reco::GenParticleRef getGenTauMotherMomentum(size_t i, int pdgIdToMatch, int checkCharge, double maxDPtRel, double maxDeltaR, int statusFlag) const;
+    const reco::Candidate::LorentzVector getGenTauMotherNuMomentum(size_t i, int pdgIdToMatch, int checkCharge, double maxDPtRel, double maxDeltaR, int statusFlag) const;
+
     const reco::Candidate::LorentzVector getGenNu() const;
     const int getGenMatchCategory(size_t i) const;
 

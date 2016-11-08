@@ -911,6 +911,14 @@ const reco::Candidate::LorentzVector PATFinalState::getGenParticleNuMomentum(siz
   bool charge = (bool) checkCharge;
   return fshelpers::getGenParticleNuMomentum( daughter(i), event_->genParticleRefProd(), pdgIdToMatch, charge, maxDPtRel, maxDeltaR);
 }
+const reco::GenParticleRef PATFinalState::getGenTauMotherMomentum(size_t i, int pdgIdToMatch, int checkCharge, double maxDPtRel = 0.5, double maxDeltaR = 0.5, int statusFlag = 0) const {
+  bool charge = (bool) checkCharge;
+  return fshelpers::getGenTauMotherMomentum( daughter(i), event_->genParticleRefProd(), pdgIdToMatch, charge, maxDPtRel, maxDeltaR, statusFlag);
+}
+const reco::Candidate::LorentzVector PATFinalState::getGenTauMotherNuMomentum(size_t i, int pdgIdToMatch, int checkCharge, double maxDPtRel = 0.5, double maxDeltaR = 0.5, int statusFlag = 0) const {
+  bool charge = (bool) checkCharge;
+  return fshelpers::getGenTauMotherNuMomentum( daughter(i), event_->genParticleRefProd(), pdgIdToMatch, charge, maxDPtRel, maxDeltaR, statusFlag);
+}
 const reco::Candidate::LorentzVector PATFinalState::getGenNu() const {
   return fshelpers::getGenNu(event_->genParticleRefProd());
 }

@@ -49,7 +49,10 @@ id = PSet(
 #         '-{object}.userFloat("rhoCSA14")*{object}.userFloat("ea_comb_iso04_kt6PFJCNth05")))'
 #         '/{object}.pt()'
 #     ),
-    objectIsMediumMuon = '{object}.isMediumMuon',
+
+    objectIsMediumMuonOld = '{object}.isMediumMuon',
+    objectIsMediumMuon = '{object}.userInt("ShortTermMediumID")',
+
     objectIsPFMuon = '{object}.isPFMuon',
     objectIsGlobal = '{object}.isGlobalMuon',
     objectIsTracker = '{object}.isTrackerMuon',
@@ -79,6 +82,14 @@ id = PSet(
 
     objectGenMatchCategory = 'getGenMatchCategory({object_idx})',
 
+    objectGenTauMotherPt    = '? (getGenTauMotherMomentum({object_idx}, 13, 1, 1, 0.5, 4).isAvailable && getGenTauMotherMomentum({object_idx}, 13, 1, 1, 0.5, 4).isNonnull) ? getGenTauMotherMomentum({object_idx}, 13, 1, 1, 0.5, 4).pt() : -999',
+    objectGenTauMotherEta   = '? (getGenTauMotherMomentum({object_idx}, 13, 1, 1, 0.5, 4).isAvailable && getGenTauMotherMomentum({object_idx}, 13, 1, 1, 0.5, 4).isNonnull) ? getGenTauMotherMomentum({object_idx}, 13, 1, 1, 0.5, 4).eta() : -999',
+    objectGenTauMotherPhi   = '? (getGenTauMotherMomentum({object_idx}, 13, 1, 1, 0.5, 4).isAvailable && getGenTauMotherMomentum({object_idx}, 13, 1, 1, 0.5, 4).isNonnull) ? getGenTauMotherMomentum({object_idx}, 13, 1, 1, 0.5, 4).phi() : -999',
+
+    objectGenTauMotherNuPt   = 'getGenTauMotherNuMomentum({object_idx}, 13, 1, 1, 0.5, 4).pt()',
+    objectGenTauMotherNuEta  = 'getGenTauMotherNuMomentum({object_idx}, 13, 1, 1, 0.5, 4).eta()',
+    objectGenTauMotherNuPhi  = 'getGenTauMotherNuMomentum({object_idx}, 13, 1, 1, 0.5, 4).phi()',
+    objectGenTauMotherNuMass = 'getGenTauMotherNuMomentum({object_idx}, 13, 1, 1, 0.5, 4).mass()',
 )
 
 energyCorrections = PSet(

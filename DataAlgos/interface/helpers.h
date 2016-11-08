@@ -44,6 +44,9 @@ void addFourMomenta(reco::Candidate & c);
 const reco::GenParticleRef getGenParticle(const reco::Candidate*   daughter,const reco::GenParticleRefProd genCollectionRef, int pdgIdToMatch, bool checkCharge, double maxDPtRel, double maxDeltaR, double minPt = 0.0, int statusFlag = 0);
 const reco::Candidate::LorentzVector getGenParticleVisMomentum(const reco::Candidate*   daughter,const reco::GenParticleRefProd genCollectionRef, int pdgIdToMatch, bool checkCharge, double maxDPtRel, double maxDeltaR);
 const reco::Candidate::LorentzVector getGenParticleNuMomentum(const reco::Candidate*   daughter,const reco::GenParticleRefProd genCollectionRef, int pdgIdToMatch, bool checkCharge, double maxDPtRel, double maxDeltaR);
+const reco::GenParticleRef getGenTauMotherMomentum(const reco::Candidate*   daughter,const reco::GenParticleRefProd genCollectionRef, int pdgIdToMatch, bool checkCharge, double maxDPtRel, double maxDeltaR, int statusFlag = 0);
+const reco::Candidate::LorentzVector getGenTauMotherNuMomentum(const reco::Candidate*   daughter,const reco::GenParticleRefProd genCollectionRef, int pdgIdToMatch, bool checkCharge, double maxDPtRel, double maxDeltaR, int statusFlag = 0);
+
 const reco::Candidate::LorentzVector getGenNu(const reco::GenParticleRefProd genCollectionRef);
 const int getGenMatchCategory(const reco::Candidate* daughter, const reco::GenParticleRefProd genCollectionRef);
 
