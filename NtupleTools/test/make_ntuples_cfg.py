@@ -183,7 +183,7 @@ process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_condD
 # Need the global tag for geometry etc.
 envvar = 'mcgt' if options.isMC else 'datagt'
 GT = {'mcgt': '80X_mcRun2_asymptotic_2016_miniAODv2_v1', 
-      'datagt': '80X_dataRun2_Prompt_ICHEP16JEC_v0'}
+      'datagt': '80X_dataRun2_Prompt_v14'}#'80X_dataRun2_2016SeptRepro_v4'}
 
 if options.GlobalTag:
     process.GlobalTag.globaltag = cms.string(options.GlobalTag)
@@ -246,16 +246,6 @@ process.pfmetSigEmbed = process.MiniAODMETSignificanceEmbedder.clone(srcMet = cm
 process.pfmetSigEmbedder = cms.Path(process.pfmetSigEmbed)
 process.schedule.append(process.pfmetSigEmbedder)
 fs_daughter_inputs['pfmet'] = "pfmetSigEmbed"
-# for pfmetNoHF
-# process.pfmetNoHFSigEmbed = process.MiniAODMETSignificanceEmbedder.clone( srcMet = cms.InputTag(fs_daughter_inputs['pfmetNoHF']))
-# process.pfmetNoHFSigEmbedder = cms.Path(process.pfmetNoHFSigEmbed)
-# process.schedule.append(process.pfmetNoHFSigEmbedder)
-# fs_daughter_inputs['pfmetNoHF'] = "pfmetNoHFSigEmbed"
-# for pfmetPuppi
-# process.pfmetPuppiSigEmbed = process.MiniAODMETSignificanceEmbedder.clone( srcMet = cms.InputTag(fs_daughter_inputs['pfmetPuppi']))
-# process.pfmetPuppiSigEmbedder = cms.Path(process.pfmetPuppiSigEmbed)
-# process.schedule.append(process.pfmetPuppiSigEmbedder)
-# fs_daughter_inputs['pfmetPuppi'] = "pfmetPuppiSigEmbed"
 
 
 process.miniPatMuons = cms.EDProducer(

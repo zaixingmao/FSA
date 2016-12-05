@@ -85,14 +85,14 @@ MiniAODJetBTagSFEmbedder::MiniAODJetBTagSFEmbedder(const edm::ParameterSet& pset
   h2_Num_c    = (TH2D*)f_EffMap->Get("bTaggingEffAnalyzer/h2_BTaggingEff_Num_c");
   h2_Num_udsg    = (TH2D*)f_EffMap->Get("bTaggingEffAnalyzer/h2_BTaggingEff_Num_udsg");
 
-  calib=new BTagCalibration("CSVv2", base+"/src/FinalStateAnalysis/PatTools/data/subjet_CSVv2_ichep.csv");
+  calib=new BTagCalibration("CSVv2", base+"/src/FinalStateAnalysis/PatTools/data/CSVv2_ichep.csv");
 
   reader = new BTagCalibrationReader(BTagEntry::OP_LOOSE, "central", {"up", "down"});
   reader_c = new BTagCalibrationReader(BTagEntry::OP_LOOSE, "central", {"up", "down"});
   reader_light = new BTagCalibrationReader(BTagEntry::OP_LOOSE, "central", {"up", "down"});
 
-  reader->load(*calib, BTagEntry::FLAV_B, "lt");
-  reader_c->load(*calib, BTagEntry::FLAV_C, "lt");
+  reader->load(*calib, BTagEntry::FLAV_B, "comb");
+  reader_c->load(*calib, BTagEntry::FLAV_C, "comb");
   reader_light->load(*calib, BTagEntry::FLAV_UDSG, "incl");
 
 }

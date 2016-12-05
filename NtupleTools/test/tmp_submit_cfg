@@ -1,12 +1,12 @@
 universe = vanilla
 use_x509userproxy = true
-Executable = //uscms/home//zmao/nobackup/dataSetG/data_Electron_Run2016E/B42244FB-6253-E611-8D84-02163E013586/submit
+Executable = //uscms/home//zmao/nobackup/newTopPtReweighting/TT_TuneCUETP8M1_13TeV-powheg-pythia8/FEC6CFEA-4629-E611-90F7-78E7D12226B8/submit
 Requirements   =  OpSys == "LINUX" && (Arch =="INTEL" || Arch =="x86_64")
-request_memory = 8000
+request_memory = 16000
 Should_Transfer_Files = YES
 WhenToTransferOutput = ON_EXIT
-Output = //uscms/home//zmao/nobackup/dataSetG/data_Electron_Run2016E/B42244FB-6253-E611-8D84-02163E013586/condor.out
-Error = //uscms/home//zmao/nobackup/dataSetG/data_Electron_Run2016E/B42244FB-6253-E611-8D84-02163E013586/condor.err
-Log = //uscms/home//zmao/nobackup/dataSetG/data_Electron_Run2016E/B42244FB-6253-E611-8D84-02163E013586/condor.log
+Output = //uscms/home//zmao/nobackup/newTopPtReweighting/TT_TuneCUETP8M1_13TeV-powheg-pythia8/FEC6CFEA-4629-E611-90F7-78E7D12226B8/condor.out
+Error = //uscms/home//zmao/nobackup/newTopPtReweighting/TT_TuneCUETP8M1_13TeV-powheg-pythia8/FEC6CFEA-4629-E611-90F7-78E7D12226B8/condor.err
+Log = //uscms/home//zmao/nobackup/newTopPtReweighting/TT_TuneCUETP8M1_13TeV-powheg-pythia8/FEC6CFEA-4629-E611-90F7-78E7D12226B8/condor.log
 Notification = Never
 Queue

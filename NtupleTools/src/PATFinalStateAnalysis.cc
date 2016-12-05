@@ -157,9 +157,9 @@ bool PATFinalStateAnalysis::filter(const edm::EventBase& evt) {
 	}
       }
     }
-    if(topPt > 400) topPt = 400;
-    if(topBarPt > 400) topBarPt = 400;
-
+    if(topPt > 700) topPt = 700;
+    if(topBarPt > 700) topBarPt = 700;
+    /*
     if ( nLeptons > 0 ) {
       if ( nLeptons == 1 ) {
         SF_Top = TMath::Exp(0.159+((-0.00141)*topPt));
@@ -169,6 +169,9 @@ bool PATFinalStateAnalysis::filter(const edm::EventBase& evt) {
         SF_antiTop = TMath::Exp(0.148+((-0.00129)*topBarPt));
       }
     }
+    */
+    SF_Top = TMath::Exp(0.0615+((0.0005)*topPt));                                                                                                                                              
+    SF_antiTop = TMath::Exp(0.0615+((0.0005)*topBarPt));                                                                                                                                       
     eventCounterPtWeighted_->Fill(0.0, sqrt(SF_Top*SF_antiTop)*genEventWeight);
   }
 

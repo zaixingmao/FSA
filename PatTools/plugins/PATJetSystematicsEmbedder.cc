@@ -34,6 +34,7 @@ PATJetSystematicsEmbedder::PATJetSystematicsEmbedder(const edm::ParameterSet& ps
   src_ = pset.getParameter<edm::InputTag>("src");
   label_ = pset.getParameter<std::string>("corrLabel");
   unclusteredEnergyScale_ = pset.getParameter<double>("unclusteredEnergyScale");
+  consumes<edm::View<pat::Jet> >(src_);
   produces<pat::JetCollection>();
 //   produces<ShiftedCandCollection>("p4OutJESUpJets");
 //   produces<ShiftedCandCollection>("p4OutJESDownJets");
