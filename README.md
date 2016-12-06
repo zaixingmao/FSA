@@ -8,19 +8,19 @@ PAT tuple, and utilities for generating plain ROOT ntuples from the PAT tuple.
 Installation
 ------------
 
-Current CMSSW version: ``8_0_12``.
+Current CMSSW version: ``8_0_20``.
 
 Get a supported CMSSW release area:
 
 ```bash
-  cmsrel CMSSW_8_0_12
-  cd CMSSW_8_0_12/src
+  cmsrel CMSSW_8_0_20
+  cd CMSSW_8_0_20/src
   # Setup your CMSSW environment
   cmsenv
   # Run this before doing ANYTHING else in src
   git cms-init
   #type N
-  git cms-merge-topic -u cms-met:CMSSW_8_0_X-METFilterUpdate
+  git cms-merge-topic -u cms-met:fromCMSSW_8_0_20_postICHEPfilter
 ```
 
 Checkout the FinalStateAnalysis repository:
