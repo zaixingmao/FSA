@@ -151,7 +151,7 @@ PATFinalStateEventProducer::PATFinalStateEventProducer(
   trgPrescaleSrc_ = pset.getParameter<edm::InputTag>("trgPrescaleSrc");
   consumes<pat::PackedTriggerPrescales>(trgPrescaleSrc_);
 
-  jetAK8Src_ = pset.getParameter<edm::InputTag>("jetAK8Src");
+  //jetAK8Src_ = pset.getParameter<edm::InputTag>("jetAK8Src");
 
   generatorFilter_ = edm::InputTag("generator","minVisPtFilter");
   generator_ = edm::InputTag("generator");
@@ -172,7 +172,6 @@ PATFinalStateEventProducer::PATFinalStateEventProducer(
   }
 
   produces<PATFinalStateEventCollection>();
-
   getLHEEventProduct_ = edm::GetterOfProducts<LHEEventProduct>(edm::ProcessMatch("*"), this);
   getGenEventInfoProduct_ = edm::GetterOfProducts<GenEventInfoProduct>(edm::ProcessMatch("*"), this);
 
@@ -199,8 +198,7 @@ PATFinalStateEventProducer::getRefProd(const edm::InputTag& src,
 
 void PATFinalStateEventProducer::produce(edm::Event& evt,
                                          const edm::EventSetup& es) {
-  std::auto_ptr<PATFinalStateEventCollection> output(
-                                                     new PATFinalStateEventCollection);
+  std::auto_ptr<PATFinalStateEventCollection> output(new PATFinalStateEventCollection);
 
   edm::Handle<double> rho;
   evt.getByLabel(rhoSrc_, rho);
@@ -359,8 +357,9 @@ void PATFinalStateEventProducer::produce(edm::Event& evt,
 	}
       }
     }
-    if(topPt > 400) topPt = 400;
-    if(topBarPt > 400) topBarPt = 400;
+    if(topPt > 700) topPt = 700;
+    if(topBarPt > 700) topBarPt = 700;
+    /*
     if ( nLeptons > 0 ) {
       if ( nLeptons == 1 ) {
         SF_Top = TMath::Exp(0.159+((-0.00141)*topPt));
@@ -370,6 +369,10 @@ void PATFinalStateEventProducer::produce(edm::Event& evt,
         SF_antiTop = TMath::Exp(0.148+((-0.00129)*topBarPt));
       }
     }
+    */
+    SF_Top = TMath::Exp(0.0615+((-0.0005)*topPt));                                                                                                                              
+    SF_antiTop = TMath::Exp(0.0615+((-0.0005)*topBarPt));                                                                                                                       
+
     theEvent->addWeight("ptWeight", sqrt(SF_Top*SF_antiTop));
 
     edm::Handle<LHEEventProduct> EvtHandle;
