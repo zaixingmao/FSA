@@ -26,7 +26,7 @@ Get a supported CMSSW release area:
 Checkout the FinalStateAnalysis repository:
 
 ```bash
-  git clone -b miniAOD_8_0_12_FNAL https://github.com/zaixingmao/FSA.git FinalStateAnalysis
+  git clone -b miniAOD_8_0_20_FNAL https://github.com/zaixingmao/FSA.git FinalStateAnalysis
   cd FinalStateAnalysis
   cd recipe/
   ./recipe.sh
