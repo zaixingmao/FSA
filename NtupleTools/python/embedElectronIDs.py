@@ -11,6 +11,7 @@ def embedElectronIDs(process, use25ns, eSrc, vtxSrc, beamSrc, TNT):
             'RecoEgamma.ElectronIdentification.Identification.mvaElectronID_Spring15_25ns_nonTrig_V1_cff',
             'RecoEgamma.ElectronIdentification.Identification.mvaElectronID_Spring15_25ns_Trig_V1_cff',
             'RecoEgamma.ElectronIdentification.Identification.heepElectronID_HEEPV60_cff',
+            'RecoEgamma.ElectronIdentification.Identification.mvaElectronID_Spring16_GeneralPurpose_V1_cff',
             ]
     else:
         print "50 ns cut based electron IDs don't exist yet for PHYS14. Using CSA14 cuts."
@@ -18,27 +19,20 @@ def embedElectronIDs(process, use25ns, eSrc, vtxSrc, beamSrc, TNT):
     for idmod in id_modules:
         setupAllVIDIdsInModule(process,idmod,setupVIDElectronSelection)
     
-    CBIDLabels = ["CBIDVeto", "CBIDLoose", "CBIDMedium", "CBIDTight", "MVANonTrigWP80", "MVANonTrigWP90", "MVATrigWP80", "MVATrigWP90", "heepElectronID"] # keys of cut based id user floats
+    CBIDLabels = ["CBIDVeto", "CBIDLoose", "CBIDMedium", "CBIDTight", "MVANonTrigWP80", "MVANonTrigWP90", "MVATrigWP80", "MVATrigWP90", "heepElectronID", "MVA_WP80", "MVA_WP90"] # keys of cut based id user floats
     if use25ns:
         CBIDTags = [
             cms.InputTag('egmGsfElectronIDs:cutBasedElectronID-Spring15-25ns-V1-standalone-veto'),
             cms.InputTag('egmGsfElectronIDs:cutBasedElectronID-Spring15-25ns-V1-standalone-loose'),
             cms.InputTag('egmGsfElectronIDs:cutBasedElectronID-Spring15-25ns-V1-standalone-medium'),
             cms.InputTag('egmGsfElectronIDs:cutBasedElectronID-Spring15-25ns-V1-standalone-tight'),
-#             cms.InputTag("egmGsfElectronIDs:mvaEleID-PHYS14-PU20bx25-nonTrig-V1-wp80"),
-#             cms.InputTag("egmGsfElectronIDs:mvaEleID-PHYS14-PU20bx25-nonTrig-V1-wp90"),
             cms.InputTag("egmGsfElectronIDs:mvaEleID-Spring15-25ns-nonTrig-V1-wp80"),
             cms.InputTag("egmGsfElectronIDs:mvaEleID-Spring15-25ns-nonTrig-V1-wp90"),
             cms.InputTag("egmGsfElectronIDs:mvaEleID-Spring15-25ns-Trig-V1-wp80"),
             cms.InputTag("egmGsfElectronIDs:mvaEleID-Spring15-25ns-Trig-V1-wp90"),
             cms.InputTag("egmGsfElectronIDs:heepElectronID-HEEPV60"),
-            ]
-    else:
-        CBIDTags = [ # almost certainly wrong. Just don't use 50ns miniAOD any more
-            cms.InputTag('egmGsfElectronIDs:cutBasedElectronID-CSA14-50ns-V1-standalone-veto'),
-            cms.InputTag('egmGsfElectronIDs:cutBasedElectronID-CSA14-50ns-V1-standalone-loose'),
-            cms.InputTag('egmGsfElectronIDs:cutBasedElectronID-CSA14-50ns-V1-standalone-medium'),
-            cms.InputTag('egmGsfElectronIDs:cutBasedElectronID-CSA14-50ns-V1-standalone-tight'),
+            cms.InputTag("egmGsfElectronIDs:mvaEleID-Spring16-GeneralPurpose-V1-wp80"),
+            cms.InputTag("egmGsfElectronIDs:mvaEleID-Spring16-GeneralPurpose-V1-wp90"),
             ]
     if use25ns:
         mvaValueLabels = ["BDTIDNonTrig"]

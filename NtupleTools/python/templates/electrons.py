@@ -26,7 +26,8 @@ id = PSet(
     objectMVATrigWP80 = '{object}.userInt("MVATrigWP80")',
     objectMVATrigWP90 = '{object}.userInt("MVATrigWP90")',
     objectHEEPID = '{object}.userInt("heepElectronID")',
-    
+    objectMVA_WP80 = '{object}.userInt("MVA_WP80")',
+    objectMVA_WP90 = '{object}.userInt("MVA_WP90")',    
     # Use cms.string so we get the parentheses formatting bonus
 #     objectRelPFIsoDB = cms.string(
 #         "({object}.userIso(0)"
