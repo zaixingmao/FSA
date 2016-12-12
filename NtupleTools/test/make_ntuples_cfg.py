@@ -183,7 +183,7 @@ process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_condD
 # Need the global tag for geometry etc.
 envvar = 'mcgt' if options.isMC else 'datagt'
 GT = {'mcgt': '80X_mcRun2_asymptotic_2016_miniAODv2_v1', 
-      'datagt': '80X_dataRun2_Prompt_v14'}#'80X_dataRun2_2016SeptRepro_v4'}
+      'datagt': '80X_dataRun2_2016SeptRepro_v4'}#'80X_dataRun2_2016SeptRepro_v4'}
 
 if options.GlobalTag:
     process.GlobalTag.globaltag = cms.string(options.GlobalTag)
@@ -246,6 +246,49 @@ process.pfmetSigEmbed = process.MiniAODMETSignificanceEmbedder.clone(srcMet = cm
 process.pfmetSigEmbedder = cms.Path(process.pfmetSigEmbed)
 process.schedule.append(process.pfmetSigEmbedder)
 fs_daughter_inputs['pfmet'] = "pfmetSigEmbed"
+
+#####################
+### Pileup Jet ID ###
+#####################
+
+process.load("RecoJets.JetProducers.PileupJetID_cfi")
+process.pileupJetIdUpdated = process.pileupJetId.clone(
+  jets=cms.InputTag("slimmedJets"),
+  inputIsCorrected=True,
+  applyJec=True,
+  vertexes=cms.InputTag("offlineSlimmedPrimaryVertices")
+)
+
+##################
+### JEC ##########
+##################
+
+isData = not options.isMC
+from PhysicsTools.PatAlgos.producersLayer1.jetUpdater_cff import updatedPatJetCorrFactors
+process.patJetCorrFactorsReapplyJEC = updatedPatJetCorrFactors.clone(
+src = cms.InputTag("slimmedJets"),
+  levels = ['L1FastJet', 'L2Relative', 'L3Absolute'],
+  payload = 'AK4PFchs' ) # Make sure to choose the appropriate levels and payload here!
+from PhysicsTools.PatAlgos.producersLayer1.jetUpdater_cff import updatedPatJets
+process.patJetsReapplyJEC = updatedPatJets.clone(
+  jetSource = cms.InputTag("slimmedJets"),
+  jetCorrFactorsSource = cms.VInputTag(cms.InputTag("patJetCorrFactorsReapplyJEC"))
+  )
+if(isData):
+    process.patJetCorrFactorsReapplyJEC.levels = ['L1FastJet', 'L2Relative', 'L3Absolute', 'L2L3Residual']
+
+process.patJetsReapplyJEC.userData.userFloats.src += ['pileupJetIdUpdated:fullDiscriminant']
+
+process.applyJEC = cms.Path()
+process.applyJEC += process.pileupJetIdUpdated
+process.applyJEC += process.patJetCorrFactorsReapplyJEC
+process.applyJEC += process.patJetsReapplyJEC
+process.schedule.append(process.applyJEC)
+
+fs_daughter_inputs['jets'] = 'patJetsReapplyJEC'
+
+
+##################
 
 
 process.miniPatMuons = cms.EDProducer(
