@@ -65,7 +65,7 @@ export PATH=$fsa/PatTools/scripts:$PATH
 export PATH=$fsa/RecoTools/scripts:$PATH
 
 # Some tight compiler flags should be relaxed
-export USER_CXXFLAGS="-Wno-delete-non-virtual-dtor -Wno-error=unused-but-set-variable -Wno-error=unused-variable -Wno-error=sign-compare -Wno-error=reorder"
+export USER_CXXFLAGS="-Wno-error=delete-non-virtual-dtor -Wno-error=unused-but-set-variable -Wno-error=unused-variable -Wno-error=sign-compare -Wno-error=reorder"
 
 # Only use the ZZ MELA packages if we actually need them (they take a long time to compile)
 if [ -d $CMSSW_BASE/src/ZZMatrixElement ]; then

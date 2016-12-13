@@ -178,12 +178,12 @@ if options.TNT:
 #load magfield and geometry (for mass resolution)
 process.load('Configuration.StandardSequences.GeometryRecoDB_cff')
 process.load('Configuration.StandardSequences.MagneticField_38T_PostLS1_cff')
-
-process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_condDBv2_cff')
+process.load('Configuration.StandardSequences.Services_cff')
+process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_cff')
 # Need the global tag for geometry etc.
 envvar = 'mcgt' if options.isMC else 'datagt'
 GT = {'mcgt': '80X_mcRun2_asymptotic_2016_miniAODv2_v1', 
-      'datagt': '80X_dataRun2_2016SeptRepro_v4'}#'80X_dataRun2_2016SeptRepro_v4'}
+      'datagt': '80X_dataRun2_Prompt_v9'}#'80X_dataRun2_2016SeptRepro_v4'}
 
 if options.GlobalTag:
     process.GlobalTag.globaltag = cms.string(options.GlobalTag)
@@ -204,13 +204,26 @@ fs_daughter_inputs = {
     'photons': 'slimmedPhotons',
     'jets': 'slimmedJets',
     'pfmet': 'slimmedMETs',         
+    'slimmedMET': 'slimmedMETs',         
     'pfmetNoHF': 'slimmedMETsNoHF',         
     'pfmetPuppi': 'slimmedMETsPuppi',
     'mvamet': 'fixme',              # produced later
     'tautaumvamet': 'fixme',              # produced later
     'fsr': 'slimmedPhotons',
     'vertices': 'offlineSlimmedPrimaryVertices',
-    'beamSpots': 'offlineBeamSpot'
+    'beamSpots': 'offlineBeamSpot',
+    'pfmet_jresUp': 'slimmedMETs',         
+    'pfmet_jresDown': 'slimmedMETs',         
+    'pfmet_jesUp': 'slimmedMETs',         
+    'pfmet_jesDown': 'slimmedMETs',         
+    'pfmet_uesUp': 'slimmedMETs',         
+    'pfmet_uesDown': 'slimmedMETs',         
+    'pfmet_eesUp': 'slimmedMETs',         
+    'pfmet_eesDown': 'slimmedMETs',  
+    'pfmet_mesUp': 'slimmedMETs',         
+    'pfmet_mesDown': 'slimmedMETs',   
+    'pfmet_tesUp': 'slimmedMETs',         
+    'pfmet_tesDown': 'slimmedMETs',   
 }
 
 # embed some things we need that arent in miniAOD yet (like some ids)
@@ -219,9 +232,7 @@ output_commands = []
 # embed electron ids
 electronMVANonTrigIDLabel = "BDTIDNonTrig"
 electronMVATrigIDLabel = "BDTIDTrig"
-# process.load("RecoEgamma.ElectronIdentification.ElectronMVAValueMapProducer_cfi")
-# process.electronMVA = cms.Path(process.electronMVAValueMapProducer)
-# process.schedule.append(process.electronMVA)
+
 
 from FinalStateAnalysis.NtupleTools.embedElectronIDs import embedElectronIDs
 fs_daughter_inputs['electrons'] = embedElectronIDs(process, True,fs_daughter_inputs['electrons'], fs_daughter_inputs['vertices'], fs_daughter_inputs['beamSpots'], options.TNT)
@@ -236,16 +247,6 @@ process.ghostCleanedMuons = cms.EDProducer("PATMuonCleanerBySegments",
 # 
 # process.miniCleanedMuons = cms.Path(process.ghostCleanedMuons)
 # process.schedule.append(process.miniCleanedMuons)
-
-#calculate covmatrix
-
-process.load("FinalStateAnalysis.PatTools.met.METSignificance_cfi")
-process.load("RecoMET/METProducers.METSignificanceParams_cfi")
-#for pfmet
-process.pfmetSigEmbed = process.MiniAODMETSignificanceEmbedder.clone(srcMet = cms.InputTag(fs_daughter_inputs['pfmet']))
-process.pfmetSigEmbedder = cms.Path(process.pfmetSigEmbed)
-process.schedule.append(process.pfmetSigEmbedder)
-fs_daughter_inputs['pfmet'] = "pfmetSigEmbed"
 
 #####################
 ### Pileup Jet ID ###
@@ -262,33 +263,56 @@ process.pileupJetIdUpdated = process.pileupJetId.clone(
 ##################
 ### JEC ##########
 ##################
-
 isData = not options.isMC
-from PhysicsTools.PatAlgos.producersLayer1.jetUpdater_cff import updatedPatJetCorrFactors
-process.patJetCorrFactorsReapplyJEC = updatedPatJetCorrFactors.clone(
-src = cms.InputTag("slimmedJets"),
-  levels = ['L1FastJet', 'L2Relative', 'L3Absolute'],
-  payload = 'AK4PFchs' ) # Make sure to choose the appropriate levels and payload here!
-from PhysicsTools.PatAlgos.producersLayer1.jetUpdater_cff import updatedPatJets
-process.patJetsReapplyJEC = updatedPatJets.clone(
-  jetSource = cms.InputTag("slimmedJets"),
-  jetCorrFactorsSource = cms.VInputTag(cms.InputTag("patJetCorrFactorsReapplyJEC"))
-  )
+
+from PhysicsTools.PatAlgos.tools.jetTools import updateJetCollection
+updateJetCollection(
+   process,
+   jetSource = cms.InputTag('slimmedJets'),
+   labelName = 'UpdatedJEC',
+   jetCorrections = ('AK4PFchs', cms.vstring(['L1FastJet', 'L2Relative', 'L3Absolute']), 'None')  # Do not forget 'L2L3Residual' on data!
+)
 if(isData):
-    process.patJetCorrFactorsReapplyJEC.levels = ['L1FastJet', 'L2Relative', 'L3Absolute', 'L2L3Residual']
-
-process.patJetsReapplyJEC.userData.userFloats.src += ['pileupJetIdUpdated:fullDiscriminant']
-
+    updateJetCollection.jetCorrections = ('AK4PFchs', cms.vstring(['L1FastJet', 'L2Relative', 'L3Absolute', 'L2L3Residual']), 'None')
+process.updatedPatJetsUpdatedJEC.userData.userFloats.src += ['pileupJetIdUpdated:fullDiscriminant']
 process.applyJEC = cms.Path()
 process.applyJEC += process.pileupJetIdUpdated
-process.applyJEC += process.patJetCorrFactorsReapplyJEC
-process.applyJEC += process.patJetsReapplyJEC
+process.applyJEC += process.patJetCorrFactorsUpdatedJEC
+process.applyJEC += process.updatedPatJetsUpdatedJEC
 process.schedule.append(process.applyJEC)
+fs_daughter_inputs['jets'] = 'updatedPatJetsUpdatedJEC'
 
-fs_daughter_inputs['jets'] = 'patJetsReapplyJEC'
+#######################################
+## ReRun Type1 Correction for MET######
+#######################################
+from PhysicsTools.PatUtils.tools.runMETCorrectionsAndUncertainties import runMetCorAndUncFromMiniAOD
+runMetCorAndUncFromMiniAOD(process, 
+                           isData = isData,
+                          )
+baseMET = "patPFMetT1"
+fs_daughter_inputs['pfmet'] = baseMET
+process.reRunType1MET = cms.Path(process.patPFMetT1)
 
+variations = {"jres": "JetRes",
+              "jes": "JetEn",
+              "ues": "UnclusteredEn",
+              "ees": "ElectronEn",
+              "mes": "MuonEn",
+              "tes": "TauEn",
+            }
+for iVar in variations.keys():
+    for sys in ["Up", "Down"]:
+        process.reRunType1MET += getattr(process, baseMET+variations[iVar]+sys)
+        fs_daughter_inputs['pfmet_%s%s' %(iVar,sys)] = baseMET+variations[iVar]+sys
 
-##################
+process.schedule.append(process.reRunType1MET)
+
+#Add met significane for normal RECO METs for svFit testing
+process.load("RecoMET.METProducers.METSignificance_cfi")
+process.METSignificance.srcMet = cms.InputTag(fs_daughter_inputs['pfmet'])
+process.METSignificance.srcPfJets = cms.InputTag(fs_daughter_inputs['jets'])
+process.METSigSeq = cms.Path(process.METSignificance)
+process.schedule.append(process.METSigSeq)
 
 
 process.miniPatMuons = cms.EDProducer(

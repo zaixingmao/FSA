@@ -68,8 +68,20 @@ def produce_final_states(process, collections, output_commands,
         process.patFinalStateEventProducer.genParticleSrc = cms.InputTag("prunedGenParticles")
         process.patFinalStateEventProducer.mets = cms.PSet(
             pfmet = cms.InputTag(src['pfmet']),
-#            pfmetNoHF = cms.InputTag(src['pfmetNoHF']),
+            pfmet_jresUp = cms.InputTag(src['pfmet_jresUp']),
+            pfmet_jresDown = cms.InputTag(src['pfmet_jresDown']),
+            pfmet_jesUp = cms.InputTag(src['pfmet_jesUp']),
+            pfmet_jesDown = cms.InputTag(src['pfmet_jesDown']),
+            pfmet_uesUp = cms.InputTag(src['pfmet_uesUp']),
+            pfmet_uesDown = cms.InputTag(src['pfmet_uesDown']),
+            pfmet_mesUp = cms.InputTag(src['pfmet_mesUp']),
+            pfmet_mesDown = cms.InputTag(src['pfmet_mesDown']),
+            pfmet_eesUp = cms.InputTag(src['pfmet_eesUp']),
+            pfmet_eesDown = cms.InputTag(src['pfmet_eesDown']),
+            pfmet_tesUp = cms.InputTag(src['pfmet_tesUp']),
+            pfmet_tesDown = cms.InputTag(src['pfmet_tesDown']),
             pfmetPuppi = cms.InputTag(src['pfmetPuppi']),
+            slimmedMET = cms.InputTag(src['slimmedMET']),
         )
         if runMVAMET:
             process.patFinalStateEventProducer.mets.mvamet = cms.InputTag(src['mvamet'])
