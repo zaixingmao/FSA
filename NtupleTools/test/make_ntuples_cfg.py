@@ -77,7 +77,7 @@ options = TauVarParsing.TauVarParsing(
     rerunJets=0,
     dblhMode=False, # For double-charged Higgs analysis
     runTauSpinner=0,
-    GlobalTag="",
+    GlobalTag=0,
     use25ns=1,
     runDQM=0,
     hzz=0,
@@ -178,19 +178,42 @@ if options.TNT:
 #load magfield and geometry (for mass resolution)
 process.load('Configuration.StandardSequences.GeometryRecoDB_cff')
 process.load('Configuration.StandardSequences.MagneticField_38T_PostLS1_cff')
-process.load('Configuration.StandardSequences.Services_cff')
-process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_cff')
 # Need the global tag for geometry etc.
 envvar = 'mcgt' if options.isMC else 'datagt'
 GT = {'mcgt': '80X_mcRun2_asymptotic_2016_miniAODv2_v1', 
-      'datagt': '80X_dataRun2_Prompt_v9'}#'80X_dataRun2_2016SeptRepro_v4'}
+      'datagt': '80X_dataRun2_Prompt_v14'}#'80X_dataRun2_2016SeptRepro_v4'}
 
-if options.GlobalTag:
-    process.GlobalTag.globaltag = cms.string(options.GlobalTag)
-else:
-    process.GlobalTag.globaltag = cms.string(GT[envvar])
-
+process.load('Configuration.StandardSequences.Services_cff')
+process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_cff')
+process.GlobalTag.globaltag = cms.string(GT[envvar])
 print 'Using globalTag: %s' % process.GlobalTag.globaltag
+
+if not options.GlobalTag:
+    print 'Using sqlite'
+    dbFile = "sqlite:JEC/"
+    dbFile += "Spring16_23Sep2016V2_MC.db" if options.isMC else "Spring16_23Sep2016AllV2_DATA.db"
+    tag = "JetCorrectorParametersCollection_Spring16_23Sep2016V2_MC_AK4PFchs"
+    if not options.isMC:
+        tag = "JetCorrectorParametersCollection_Spring16_23Sep2016AllV2_DATA_AK4PFchs"
+    process.load ("CondCore.CondDB.CondDB_cfi")
+    from CondCore.CondDB.CondDB_cfi import *
+    process.jec = cms.ESSource("PoolDBESSource",
+          DBParameters = cms.PSet(
+            messageLevel = cms.untracked.int32(0)
+            ),
+          timetype = cms.string('runnumber'),
+          toGet = cms.VPSet(
+          cms.PSet(
+                record = cms.string('JetCorrectionsRecord'),
+                tag    = cms.string(tag),
+                label  = cms.untracked.string('AK4PFchs')
+                ),
+          ), 
+          connect = cms.string(dbFile)
+    )
+
+    ## add an es_prefer statement to resolve a possible conflict from simultaneous connection to a global tag
+    process.es_prefer_jec = cms.ESPrefer('PoolDBESSource','jec')
 
 # Drop the input ones, just to make sure we aren't screwing anything up
 process.buildFSASeq = cms.Sequence()
@@ -575,48 +598,6 @@ elif options.sys == 'jetEC':
     process.schedule.append(process.sysEmbedding)
     
 
-
-
-# mvamet
-if options.runMVAMET:
-    process.load("RecoJets.JetProducers.ak4PFJets_cfi")
-    process.ak4PFJets.src = cms.InputTag("packedPFCandidates")
-    process.ak4PFJets.doAreaFastjet = cms.bool(True)
-    
-    from JetMETCorrections.Configuration.DefaultJEC_cff import ak4PFJetsL1FastL2L3
-    
-    process.load("RecoMET.METPUSubtraction.mvaPFMET_cff")
-    process.pfMVAMEt.srcPFCandidates = cms.InputTag("packedPFCandidates")
-    process.pfMVAMEt.srcVertices = cms.InputTag("offlineSlimmedPrimaryVertices")
-    process.pfMVAMEt.inputFileNames.U     = cms.FileInPath('RecoMET/METPUSubtraction/data/gbru_7_4_X_miniAOD_50NS_July2015.root')
-    process.pfMVAMEt.inputFileNames.DPhi  = cms.FileInPath('RecoMET/METPUSubtraction/data/gbrphi_7_4_X_miniAOD_50NS_July2015.root')
-    process.pfMVAMEt.inputFileNames.CovU1 = cms.FileInPath('RecoMET/METPUSubtraction/data/gbru1cov_7_4_X_miniAOD_50NS_July2015.root')
-    process.pfMVAMEt.inputFileNames.CovU2 = cms.FileInPath('RecoMET/METPUSubtraction/data/gbru_7_4_X_miniAOD_50NS_July2015.root')
-    if not options.use25ns:
-        process.pfMVAMEt.inputFileNames.U     = cms.FileInPath('RecoMET/METPUSubtraction/data/gbru_7_4_X_miniAOD_25NS_July2015.root')
-        process.pfMVAMEt.inputFileNames.DPhi  = cms.FileInPath('RecoMET/METPUSubtraction/data/gbrphi_7_4_X_miniAOD_25NS_July2015.root')
-        process.pfMVAMEt.inputFileNames.CovU1 = cms.FileInPath('RecoMET/METPUSubtraction/data/gbru1cov_7_4_X_miniAOD_25NS_July2015.root')
-        process.pfMVAMEt.inputFileNames.CovU2 = cms.FileInPath('RecoMET/METPUSubtraction/data/gbru2cov_7_4_X_miniAOD_25NS_July2015.root')
-    
-    process.puJetIdForPFMVAMEt.jec =  cms.string('AK4PF')
-    process.puJetIdForPFMVAMEt.vertexes = cms.InputTag("offlineSlimmedPrimaryVertices")
-    process.puJetIdForPFMVAMEt.rho = cms.InputTag("fixedGridRhoFastjetAll")
-    
-    from PhysicsTools.PatAlgos.producersLayer1.metProducer_cfi import patMETs
-    
-    process.miniAODMVAMEt = patMETs.clone(
-        metSource=cms.InputTag("pfMVAMEt"),
-        addMuonCorrections = cms.bool(False),
-        addGenMET = cms.bool(False)
-    )
-    fs_daughter_inputs['mvamet'] = 'miniAODMVAMEt'
-    
-    process.mvaMetSequence = cms.Path(
-        process.ak4PFJets *
-        process.pfMVAMEtSequence *
-        process.miniAODMVAMEt
-    )
-    process.schedule.append(process.mvaMetSequence)
 
 # add met filters
 if options.runMETFilters:
