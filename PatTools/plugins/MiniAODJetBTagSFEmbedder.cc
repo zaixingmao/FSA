@@ -114,7 +114,7 @@ void MiniAODJetBTagSFEmbedder::produce(edm::Event& evt, const edm::EventSetup& e
     double num = 1.0;
     double denom = 1.0;
     bool bTag = false;
-    if (jet.bDiscriminator("pfCombinedInclusiveSecondaryVertexV2BJetTags")>0.460) bTag =true;
+    if (jet.bDiscriminator("pfCombinedInclusiveSecondaryVertexV2BJetTags")>0.5426) bTag =true;
     double jetPt = jet.pt();
     double jetEta = jet.eta();
     if(jetPt > 30 && fabs(jetEta)<2.4 && isMC_){

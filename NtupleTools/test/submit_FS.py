@@ -86,10 +86,10 @@ skimCuts['tt'] = {"ID_t": "object.tauID(\\\"decayModeFindingNewDMs\\\") > 0.5",
                   "Eta_t": "abs(object.eta()) < 2.1",
                   }
 skimCuts['et'] = {# "ID_e": "object.userFloat(\'MVANonTrigWP80\')> 0.5",
-                  "Pt_e": "object.pt() > 23",
+                  "Pt_e": "object.pt() > 25",
                   "Eta_e": "abs(object.eta()) < 2.1",
                   "ID_t": "object.tauID(\\\"decayModeFindingNewDMs\\\") > 0.5",
-                  "Pt_t": "object.pt() > 18",
+                  "Pt_t": "object.pt() > 20",
                   "Eta_t": "abs(object.eta()) < 2.1",
                   }
 skimCuts['em'] = {
@@ -105,11 +105,11 @@ skimCuts['mm'] = {"Pt": "object.pt() > 10",
                   }
 
 skimCuts['mt'] = {"ID_m": "object.userInt(\\\"ShortTermMediumID\\\") > 0.5",
-                  "Pt_m": "object.pt() > 18",
+                  "Pt_m": "object.pt() > 25",
                   "Eta_m": "abs(object.eta()) < 2.1",
                   "ID_t": "object.tauID(\\\"decayModeFindingNewDMs\\\") > 0.5",
-                  "Pt_t": "object.pt() > 18",
-                  "Eta_t": "abs(object.eta()) < 2.3",
+                  "Pt_t": "object.pt() > 20",
+                  "Eta_t": "abs(object.eta()) < 2.1",
                   }
 skimCuts['ee'] = {"Pt": "object.pt() > 13",
                   "Eta": "abs(object.eta()) < 2.1",
@@ -203,23 +203,19 @@ if not options.runLocal:
 
     cmd += " --comand-template=%s" %template_location
     if isMC:
-        cmd += " --das-replace-tuple=$fsa/MetaData/tuples/MiniAOD-13TeV_RunIISpring16MiniAODv2.json --samples %s -o %s" %(samples, tempFile)
+        cmd += " --das-replace-tuple=$fsa/MetaData/tuples/MiniAOD-13TeV_RunIISummer16MiniAODv2.json --samples %s -o %s" %(samples, tempFile)
         if not options.notFromDAS:
             if options.is50ns:
                 cmd += " --campaign-tag=\"RunIISpring15DR74-Asympt50ns*\" "
             else:
-                if "DY" in options.sample and "M-50" in options.sample:
-                    cmd += " --campaign-tag=\"RunIISpring16MiniAODv2-PUSpring16_80X_mcRun2_asymptotic_2016_miniAODv2_v0_ext1-v*\" "
-                    #cmd += " --campaign-tag=\"RunIISpring16MiniAODv2-PUSpring16_80X_mcRun2_asymptotic_2016_miniAODv2_v0-v1\" "
+                if "DY" in options.sample:
+                    cmd += " --campaign-tag=\"RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6_ext*\" "
                 elif "TT_LO" in options.sample:
-                    cmd += " --campaign-tag=\"RunIISpring16MiniAODv2-PUSpring16_80X_mcRun2_asymptotic_2016_miniAODv2_v0_ext4-v1\" "
+                    cmd += " --campaign-tag=\"RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1\" "
                 elif "ZPrime" in options.sample:
-                    cmd += " --campaign-tag=\"RunIISpring16MiniAODv2-PUSpring16RAWAODSIM_reHLT_80X_mcRun2_asymptotic_v14-v1\" "
+                    cmd += " --campaign-tag=\"RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1\" "
                 else:
-                    cmd += " --campaign-tag=\"RunIISpring16MiniAODv2-PUSpring16_80X_mcRun2_asymptotic_2016_miniAODv2_v0-v1\" "
-                    #cmd += " --campaign-tag=\"RunIISpring16MiniAODv2-PUSpring16RAWAODSIM_80X_mcRun2_asymptotic_2016_miniAODv2_v0-v1\" "
-                    #cmd += " --campaign-tag=\"RunIISpring16MiniAODv2-PUSpring16_80X_mcRun2_asymptotic_2016_miniAODv2_v0_ext1-v1\" "
-                    #cmd += " --campaign-tag=\"RunIISpring16MiniAODv2-PUSpring16RAWAODSIM_reHLT_80X_mcRun2_asymptotic_v14-v1\" "
+                    cmd += " --campaign-tag=\"RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v3\" "
 
         else:
             cmd += " --input-dir=/nfs_scratch/zmao/"

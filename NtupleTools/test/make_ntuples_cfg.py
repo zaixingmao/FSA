@@ -77,7 +77,7 @@ options = TauVarParsing.TauVarParsing(
     rerunJets=0,
     dblhMode=False, # For double-charged Higgs analysis
     runTauSpinner=0,
-    GlobalTag=0,
+    GlobalTag=1,
     use25ns=1,
     runDQM=0,
     hzz=0,
@@ -180,7 +180,7 @@ process.load('Configuration.StandardSequences.GeometryRecoDB_cff')
 process.load('Configuration.StandardSequences.MagneticField_38T_PostLS1_cff')
 # Need the global tag for geometry etc.
 envvar = 'mcgt' if options.isMC else 'datagt'
-GT = {'mcgt': '80X_mcRun2_asymptotic_2016_miniAODv2_v1', 
+GT = {'mcgt': '80X_mcRun2_asymptotic_2016_TrancheIV_v6',
       'datagt': '80X_dataRun2_Prompt_v14'}#'80X_dataRun2_2016SeptRepro_v4'}
 
 process.load('Configuration.StandardSequences.Services_cff')
