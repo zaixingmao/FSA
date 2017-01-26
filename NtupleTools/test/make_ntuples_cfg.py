@@ -181,7 +181,7 @@ process.load('Configuration.StandardSequences.MagneticField_38T_PostLS1_cff')
 # Need the global tag for geometry etc.
 envvar = 'mcgt' if options.isMC else 'datagt'
 GT = {'mcgt': '80X_mcRun2_asymptotic_2016_TrancheIV_v6',
-      'datagt': '80X_dataRun2_Prompt_v14'}#'80X_dataRun2_2016SeptRepro_v4'}
+      'datagt': '80X_dataRun2_2016SeptRepro_v4'}
 
 process.load('Configuration.StandardSequences.Services_cff')
 process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_cff')
