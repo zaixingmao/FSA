@@ -77,7 +77,7 @@ options = TauVarParsing.TauVarParsing(
     rerunJets=0,
     dblhMode=False, # For double-charged Higgs analysis
     runTauSpinner=0,
-    GlobalTag=1,
+    GlobalTag=0,
     use25ns=1,
     runDQM=0,
     hzz=0,
@@ -191,10 +191,10 @@ print 'Using globalTag: %s' % process.GlobalTag.globaltag
 if not options.GlobalTag:
     print 'Using sqlite'
     dbFile = "sqlite:JEC/"
-    dbFile += "Spring16_23Sep2016V2_MC.db" if options.isMC else "Spring16_23Sep2016AllV2_DATA.db"
-    tag = "JetCorrectorParametersCollection_Spring16_23Sep2016V2_MC_AK4PFchs"
+    dbFile += "Summer16_23Sep2016V3_MC.db" if options.isMC else "Summer16_23Sep2016AllV3_DATA.db"
+    tag = "JetCorrectorParametersCollection_Summer16_23Sep2016V3_MC_AK4PFchs"
     if not options.isMC:
-        tag = "JetCorrectorParametersCollection_Spring16_23Sep2016AllV2_DATA_AK4PFchs"
+        tag = "JetCorrectorParametersCollection_Summer16_23Sep2016AllV3_DATA_AK4PFchs"
     process.load ("CondCore.CondDB.CondDB_cfi")
     from CondCore.CondDB.CondDB_cfi import *
     process.jec = cms.ESSource("PoolDBESSource",
