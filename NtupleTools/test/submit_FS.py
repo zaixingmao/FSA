@@ -138,7 +138,7 @@ TNT = 1 if options.TNT else 0
 
 
 # useLumiMask = '/afs/cern.ch/cms/CAF/CMSCOMM/COMM_DQM/certification/Collisions15/13TeV/Cert_246908-258750_13TeV_PromptReco_Collisions15_25ns_JSON.txt' if options.isData else ''
-useLumiMask = 'Cert_271036-284044_13TeV_23Sep2016ReReco_Collisions16_JSON.txt' if options.isData else ''
+useLumiMask = 'json/Cert_271036-284044_13TeV_23Sep2016ReReco_Collisions16_JSON.txt' if options.isData else ''
 localJobInfo = localJob_cfg.localJobInfo
 
 inputFiles = localJobInfo['inputFile']
@@ -210,9 +210,7 @@ if not options.runLocal:
             else:
                 if "DY" in options.sample:
                     cmd += " --campaign-tag=\"RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6_ext*\" "
-                elif "TT_LO" in options.sample:
-                    cmd += " --campaign-tag=\"RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1\" "
-                elif "ZPrime" in options.sample:
+                elif ("TT_LO" in options.sample) or ("ZPrime" in options.sample) or ("WJetsToLNu_LO" in options.sample):
                     cmd += " --campaign-tag=\"RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1\" "
                 else:
                     cmd += " --campaign-tag=\"RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v3\" "
