@@ -23,6 +23,7 @@ Get a supported CMSSW release area:
   git cms-merge-topic -u cms-met:fromCMSSW_8_0_20_postICHEPfilter
   git cms-merge-topic ikrav:egm_id_80X_v2
   git cms-merge-topic cms-met:METRecipe_8020	
+  git cms-merge-topic -u cms-tau-pog:CMSSW_8_0_X_tau-pog_miniAOD-backport-tauID
   scram b -j 8
   cd $CMSSW_BASE/external
   cd slc6_amd64_gcc530/
