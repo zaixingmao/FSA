@@ -77,7 +77,7 @@ options = TauVarParsing.TauVarParsing(
     rerunJets=0,
     dblhMode=False, # For double-charged Higgs analysis
     runTauSpinner=0,
-    GlobalTag=0,
+    GlobalTag=1,
     use25ns=1,
     runDQM=0,
     hzz=0,
@@ -180,8 +180,8 @@ process.load('Configuration.StandardSequences.GeometryRecoDB_cff')
 process.load('Configuration.StandardSequences.MagneticField_38T_PostLS1_cff')
 # Need the global tag for geometry etc.
 envvar = 'mcgt' if options.isMC else 'datagt'
-GT = {'mcgt': '80X_mcRun2_asymptotic_2016_TrancheIV_v6',
-      'datagt': '80X_dataRun2_2016SeptRepro_v4'}
+GT = {'mcgt': '80X_mcRun2_asymptotic_2016_TrancheIV_v8',
+      'datagt': '80X_dataRun2_2016SeptRepro_v7'}
 
 process.load('Configuration.StandardSequences.Services_cff')
 process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_cff')
@@ -412,90 +412,53 @@ process.runMiniAODLeptonRelIsoEmbedding = cms.Path(
     process.miniElectronsEmbedRelIso
 )
 process.schedule.append(process.runMiniAODLeptonRelIsoEmbedding)
-
-# Embed effective areas in muons and electrons
-process.load("FinalStateAnalysis.PatTools.electrons.patElectronEAEmbedding_cfi")
-process.patElectronEAEmbedder.src = cms.InputTag(fs_daughter_inputs['electrons'])
-process.load("FinalStateAnalysis.PatTools.muons.patMuonEAEmbedding_cfi")
-process.patMuonEAEmbedder.src = cms.InputTag(fs_daughter_inputs['muons'])
-#fs_daughter_inputs['electrons'] = 'patElectronEAEmbedder'
-#fs_daughter_inputs['muons'] = 'patMuonEAEmbedder'
-# And for electrons, the new HZZ4l EAs as well
-process.miniAODElectronEAEmbedding = cms.EDProducer(
-    "MiniAODElectronEffectiveArea2015Embedder",
-    src = cms.InputTag(fs_daughter_inputs['electrons']),
-    label = cms.string("EffectiveArea_HZZ4l2015"), # embeds a user float with this name
-    )
-#fs_daughter_inputs['electrons'] = 'miniAODElectronEAEmbedding'
-process.EAEmbedding = cms.Path(
-    process.patElectronEAEmbedder +
-    process.patMuonEAEmbedder +
-    process.miniAODElectronEAEmbedding
-    )
-#process.schedule.append(process.EAEmbedding)
-
-# Embed rhos in electrons
-process.miniAODElectronRhoEmbedding = cms.EDProducer(
-    "ElectronRhoOverloader",
-    src = cms.InputTag(fs_daughter_inputs['electrons']),
-    srcRho = cms.InputTag("fixedGridRhoFastjetAll"), # not sure this is right
-    userLabel = cms.string("rhoCSA14")
-    )
-#fs_daughter_inputs['electrons'] = 'miniAODElectronRhoEmbedding'
-
-# ... and muons
-process.miniAODMuonRhoEmbedding = cms.EDProducer(
-    "MuonRhoOverloader",
-    src = cms.InputTag(fs_daughter_inputs['muons']),
-    srcRho = cms.InputTag("fixedGridRhoFastjetCentralNeutral"), # not sure this is right
-    userLabel = cms.string("rhoCSA14")
-    )
-#fs_daughter_inputs['muons'] = 'miniAODMuonRhoEmbedding'
-process.rhoEmbedding = cms.Path(
-    process.miniAODElectronRhoEmbedding +
-    process.miniAODMuonRhoEmbedding
-    )
-#process.schedule.append(process.rhoEmbedding)
-
-if options.hzz:
-    # Make FSR photon collection, give them isolation
-    process.load("FinalStateAnalysis.PatTools.miniAOD_fsrPhotons_cff")
-    fs_daughter_inputs['fsr'] = 'boostedFsrPhotons'
-    output_commands.append('*_boostedFsrPhotons_*_*')
-    process.makeFSRPhotons = cms.Path(process.fsrPhotonSequence)
-    process.schedule.append(process.makeFSRPhotons)
-
-    # Embed HZZ ID and isolation decisions because we need to know them for FSR recovery
-    idCheatLabel = "HZZ4lIDPass" # Gets loose ID. For tight ID, append "Tight".
-    isoCheatLabel = "HZZ4lIsoPass"
-    process.electronIDIsoCheatEmbedding = cms.EDProducer(
-        "MiniAODElectronHZZIDDecider",
-        src = cms.InputTag(fs_daughter_inputs['electrons']),
-        idLabel = cms.string(idCheatLabel), # boolean stored as userFloat with this name
-        isoLabel = cms.string(isoCheatLabel), # boolean stored as userFloat with this name
-        rhoLabel = cms.string("rhoCSA14"), # use rho and EA userFloats with these names
-        eaLabel = cms.string("EffectiveArea_HZZ4l2015"),
-        vtxSrc = cms.InputTag("offlineSlimmedPrimaryVertices"),
-        bdtLabel = cms.string(electronMVANonTrigIDLabel),
-        )
-    fs_daughter_inputs['electrons'] = 'electronIDIsoCheatEmbedding'
-    output_commands.append('*_electronIDIsoCheatEmbedding_*_*')
-    process.muonIDIsoCheatEmbedding = cms.EDProducer(
-        "MiniAODMuonHZZIDDecider",
-        src = cms.InputTag(fs_daughter_inputs['muons']),
-        idLabel = cms.string(idCheatLabel), # boolean will be stored as userFloat with this name
-        isoLabel = cms.string(isoCheatLabel), # boolean will be stored as userFloat with this name
-        vtxSrc = cms.InputTag("offlineSlimmedPrimaryVertices"),
-        # Defaults are correct as of 9 March 2015, overwrite later if needed
-        )
-    fs_daughter_inputs['muons'] = 'muonIDIsoCheatEmbedding'
-    output_commands.append('*_muonIDIsoCheatEmbedding_*_*')
-    process.embedHZZ4lIDDecisions = cms.Path(
-        process.electronIDIsoCheatEmbedding +
-        process.muonIDIsoCheatEmbedding
-        )
-    process.schedule.append(process.embedHZZ4lIDDecisions)
     
+#tau MVA ID recalculation
+from RecoTauTag.RecoTau.TauDiscriminatorTools import noPrediscriminants
+process.load('RecoTauTag.Configuration.loadRecoTauTagMVAsFromPrepDB_cfi')
+from RecoTauTag.RecoTau.PATTauDiscriminationByMVAIsolationRun2_cff import *
+
+process.rerunDiscriminationByIsolationMVA2016v1raw = patDiscriminationByIsolationMVArun2v1raw.clone(
+   PATTauProducer = cms.InputTag(fs_daughter_inputs['taus']),
+   Prediscriminants = noPrediscriminants,
+   loadMVAfromDB = cms.bool(True),
+   mvaName = cms.string("RecoTauTag_tauIdMVAIsoDBnewDMwLT2016v1"), # name of the training you want to use
+   mvaOpt = cms.string("DBnewDMwLT"), # option you want to use for your training (i.e., which variables are used to compute the BDT score)
+   requireDecayMode = cms.bool(True),
+   verbosity = cms.int32(0)
+)
+
+process.rerunDiscriminationByIsolationMVA2016v1Tight = patDiscriminationByIsolationMVArun2v1VLoose.clone(
+   PATTauProducer = cms.InputTag(fs_daughter_inputs['taus']),    
+   Prediscriminants = noPrediscriminants,
+   toMultiplex = cms.InputTag('rerunDiscriminationByIsolationMVA2016v1raw'),
+   key = cms.InputTag('rerunDiscriminationByIsolationMVA2016v1raw:category'),
+   loadMVAfromDB = cms.bool(True),
+   mvaOutput_normalization = cms.string("RecoTauTag_tauIdMVAIsoDBnewDMwLT2016v1_mvaOutput_normalization"), 
+   mapping = cms.VPSet(
+      cms.PSet(
+         category = cms.uint32(0),
+         cut = cms.string("RecoTauTag_tauIdMVAIsoDBnewDMwLT2016v1_WPEff60"), # this is the name of the working point you want to use
+         variable = cms.string("pt"),
+      )
+   )
+)
+process.rerunDiscriminationByIsolationMVA2016v1VLoose = process.rerunDiscriminationByIsolationMVA2016v1Tight.clone()
+process.rerunDiscriminationByIsolationMVA2016v1VLoose.mapping[0].cut = cms.string("RecoTauTag_tauIdMVAIsoDBnewDMwLT2016v1_WPEff90")
+process.rerunMvaIsolation2SeqRun2 = cms.Path(
+   process.rerunDiscriminationByIsolationMVA2016v1raw+
+   process.rerunDiscriminationByIsolationMVA2016v1VLoose+
+   process.rerunDiscriminationByIsolationMVA2016v1Tight
+)
+process.schedule.append(process.rerunMvaIsolation2SeqRun2)
+process.MVAIDEmbedTau = cms.EDProducer(
+        "PATTauMVAIDEmbedder",
+        src = cms.InputTag(fs_daughter_inputs['taus']),
+    )
+fs_daughter_inputs['taus'] = 'MVAIDEmbedTau'
+process.MVAIDEmbedding = cms.Path(process.MVAIDEmbedTau)
+process.schedule.append(process.MVAIDEmbedding)
+
 
 ## Do preselection as requested in the analysis parameters
 preselections = parameters.get('preselection',{})
@@ -514,41 +477,6 @@ process.FSAPreselection = cms.Path(process.preselectionSequence)
 process.schedule.append(process.FSAPreselection)
 
 
-# embed info about nearest jet
-process.miniAODElectronJetInfoEmbedding = cms.EDProducer(
-    "MiniAODElectronJetInfoEmbedder",
-    src = cms.InputTag(fs_daughter_inputs['electrons']),
-    embedBtags = cms.bool(False),
-    suffix = cms.string(''),
-    jetSrc = cms.InputTag(fs_daughter_inputs['jets']),
-    maxDeltaR = cms.double(0.1),
-)
-#fs_daughter_inputs['electrons'] = 'miniAODElectronJetInfoEmbedding'
-process.miniAODMuonJetInfoEmbedding = cms.EDProducer(
-    "MiniAODMuonJetInfoEmbedder",
-    src = cms.InputTag(fs_daughter_inputs['muons']),
-    embedBtags = cms.bool(False),
-    suffix = cms.string(''),
-    jetSrc = cms.InputTag(fs_daughter_inputs['jets']),
-    maxDeltaR = cms.double(0.1),
-)
-#fs_daughter_inputs['muons'] = 'miniAODMuonJetInfoEmbedding'
-process.miniAODTauJetInfoEmbedding = cms.EDProducer(
-    "MiniAODTauJetInfoEmbedder",
-    src = cms.InputTag(fs_daughter_inputs['taus']),
-    embedBtags = cms.bool(False),
-    suffix = cms.string(''),
-    jetSrc = cms.InputTag(fs_daughter_inputs['jets']),
-    maxDeltaR = cms.double(0.1),
-)
-#fs_daughter_inputs['taus'] = 'miniAODTauJetInfoEmbedding'
-
-#process.jetInfoEmbedding = cms.Path(
-#    process.miniAODElectronJetInfoEmbedding +
-#    process.miniAODMuonJetInfoEmbedding +
-#    process.miniAODTauJetInfoEmbedding
-#)
-#process.schedule.append(process.jetInfoEmbedding)
 
 process.bTagSFJets = cms.EDProducer(
     "MiniAODJetBTagSFEmbedder",
@@ -574,16 +502,6 @@ if options.sys == 'tauEC':
     )
     fs_daughter_inputs['taus'] = 'sysEmbedTau'
     process.sysEmbedding = cms.Path(process.sysEmbedTau)
-    process.schedule.append(process.sysEmbedding)
-
-elif options.sys == 'jetBTag':
-    process.bTagSysJets = cms.EDProducer(
-        "MiniAODJetBTagSysEmbedder",
-        isMC=cms.int32(options.isMC),
-        src=cms.InputTag(fs_daughter_inputs['jets'])
-    )
-    fs_daughter_inputs['jets'] = 'bTagSysJets'
-    process.sysEmbedding = cms.Path(process.bTagSysJets)
     process.schedule.append(process.sysEmbedding)
 
 elif options.sys == 'jetEC':
@@ -650,36 +568,6 @@ if options.runMETFilters:
     process.schedule.append(process.additionalMETFilters)
 
 
-if options.hzz:    
-    # Put FSR photons into leptons as user cands
-    from FinalStateAnalysis.PatTools.miniAODEmbedFSR_cfi \
-        import embedFSRInElectrons, embedFSRInMuons
-    process.electronFSREmbedder = embedFSRInElectrons.clone(
-        src = cms.InputTag(fs_daughter_inputs['electrons']),
-        srcAlt = cms.InputTag(fs_daughter_inputs['muons']),
-        srcPho = cms.InputTag(fs_daughter_inputs['fsr']),
-        srcVeto = cms.InputTag(fs_daughter_inputs['electrons']),
-        srcVtx = cms.InputTag("offlineSlimmedPrimaryVertices"),
-        idDecisionLabel = cms.string(idCheatLabel),
-        )
-    fs_daughter_inputs['electrons'] = 'electronFSREmbedder'
-    output_commands.append('*_electronFSREmbedder_*_*')
-    process.muonFSREmbedder = embedFSRInMuons.clone(
-        src = cms.InputTag(fs_daughter_inputs['muons']),
-        srcAlt = cms.InputTag(fs_daughter_inputs['electrons']),
-        srcPho = cms.InputTag(fs_daughter_inputs['fsr']),
-        srcVeto = cms.InputTag(fs_daughter_inputs['electrons']),
-        srcVtx = cms.InputTag("offlineSlimmedPrimaryVertices"),
-        idDecisionLabel = cms.string(idCheatLabel),
-        )
-    fs_daughter_inputs['muons'] = 'muonFSREmbedder'
-    output_commands.append('*_muonFSREmbedder_*_*')
-    process.embedFSRInfo = cms.Path(
-        process.electronFSREmbedder +
-        process.muonFSREmbedder
-        )
-    process.schedule.append(process.embedFSRInfo)
-
 
 # Eventually, set buildFSAEvent to False, currently working around bug
 # in pat tuples.
@@ -700,30 +588,6 @@ process.source.inputCommands = cms.untracked.vstring(
 )
 
 suffix = '' # most analyses don't need to modify the final states
-
-if options.hzz:
-    process.embedHZZMESeq = cms.Sequence()
-    # Embed matrix elements in relevant final states
-    suffix = "HZZME"
-    for quadFS in ['ElecElecElecElec', 
-                   'ElecElecMuMu',
-                   'MuMuMuMu']:
-        oldName = "finalState%s"%quadFS
-        embedProducer = cms.EDProducer(
-            "MiniAODHZZMEEmbedder",
-            src = cms.InputTag(oldName),
-            processes = cms.vstring("p0plus_VAJHU",
-                                    "bkg_VAMCFM"),
-            )
-
-        # give the FS collection the same name as before, but with an identifying suffix
-        newName = oldName + suffix
-        setattr(process, newName, embedProducer)
-        process.embedHZZMESeq += embedProducer
-        output_commands.append('*_%s_*_*'%newName)
-            
-    process.embedHZZME = cms.Path(process.embedHZZMESeq)
-    process.schedule.append(process.embedHZZME)
         
 
 

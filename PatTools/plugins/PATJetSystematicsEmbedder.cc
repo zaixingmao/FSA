@@ -87,9 +87,9 @@ void PATJetSystematicsEmbedder::produce(edm::Event& evt, const edm::EventSetup& 
       //     LorentzVector uncUESDown = (1-unclusteredEnergyScale_)*jet.p4();
       //     LorentzVector uncUESUp = (1+unclusteredEnergyScale_)*jet.p4();
 
-      ShiftedCand candUncDown = *jet.clone();
+      ShiftedCand candUncDown = jet;
       candUncDown.setP4(uncDown);
-      ShiftedCand candUncUp = *jet.clone();
+      ShiftedCand candUncUp = jet;
       candUncUp.setP4(uncUp);
       pt_up = candUncUp.pt();
       pt_down = candUncDown.pt();
@@ -97,43 +97,20 @@ void PATJetSystematicsEmbedder::produce(edm::Event& evt, const edm::EventSetup& 
     jet.addUserFloat("jes+", float(pt_up));
     jet.addUserFloat("jes-", float(pt_down));
 
-//     ShiftedCand candUncUESDown = *jet.clone();
-//     candUncUESDown.setP4(uncUESDown);
-//     ShiftedCand candUncUESUp = *jet.clone();
-//     candUncUESUp.setP4(uncUESUp);
-
-//     p4OutJESUpJets->push_back(candUncUp);
-//     p4OutJESDownJets->push_back(candUncDown);
-//     p4OutUESUpJets->push_back(candUncUESUp);
-//     p4OutUESDownJets->push_back(candUncUESDown);
 
     // Get uncorrected pt
     assert(jet.jecSetsAvailable());
 
     LorentzVector uncDown = (1-unc)*jet.p4();
     LorentzVector uncUp = (1+unc)*jet.p4();
-//     LorentzVector uncUESDown = (1-unclusteredEnergyScale_)*jet.p4();
-//     LorentzVector uncUESUp = (1+unclusteredEnergyScale_)*jet.p4();
 
-    ShiftedCand candUncDown = *jet.clone();
+    ShiftedCand candUncDown = jet;
     candUncDown.setP4(uncDown);
-    ShiftedCand candUncUp = *jet.clone();
+    ShiftedCand candUncUp = jet;
     candUncUp.setP4(uncUp);
     jet.addUserFloat("jes+", uncUp.pt());
     jet.addUserFloat("jes-", uncDown.pt());
-//     jet.addUserFloat("ues+", CandidatePtr(p4OutUESUpJetsH, i));
-//     jet.addUserFloat("ues-", CandidatePtr(p4OutUESDownJetsH, i));
 
-
-//     ShiftedCand candUncUESDown = *jet.clone();
-//     candUncUESDown.setP4(uncUESDown);
-//     ShiftedCand candUncUESUp = *jet.clone();
-//     candUncUESUp.setP4(uncUESUp);
-// 
-//     p4OutJESUpJets->push_back(candUncUp);
-//     p4OutJESDownJets->push_back(candUncDown);
-//     p4OutUESUpJets->push_back(candUncUESUp);
-//     p4OutUESDownJets->push_back(candUncUESDown);
     output->push_back(jet); // make our own copy
 
 

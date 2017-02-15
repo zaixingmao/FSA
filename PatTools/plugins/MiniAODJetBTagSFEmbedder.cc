@@ -74,7 +74,7 @@ MiniAODJetBTagSFEmbedder::MiniAODJetBTagSFEmbedder(const edm::ParameterSet& pset
   else isData_ = true;
   produces<pat::JetCollection>();
   std::string base = std::getenv("CMSSW_BASE");
-  std::string fEff =   "/src/FinalStateAnalysis/PatTools/data/TT_bEff_Loose.root";
+  std::string fEff =   "/src/FinalStateAnalysis/PatTools/data/MC_bTagEff_Loose.root";
   std::string path= base+fEff;
 
   TFile *f_EffMap = new TFile(path.c_str(),"READONLY");
@@ -85,7 +85,7 @@ MiniAODJetBTagSFEmbedder::MiniAODJetBTagSFEmbedder(const edm::ParameterSet& pset
   h2_Num_c    = (TH2D*)f_EffMap->Get("bTaggingEffAnalyzer/h2_BTaggingEff_Num_c");
   h2_Num_udsg    = (TH2D*)f_EffMap->Get("bTaggingEffAnalyzer/h2_BTaggingEff_Num_udsg");
 
-  calib=new BTagCalibration("CSVv2", base+"/src/FinalStateAnalysis/PatTools/data/CSVv2_ichep.csv");
+  calib=new BTagCalibration("CSVv2", base+"/src/FinalStateAnalysis/PatTools/data/CSVv2_Moriond17_B_H.csv");
 
   reader = new BTagCalibrationReader(BTagEntry::OP_LOOSE, "central", {"up", "down"});
   reader_c = new BTagCalibrationReader(BTagEntry::OP_LOOSE, "central", {"up", "down"});
@@ -118,7 +118,7 @@ void MiniAODJetBTagSFEmbedder::produce(edm::Event& evt, const edm::EventSetup& e
     double jetPt = jet.pt();
     double jetEta = jet.eta();
     if(jetPt > 30 && fabs(jetEta)<2.4 && isMC_){
-        if(jetPt >= 670) jetPt = 665.0;
+        if(jetPt >= 1000) jetPt = 1000;
         if (fabs(jet.partonFlavour()) == 5) {//b-jet
             j_SF  = reader->eval_auto_bounds("central", BTagEntry::FLAV_B, jetEta, jetPt); 
             j_SF_up  = reader->eval_auto_bounds("up", BTagEntry::FLAV_B, jetEta, jetPt); 

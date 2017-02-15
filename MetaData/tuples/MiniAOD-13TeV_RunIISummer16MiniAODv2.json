@@ -34,6 +34,7 @@
    "VBFHToTauTau": "VBFHToTauTau_M125_13TeV_powheg_pythia8",
    "ZPrime500": "ZprimeToTauTau_M-500_TuneCUETP8M1_13TeV-pythia8-tauola",
    "ZPrime750": "ZprimeToTauTau_M-750_TuneCUETP8M1_13TeV-pythia8-tauola",
+   "ZPrime1000": "ZprimeToTauTau_M-1000_TuneCUETP8M1_13TeV-pythia8-tauola",
    "ZPrime1250": "ZprimeToTauTau_M-1250_TuneCUETP8M1_13TeV-pythia8-tauola",
    "ZPrime1500": "ZprimeToTauTau_M-1500_TuneCUETP8M1_13TeV-pythia8-tauola",
    "ZPrime1750": "ZprimeToTauTau_M-1750_TuneCUETP8M1_13TeV-pythia8-tauola",

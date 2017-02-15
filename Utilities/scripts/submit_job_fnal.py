@@ -552,7 +552,7 @@ if __name__ == "__main__":
 
     os.chdir(relBase)
     os.chdir('../')
-    tarCommand = 'tar --exclude="src/.git" --exclude="src/FinalStateAnalysis/.git" --exclude="src/TauAnalysis/SVfitStandalone/.git" --exclude="python/.git" --exclude="python/FinalStateAnalysis/.git"  -zcf '+tarfile+' '+relBase.split('/')[-1]
+    tarCommand = 'tar --exclude="src/.git" --exclude="src/FinalStateAnalysis/.git" --exclude="src/TauAnalysis/SVfitStandalone/.git" --exclude="python/.git" --exclude="python/FinalStateAnalysis/.git" --exclude="src/FinalStateAnalysis/NtupleTools/test/localRunOutputs/*"  -zcf '+tarfile+' '+relBase.split('/')[-1]
 
     print "packing: %s" %tarCommand
 

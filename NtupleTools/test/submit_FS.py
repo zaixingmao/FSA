@@ -89,7 +89,8 @@ skimCuts['et'] = {# "ID_e": "object.userFloat(\'MVANonTrigWP80\')> 0.5",
                   "Pt_e": "object.pt() > 25",
                   "Eta_e": "abs(object.eta()) < 2.1",
                   "ID_t": "object.tauID(\\\"decayModeFindingNewDMs\\\") > 0.5",
-                  "Pt_t": "object.pt() > 20",
+                  "decayMode_t": "object.decayMode() < 4 || object.decayMode() > 8",
+                  "Pt_t": "object.pt() > 18",
                   "Eta_t": "abs(object.eta()) < 2.1",
                   }
 skimCuts['em'] = {
@@ -108,7 +109,8 @@ skimCuts['mt'] = {"ID_m": "object.userInt(\\\"ShortTermMediumID\\\") > 0.5",
                   "Pt_m": "object.pt() > 25",
                   "Eta_m": "abs(object.eta()) < 2.1",
                   "ID_t": "object.tauID(\\\"decayModeFindingNewDMs\\\") > 0.5",
-                  "Pt_t": "object.pt() > 20",
+                  "decayMode_t": "object.decayMode() < 4 || object.decayMode() > 8",
+                  "Pt_t": "object.pt() > 18",
                   "Eta_t": "abs(object.eta()) < 2.1",
                   }
 skimCuts['ee'] = {"Pt": "object.pt() > 13",
@@ -138,7 +140,7 @@ TNT = 1 if options.TNT else 0
 
 
 # useLumiMask = '/afs/cern.ch/cms/CAF/CMSCOMM/COMM_DQM/certification/Collisions15/13TeV/Cert_246908-258750_13TeV_PromptReco_Collisions15_25ns_JSON.txt' if options.isData else ''
-useLumiMask = 'Cert_271036-284044_13TeV_23Sep2016ReReco_Collisions16_JSON.txt' if options.isData else ''
+useLumiMask = 'json/Cert_271036-284044_13TeV_23Sep2016ReReco_Collisions16_JSON.txt' if options.isData else ''
 localJobInfo = localJob_cfg.localJobInfo
 
 inputFiles = localJobInfo['inputFile']
@@ -208,13 +210,15 @@ if not options.runLocal:
             if options.is50ns:
                 cmd += " --campaign-tag=\"RunIISpring15DR74-Asympt50ns*\" "
             else:
-                if "DY" in options.sample:
+                if "DYJetsToLL_M-50" in options.sample:
+                    cmd += " --campaign-tag=\"RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6_ext1-v2\" "
+                elif "DY" in options.sample:
                     cmd += " --campaign-tag=\"RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6_ext*\" "
-                elif ("TT_LO" in options.sample) or ("ZPrime" in options.sample) or ("WJetsToLNu_LO" in options.sample):
+                elif ("TT_LO" in options.sample) or ("ZPrime" in options.sample) or ("WZTo2L2Q" in options.sample):
                     cmd += " --campaign-tag=\"RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1\" "
-                elif "ST_tW" in options.sample:
+                elif "ST_tW" in options.sample or "VV" in options.sample or "WZTo2L2Q" in options.sample or "WJetsToLNu_HT-400to600" in options.sample:
                     cmd += " --campaign-tag=\"RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6_ext1-v1\" "
-                elif "WJetsToLNu_HT-200to400" in options.sample:
+                elif ("WJetsToLNu_HT-200to400" in options.sample) or ("WJetsToLNu_HT-100to200" in options.sample) or ("WJetsToLNu_LO" in options.sample):
                     cmd += " --campaign-tag=\"RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6_ext2-v1\" "
                 else:
                     cmd += " --campaign-tag=\"RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v3\" "

@@ -104,6 +104,11 @@ id = PSet(
     objectChargedIsoPtSum = '{object}.tauID("chargedIsoPtSum")',
     objectPuCorrPtSum     = '{object}.tauID("puCorrPtSum")',
 
+    # MVA ID trained with summer2016 MC
+    objectByIsolationMVA2016v1DBnewDMwLTraw = '{object}.userFloat("newMVAIDraw")',
+    objectByVLooseIsolationMVA2016v1DBnewDMwLT = '{object}.userInt("newMVAIDVLoose")',
+    objectByTightIsolationMVA2016v1DBnewDMwLT = '{object}.userInt("newMVAIDTight")',
+
 )
 
 TNT_request = PSet(

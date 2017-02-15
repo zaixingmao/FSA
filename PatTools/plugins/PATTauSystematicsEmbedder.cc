@@ -185,19 +185,11 @@ void PATTauSystematicsEmbedder::produce(edm::Event& evt, const edm::EventSetup& 
   for (size_t i = 0; i < nTaus; ++i) {
 
     pat::Tau origTau = taus->at(i);
-    ShiftedCand p4OutNomTau = *origTau.clone();
-//     p4OutNomTaus->push_back(p4OutNomTau);
-    // Now make the smeared versions of the jets and taus
+    ShiftedCand p4OutNomTau = origTau;
+
     // TES uncertainty
 
     ShiftedLorentzVectors tesShifts = tauJetCorrection_.uncertainties(p4OutNomTau.p4());
-//     ShiftedCand p4OutTESUpTau = *p4OutNomTau.clone();
-//     p4OutTESUpTau.setP4(tesShifts.shiftedUp);
-//     p4OutTESUpTaus->push_back(p4OutTESUpTau);
-
-//     ShiftedCand p4OutTESDownTau = *p4OutNomTau.clone();
-//     p4OutTESDownTau.setP4(tesShifts.shiftedDown);
-//     p4OutTESDownTaus->push_back(p4OutTESDownTau);
 
     origTau.addUserFloat("tes+", tesShifts.shiftedUp.pt());
     origTau.addUserFloat("tes-", tesShifts.shiftedDown.pt());
@@ -207,28 +199,6 @@ void PATTauSystematicsEmbedder::produce(edm::Event& evt, const edm::EventSetup& 
 
   }
 
-  // Put the shifted collections in the event
-//   typedef edm::OrphanHandle<ShiftedCandCollection> PutHandle;
-// 
-//   PutHandle p4OutNomTausH = evt.put(p4OutNomTaus, "p4OutNomTaus");
-//   PutHandle p4OutTESUpTausH = evt.put(p4OutTESUpTaus, "p4OutTESUpTaus");
-//   PutHandle p4OutTESDownTausH = evt.put(p4OutTESDownTaus, "p4OutTESDownTaus");
-  // Now embed the shifted collections into our output pat taus
-//   for (size_t i = 0; i < output->size(); ++i) {
-//     pat::Tau& tau = output->at(i);
-//     tau.addUserFloat("uncorr", CandidatePtr(p4OutNomTausH, i));
-//     tau.addUserFloat("tes+", CandidatePtr(p4OutTESUpTausH, i).pt());
-//     tau.addUserFloat("tes-", CandidatePtr(p4OutTESDownTausH, i).pt());
-
-// 
-//   // Now embed the shifted collections into our output pat taus
-//   for (size_t i = 0; i < output->size(); ++i) {
-//     pat::Tau& tau = output->at(i);
-//     tau.addUserCand("uncorr", CandidatePtr(p4OutNomTausH, i));
-//     tau.addUserCand("tes+", CandidatePtr(p4OutTESUpTausH, i));
-//     tau.addUserCand("tes-", CandidatePtr(p4OutTESDownTausH, i));
-
-//   }
   evt.put(output);
 }
 
