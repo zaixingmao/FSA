@@ -221,7 +221,7 @@ if not options.runLocal:
                 elif ("WJetsToLNu_HT-200to400" in options.sample) or ("WJetsToLNu_HT-100to200" in options.sample) or ("WJetsToLNu_LO" in options.sample):
                     cmd += " --campaign-tag=\"RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6_ext2-v1\" "
                 else:
-                    cmd += " --campaign-tag=\"RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v3\" "
+                    cmd += " --campaign-tag=\"RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1\" "
 
         else:
             cmd += " --input-dir=/nfs_scratch/zmao/"
