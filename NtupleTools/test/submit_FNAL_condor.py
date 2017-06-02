@@ -12,7 +12,7 @@ def writeCFGFile(dir):
         dir = dir[:dir.find('\n')]
     f.write("Executable = %s/submit\n" %dir)
     f.write('Requirements   =  OpSys == "LINUX" && (Arch =="INTEL" || Arch =="x86_64")\n')
-    f.write("request_memory = 8000\n")
+    f.write("request_memory = 10000\n")
     f.write("Should_Transfer_Files = YES\n")
     f.write("WhenToTransferOutput = ON_EXIT\n")
     f.write("Output = %s/condor.out\n" %dir)
