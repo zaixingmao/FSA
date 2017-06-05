@@ -14,7 +14,7 @@ Get a supported CMSSW release area:
 
 ```bash
   cmsrel CMSSW_8_0_26_patch1
-  cd CMSSW_8_0_25_patch1/src
+  cd CMSSW_8_0_26_patch1/src
   # Setup your CMSSW environment
   cmsenv
   # Run this before doing ANYTHING else in src
