@@ -8,13 +8,13 @@ PAT tuple, and utilities for generating plain ROOT ntuples from the PAT tuple.
 Installation
 ------------
 
-Current CMSSW version: ``8_0_25``.
+Current CMSSW version: ``8_0_26_patch1``.
 
 Get a supported CMSSW release area:
 
 ```bash
-  cmsrel CMSSW_8_0_25
-  cd CMSSW_8_0_25/src
+  cmsrel CMSSW_8_0_26_patch1
+  cd CMSSW_8_0_25_patch1/src
   # Setup your CMSSW environment
   cmsenv
   # Run this before doing ANYTHING else in src
@@ -36,7 +36,7 @@ Get a supported CMSSW release area:
 Checkout the FinalStateAnalysis repository:
 
 ```bash
-  git clone -b miniAOD_8_0_25_FNAL https://github.com/zaixingmao/FSA.git FinalStateAnalysis
+  git clone -b miniAOD_8_0_26_FNAL https://github.com/zaixingmao/FSA.git FinalStateAnalysis
   cd FinalStateAnalysis
   cd recipe/
   ./recipe.sh
@@ -66,5 +66,5 @@ Running:
 
 ```bash
 cd NtupleTools/test/
-#Read documentation at https://github.com/zaixingmao/FSA/tree/miniAOD_8_0_12_FNAL/NtupleTools/test
+#Read documentation at https://github.com/zaixingmao/FSA/tree/miniAOD_8_0_26_FNAL/NtupleTools/test
 ```
